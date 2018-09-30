@@ -1,0 +1,26 @@
+para rodar o backend: nodemon
+localhost:3000
+para rodar o frontend: quasar dev
+localhost:8080
+
+
+oq uso:
+backend
+https://nodejs.org/dist/latest-v8.x/docs/api/
+https://expressjs.com/pt-br/
+https://github.com/expressjs/cors
+
+frontend
+https://br.vuejs.org/
+https://quasar-framework.org
+https://github.com/axios/axios
+
+
+hospedagem:
+https://www.umbler.com/br
+
+referencias:
+login
+http://www.luiztools.com.br/post/autenticacao-json-web-token-jwt-em-nodejs/
+mysql
+http://www.luiztools.com.br/post/como-usar-nodejs-mysql/#9
