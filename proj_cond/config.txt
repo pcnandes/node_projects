@@ -3,6 +3,8 @@ localhost:3000
 para rodar o frontend: quasar dev
 localhost:8080
 
+repositório:
+https://github.com/pcnandes/node_projects/tree/master/proj_cond
 
 oq uso:
 backend
