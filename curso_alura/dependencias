@@ -1,0 +1,47 @@
+1-instalar MySql
+definir usuario root e senha em branco
+
+
+2- criar banco casadocodigo_nodejs
+create database casadocodigo_nodejs;
+use casadocodigo_nodejs;
+
+
+3- criar tabela produtos
+REATE TABLE produtos (
+  id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  titulo varchar(255) DEFAULT NULL,
+  descricao text,
+  preco decimal(10,2) DEFAULT NULL);
+
+
+4-popular tabela
+insert into produtos(titulo, descricao, preco)
+values ('Comecando com nodejs', 'livro introdutório sobre nodejs', 39.90);
+
+insert into produtos(titulo, descricao, preco)
+values ('Comecando com javascript', 'livro introdutório sobre javascript', 39.90);
+
+insert into produtos(titulo, descricao, preco)
+values ('Comecando com express', 'livro introdutório sobre express', 39.90);
+
+
+5- iniciar servidor
+node app
+http://localhost:3000/produtos
+
+6- iniciar testes (nao precisa do servidor estar rodando)
+6.1- criar banco casadocodigo_nodejs
+create database casadocodigo_nodejs_teste;
+use casadocodigo_nodejs_teste;
+
+6.2- criar tabela produtos
+REATE TABLE produtos (
+  id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  titulo varchar(255) DEFAULT NULL,
+  descricao text,
+  preco decimal(10,2) DEFAULT NULL);
+
+6.3- rodar o mocha (responsável por executar os testes)
+./NODE_ENV=test node_modules/mocha/bin/mocha
+
