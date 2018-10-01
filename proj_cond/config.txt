@@ -1,22 +1,32 @@
-para rodar o backend: nodemon
+1 - CONFIGURAR E INICIAR O AMBIENTE
+
+1.1- Instalando as dependencias
+npm install -> instalar as bibliotecas configuradas em package.json (necessário executar no backend e frontend)
+
+1.2- criar arquivo .env copiando o .env.exemple, mas definindo uma senha
+
+1.3- para rodar o backend: nodemon (npm install -g nodemon caso nao esteja instalado) 
+O comando carrega o script q está em package.json e roda o js "node ./bin/www"
 localhost:3000
-para rodar o frontend: quasar dev
+
+1.4- para rodar o frontend: quasar dev
 localhost:8080
 
-reposit�rio:
-https://github.com/pcnandes/node_projects/tree/master/proj_cond
-
-oq uso:
-backend
+2 - OQ USO
+2.1 - backend
 https://nodejs.org/dist/latest-v8.x/docs/api/
 https://expressjs.com/pt-br/
 https://github.com/expressjs/cors
 
-frontend
+2.3 - frontend
 https://br.vuejs.org/
 https://quasar-framework.org
 https://github.com/axios/axios
 
+
+3 - ANOTAÇÕES
+repositório:
+https://github.com/pcnandes/node_projects/tree/master/proj_cond
 
 hospedagem:
 https://www.umbler.com/br
