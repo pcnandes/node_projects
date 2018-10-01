@@ -1,13 +1,10 @@
-var express = require('express');
-var messages = require('../controllers/msgController');
+const express = require('express')
+const messages = require('../controllers/msgController')
 // TODO descobrir uma forma de centralizar a autorização
-var security = require('../controllers/securityController');
-var router = express.Router();
-
-router.route('/lista')
-  .get(messages.listAll);
+const security = require('../controllers/securityController')
+const router = express.Router()
 
 router.route('/lista_sec')
-  .get(security.verifyJWT, messages.listAll);
+  .get(security.verifyJWT, messages.listAll)
 
-module.exports = router;
+module.exports = router
