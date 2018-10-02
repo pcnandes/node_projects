@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     listar () {
-      this.$axios.get('/lista')
+      this.$axios.get('/public/lista')
         .then((response) => {
           console.log(response)
           this.lista = response.data

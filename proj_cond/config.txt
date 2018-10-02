@@ -36,3 +36,8 @@ login
 http://www.luiztools.com.br/post/autenticacao-json-web-token-jwt-em-nodejs/
 mysql
 http://www.luiztools.com.br/post/como-usar-nodejs-mysql/#9
+
+
+EStudar:
+https://medium.com/matheus-rossi/pwa-vue-js-quasar-ac97d775fcca
+https://alinex.github.io/2018/01/04/quasar-start.html
