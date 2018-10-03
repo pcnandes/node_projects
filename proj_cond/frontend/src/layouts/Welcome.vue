@@ -2,18 +2,16 @@
   <q-layout view="lHh Lpr lFf">
     <q-layout-header>
       <q-toolbar
-        color="grey-10"
-        :glossy="$q.theme === 'mat'"
-        :inverted="$q.theme === 'ios'"
+        color="blue-9"
       >
         <q-toolbar-title>
-          Quasar App
-          <div slot="subtitle">Running on Quasar v{{ $q.version }}</div>
+          SINDCON
+          <div slot="subtitle">Sistema de gestão de condomínio</div>
         </q-toolbar-title>
       </q-toolbar>
     </q-layout-header>
     <q-page-container>
-      <router-view />
+      <router-view/>
     </q-page-container>
   </q-layout>
 </template>
