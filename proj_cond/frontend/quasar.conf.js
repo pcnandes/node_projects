@@ -35,6 +35,13 @@ module.exports = function (ctx) {
       }
     },
     devServer: {
+      proxy: {
+        '/': {
+          target: 'http://127.0.0.1:3000',
+          timeout: 1000
+          // pathRewrite: {"^/backend/api" : "api"}
+        }
+      }
       // https: true,
       // port: 8080,
       // open: true // opens browser window automatically
