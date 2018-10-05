@@ -1,15 +1,17 @@
 const jwt = require('jsonwebtoken')
 
 exports.login = function (req, res, next) {
-  if (req.body.user === 'paulo' && req.body.pwd === '123') {
+  let credenciais = req.body
+  if (credenciais.usuario === 'paulo' && credenciais.senha === '123') {
     // auth ok
     const id = 1 // esse id viria do banco de dados
     var token = jwt.sign({ id }, process.env.SECRET, {
       expiresIn: 300 // expires in 5min
     })
-    res.status(200).send({ auth: true, token: token })
+    res.status(200).send({ auth: true, token: token, usario: credenciais.usuario })
+  } else {
+    res.status(401).send('Login inválidooooo!')
   }
-  res.status(500).send('Login inválidooooo!')
 }
 
 exports.logout = function (req, res) {
