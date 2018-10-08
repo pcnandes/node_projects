@@ -1,5 +1,5 @@
 <template>
-  <q-page class="pagina flex row fit wrap tertiary">
+  <q-page class="pagina tertiary">
       <div class="welcome_bloco">
         <h1>Um novo jeito de administar seu condomínio</h1>
         <ul>
@@ -77,14 +77,21 @@ export default {
 </script>
 <style>
   .pagina {
+    display: flex;
+    min-height: 350px;
+    /*align-items: stretch;*/
+    flex-wrap: wrap;
     background-color: #2b3137;
     padding-top: 70px;
     color: white;
   }
   .welcome_bloco {
-    flex: 3;
+    /*flex: 3;
     padding-left: 10%;
+    min-width: 350px;*/
+    flex-grow: 4;
     min-width: 350px;
+    padding-left: 10%;
   }
   .welcome_bloco > h1 {
     font-weight: 500;
@@ -109,10 +116,14 @@ export default {
   .login_bloco {
     background-color: #DCDCDC;
     padding: 24px;
+    flex-grow: 1;
+    min-width:350px;
+    border-radius: 15px 0 0 0;
+    /*
     flex: 1 1 0;
     min-width: 350px;
     margin-left: auto;
-    border-radius: 15px 0 0 0;
+    border-radius: 15px 0 0 0;*/
   }
   .login_bloco > div, button, a {
     margin-top: 15px;
