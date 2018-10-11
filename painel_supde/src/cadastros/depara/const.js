@@ -1,0 +1,27 @@
+const DOMINIOS = [
+  'casoteste.situacao',
+  'casoteste.tipoexecucao',
+  'cliente',
+  'compromisso.situacao',
+  'linguagem',
+  'macroatividade',
+  'plts.situacao',
+  'projeto.situacao',
+  'relato.classificacao',
+  'relato.resolucao',
+  'relato.situacao',
+  'relato.tipo',
+  'requisito.tipo',
+  'ss.motivo',
+  'ss.situacao',
+  'ter.status',
+  'tipodemanda',
+  'metodologia',
+  'ss.situacao.grupo',
+  'subprocesso.codigo',
+  'subprocesso.descricao',
+  'lote.situacao.grupo',
+  'projeto.situacao.grupo',
+  'linguagem.insumo'
+];
+export { DOMINIOS }
