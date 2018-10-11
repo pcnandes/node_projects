@@ -23,6 +23,7 @@
         <q-btn color="primary" type="submit">Login</q-btn>
         <q-checkbox v-model="lembreDeMim" label="Lembre-se de mim" />
         <a href="">Esqueci a senha</a>
+        {{ usuario }}
     </form>
   </q-page>
 </template>
@@ -51,26 +52,19 @@ export default {
   },
   created () { },
   methods: {
-    login () {
-      this.$axios.post('/public/login', this.credenciais)
-        .then((response) => {
-          console.log(response)
-          this.user = response.data
+    onSubmit () {
+      this.$store.dispatch('auth/login', {'credenciais': this.form, 'lembreDeMim': this.lembreDeMim})
+        .then(() => {
+          console.log('login com sucesso redirecionar para a pagina')
         })
         .catch(() => {
           console.log('deu erro no login')
         })
-    },
-    onSubmit () {
-      this.$auth.login({
-        fetchUser: false,
-        data: this.form,
-        lembreDeMim: this.lembreDeMim
-      })
-        .then(response => {
-        }, (res) => {
-          console.log('Res: ', res)
-        })
+    }
+  },
+  computed: {
+    usuario () {
+      return this.$store.state.auth.usuario.nome
     }
   }
 }
