@@ -4,12 +4,13 @@ exports.login = function (req, res, next) {
   let credenciais = req.body
   if (credenciais.usuario === 'paulo' && credenciais.senha === '123') {
     // auth ok
-    const userLogado = { 'nome': 'Paulo Fernandes', perfis: ['Administrador', 'Gerente'] }
+    const userLogado = { usuario: 1, nome: 'Paulo Fernandes', roles: ['Administrador', 'Gerente'] }
 
     var token = jwt.sign(userLogado, process.env.SECRET, {
       expiresIn: '1h' // expires in 5min
     })
-    res.status(200).send(token)
+
+    res.status(200).send({ 'token': token })
   } else {
     res.status(401).send('Login inválidooooo!')
   }
