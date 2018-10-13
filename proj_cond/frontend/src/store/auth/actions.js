@@ -24,7 +24,7 @@ export const logout = ({commit}, data) => {
   commit('apagarToken')
 }
 
-export const autoLogin = ({dispatch}, data) => {
+export const tentarAutoLogin = ({dispatch}, data) => {
   return dispatch('setToken', localStorage.getItem(ID_TOKEN))
 }
 
