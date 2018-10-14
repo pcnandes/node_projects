@@ -6,6 +6,9 @@ const router = express.Router()
 router.route('/login')
   .post(security.login)
 
+router.route('/retoken')
+  .post(security.retoken)
+
 router.route('/logout')
   .get(security.logout)
 

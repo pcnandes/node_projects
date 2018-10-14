@@ -56,6 +56,7 @@ export default {
       this.$store.dispatch('auth/login', {'credenciais': this.form, 'lembreDeMim': this.lembreDeMim})
         .then(() => {
           console.log('login com sucesso redirecionar para a pagina')
+          this.$router.push(`/home/`)
         })
         .catch(() => {
           console.log('deu erro no login')

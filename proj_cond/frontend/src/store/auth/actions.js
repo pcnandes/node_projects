@@ -24,13 +24,9 @@ export const logout = ({commit}, data) => {
   commit('apagarToken')
 }
 
-export const tentarAutoLogin = ({dispatch}, data) => {
-  return dispatch('setToken', localStorage.getItem(ID_TOKEN))
-}
-
 // TODO falta criar retoken
-export const retoken = ({commit, dispatch}, token) => {
-  return axios.post('/public/retoken', token)
+export const retoken = ({commit, dispatch}) => {
+  return axios.post('/public/retoken', localStorage.getItem(ID_TOKEN))
     .then(res => {
       return dispatch('setToken', res.data.token)
     })
@@ -70,6 +66,7 @@ export const setToken = ({commit, dispatch, state}, encodedToken) => {
           // gravo usuario no localStorage
           localStorage.setItem(ID_TOKEN, JSON.stringify(encodedToken))
           commit('setUsuario', usuario)
+          commit('setLogado', true)
         }
       }
     } catch (err) {

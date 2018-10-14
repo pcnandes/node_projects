@@ -3,7 +3,8 @@ export function someGetter (state) {
 }
 */
 export function isLogado (state) {
-  return state.user !== null
+  console.log('verificando usuario logado')
+  return state.logado
 }
 
 export function getUsuario (state) {

@@ -4,6 +4,10 @@ export const setUsuario = (state, usuario) => {
   state.usuario = usuario
 }
 
+export const setLogado = (state, logado) => {
+  state.logado = logado
+}
+
 export const clearToken = (state) => {
   if (state.timerToken) {
     clearTimeout(state.timer)

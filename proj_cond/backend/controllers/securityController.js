@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const tempoExpiracao = '1h'
 
 exports.login = function (req, res, next) {
   let credenciais = req.body
@@ -7,7 +8,7 @@ exports.login = function (req, res, next) {
     const userLogado = { usuario: 1, nome: 'Paulo Fernandes', roles: ['Administrador', 'Gerente'] }
 
     var token = jwt.sign(userLogado, process.env.SECRET, {
-      expiresIn: '1h' // expires in 5min
+      expiresIn: tempoExpiracao // '1h'
     })
 
     res.status(200).send({ 'token': token })
@@ -16,10 +17,20 @@ exports.login = function (req, res, next) {
   }
 }
 
+exports.retoken = function (req, res, next) {
+  let token = verificaToken(req, res)
+  if (!token) {
+    res.status(401).send('Token inválido!')
+  } else {
+    res.status(200).send({ 'token': token })
+  }
+}
+
 exports.logout = function (req, res) {
   res.status(200).send({ token: null })
 }
 
+// TODO trocar nome para verificar acesso e usar verificaCaptcha
 exports.verifyJWT = function (req, res, next) {
   var token = req.headers['x-access-token']
   if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' })
@@ -29,4 +40,20 @@ exports.verifyJWT = function (req, res, next) {
     req.userId = decoded.id
     next()
   })
+}
+
+function verificaToken (req, res) {
+  var token = req.headers['x-access-token']
+  if (!token) {
+    return null
+  } else {
+    jwt.verify(token, process.env.SECRET, function (err, decoded) {
+      if (err) return null
+      console.log(decoded)
+      var newToken = jwt.sign(decoded, process.env.SECRET, {
+        expiresIn: tempoExpiracao // '1h'
+      })
+      return newToken
+    })
+  }
 }
