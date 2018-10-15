@@ -13,7 +13,7 @@ export const clearToken = (state) => {
     clearTimeout(state.timer)
     state.timer = null
   }
-  const usuarioLogado = !!state.user
+  const usuarioLogado = false
   state.user = null
   localStorage.removeItem(ID_TOKEN)
   if (usuarioLogado) {

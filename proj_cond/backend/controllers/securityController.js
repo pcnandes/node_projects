@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken')
-const tempoExpiracao = '1h'
-
+const tempoExpiracao = 60 * 3 // 3 minutos
 exports.login = function (req, res, next) {
   let credenciais = req.body
   if (credenciais.usuario === 'paulo' && credenciais.senha === '123') {
@@ -18,7 +17,22 @@ exports.login = function (req, res, next) {
 }
 
 exports.retoken = function (req, res, next) {
-  let token = verificaToken(req, res)
+  console.log('retoken')
+  let token = req.headers['x-access-token']
+  console.log(token)
+  // console.log(req)
+  if (token) {
+    jwt.verify(token, process.env.SECRET, function (err, decoded) {
+      if (err) return null
+      console.log('decoded')
+      console.log(decoded)
+      // TODO recuperar usuario do banco
+      const userLogado = { usuario: decoded.usuario, nome: decoded.nome, roles: decoded.roles }
+      token = jwt.sign(userLogado, process.env.SECRET, {
+        expiresIn: tempoExpiracao // '1h'
+      })
+    })
+  }
   if (!token) {
     res.status(401).send('Token inválido!')
   } else {
@@ -41,19 +55,24 @@ exports.verifyJWT = function (req, res, next) {
     next()
   })
 }
-
-function verificaToken (req, res) {
-  var token = req.headers['x-access-token']
+/*
+function verificaToken (token) {
+  console.log('verificando Token')
   if (!token) {
     return null
   } else {
     jwt.verify(token, process.env.SECRET, function (err, decoded) {
       if (err) return null
+      console.log('decoded')
       console.log(decoded)
-      var newToken = jwt.sign(decoded, process.env.SECRET, {
+      // TODO recuperar usuario do banco
+      const userLogado = { usuario: decoded.usuario, nome: decoded.nome, roles: decoded.roles }
+
+      var newToken = jwt.sign(userLogado, process.env.SECRET, {
         expiresIn: tempoExpiracao // '1h'
       })
       return newToken
     })
   }
 }
+*/

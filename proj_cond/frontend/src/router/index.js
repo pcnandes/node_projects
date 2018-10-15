@@ -23,33 +23,25 @@ export default function ({store}/* { store, ssrContext } */) {
 
   Router.beforeEach((to, from, next) => {
     console.log('tratando navigation guard')
-    // verifica se o usuário está autenticado
-    console.log(store.getters['auth/getUsuario'])
-
     let logado = store.getters['auth/isLogado']
-    // if (to.path !== '/' && !logado) {
-    if (to.path !== '/' && !logado) {
-      // tenta fazer o autologin
+    if (!logado) {
       store.dispatch('auth/retoken')
         .then(res => {
+          console.log('res retoken')
+          console.log(res)
           if (res) {
             if (to.fullPath === '/') {
               next({path: '/home'})
             } else next()
-          } else next({path: '/'})
+          } else {
+            let redirect = to.fullPath === '/' ? undefined : to.fullPath
+            next({path: redirect})
+          }
         })
-        .catch(err => {
-          console.log(err)
-          next({path: '/'})
-          // const query = to.fullPath === '/' ? undefined : {redirect: to.fullPath}
-          // next({path: '/', query})
-        })
-    } else if (logado) {
+    } else {
       if (to.fullPath === '/') {
         next({path: '/home'})
       } else next()
-    } else {
-      next()
     }
   })
 

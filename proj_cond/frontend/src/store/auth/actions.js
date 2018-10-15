@@ -26,12 +26,23 @@ export const logout = ({commit}, data) => {
 
 // TODO falta criar retoken
 export const retoken = ({commit, dispatch}) => {
-  return axios.post('/public/retoken', localStorage.getItem(ID_TOKEN))
+  console.log('iniciado retoken')
+  console.log(axios)
+
+  const instance = axios.create({
+    headers: {
+      common: {
+        'x-access-token': JSON.parse(localStorage.getItem(ID_TOKEN))
+      }
+    }
+  })
+
+  return instance.post('/public/retoken')
     .then(res => {
       return dispatch('setToken', res.data.token)
     })
     .catch(res => {
-      commit('clearToken')
+      // commit('clearToken')
     })
 }
 
