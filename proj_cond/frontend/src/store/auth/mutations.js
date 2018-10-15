@@ -13,10 +13,8 @@ export const clearToken = (state) => {
     clearTimeout(state.timer)
     state.timer = null
   }
-  const usuarioLogado = false
-  state.user = null
+  state.logado = false
+  state.usuario = {}
   localStorage.removeItem(ID_TOKEN)
-  if (usuarioLogado) {
-    this.$router.replace('/')
-  }
+  // this.$router.replace('/')
 }

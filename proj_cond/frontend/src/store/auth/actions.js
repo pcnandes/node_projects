@@ -27,13 +27,11 @@ export const logout = ({commit}, data) => {
 // TODO falta criar retoken
 export const retoken = ({commit, dispatch}) => {
   console.log('iniciado retoken')
-  console.log(axios)
 
+  // cria outra instancia do axios para evitar o axios.defaults.headers['x-access-token']
   const instance = axios.create({
     headers: {
-      common: {
-        'x-access-token': JSON.parse(localStorage.getItem(ID_TOKEN))
-      }
+      common: { 'x-access-token': JSON.parse(localStorage.getItem(ID_TOKEN)) }
     }
   })
 
@@ -42,7 +40,8 @@ export const retoken = ({commit, dispatch}) => {
       return dispatch('setToken', res.data.token)
     })
     .catch(res => {
-      // commit('clearToken')
+      commit('clearToken')
+      return false
     })
 }
 
@@ -71,8 +70,9 @@ export const setToken = ({commit, dispatch, state}, encodedToken) => {
           axios.defaults.headers['x-access-token'] = encodedToken
           // cria um timer para atualização do token automaticamente
           state.timerToken = setTimeout(() => {
+            console.log('Executando timer retoken')
             dispatch('retoken')
-          }, Math.max(dataExpiracao.getTime() - now.getTime() - 2000, 1))
+          }, Math.max(dataExpiracao.getTime() - now.getTime() - (1000 * 60), 1)) // (1000 * 60) = 1 minuto
 
           // gravo usuario no localStorage
           localStorage.setItem(ID_TOKEN, JSON.stringify(encodedToken))

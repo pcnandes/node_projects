@@ -23,14 +23,18 @@ exports.retoken = function (req, res, next) {
   // console.log(req)
   if (token) {
     jwt.verify(token, process.env.SECRET, function (err, decoded) {
-      if (err) return null
-      console.log('decoded')
-      console.log(decoded)
-      // TODO recuperar usuario do banco
-      const userLogado = { usuario: decoded.usuario, nome: decoded.nome, roles: decoded.roles }
-      token = jwt.sign(userLogado, process.env.SECRET, {
-        expiresIn: tempoExpiracao // '1h'
-      })
+      if (!err) {
+        console.log('decoded')
+        console.log(decoded)
+        // TODO recuperar usuario do banco
+        const userLogado = { usuario: decoded.usuario, nome: decoded.nome, roles: decoded.roles }
+        token = jwt.sign(userLogado, process.env.SECRET, {
+          expiresIn: tempoExpiracao // '1h'
+        })
+      } else {
+        token = null
+        console.log(err)
+      }
     })
   }
   if (!token) {
@@ -51,7 +55,7 @@ exports.verifyJWT = function (req, res, next) {
   jwt.verify(token, process.env.SECRET, function (err, decoded) {
     if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' })
     // se tudo estiver ok, salva no request para uso posterior
-    req.userId = decoded.id
+    req.userId = decoded.usuario
     next()
   })
 }
