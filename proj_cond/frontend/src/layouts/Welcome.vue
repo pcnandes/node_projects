@@ -8,6 +8,8 @@
           SINDCON
           <div slot="subtitle">Sistema de gestão de condomínio</div>
         </q-toolbar-title>
+        <q-btn flat round dense icon="mail" title="Mensagens"/>
+        <q-btn flat round dense icon="people" title="usuário"/>
       </q-toolbar>
     </q-layout-header>
     <q-page-container>
