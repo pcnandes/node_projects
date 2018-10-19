@@ -1,39 +1,34 @@
 const jwt = require('jsonwebtoken')
 const tempoExpiracao = 60 * 3 // 3 minutos
+
 exports.login = function (req, res, next) {
   let credenciais = req.body
+  // TODO recuperar no banco dados do usuario
   if (credenciais.usuario === 'paulo' && credenciais.senha === '123') {
-    // auth ok
+    // TODO recuperar usuário logado do banco
     const userLogado = { usuario: 1, nome: 'Paulo Fernandes', roles: ['Administrador', 'Gerente'] }
-
-    var token = jwt.sign(userLogado, process.env.SECRET, {
-      expiresIn: tempoExpiracao // '1h'
-    })
-
+    const token = gerarToken(userLogado)
     res.status(200).send({ 'token': token })
   } else {
     res.status(401).send('Login inválidooooo!')
   }
 }
 
+// TODO olhar em https://www.codementor.io/olatundegaruba/5-steps-to-authenticating-node-js-with-jwt-7ahb5dmyr
+exports.registrar = function (req, res, next) {
+  return null
+}
+
 exports.retoken = function (req, res, next) {
-  console.log('retoken')
   let token = req.headers['x-access-token']
-  console.log(token)
-  // console.log(req)
   if (token) {
     jwt.verify(token, process.env.SECRET, function (err, decoded) {
       if (!err) {
-        console.log('decoded')
-        console.log(decoded)
         // TODO recuperar usuario do banco
         const userLogado = { usuario: decoded.usuario, nome: decoded.nome, roles: decoded.roles }
-        token = jwt.sign(userLogado, process.env.SECRET, {
-          expiresIn: tempoExpiracao // '1h'
-        })
+        token = gerarToken(userLogado)
       } else {
         token = null
-        console.log(err)
       }
     })
   }
@@ -51,32 +46,21 @@ exports.logout = function (req, res) {
 // TODO trocar nome para verificar acesso e usar verificaCaptcha
 exports.verifyJWT = function (req, res, next) {
   var token = req.headers['x-access-token']
-  if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' })
+  if (!token) {
+    return res.status(401).send({ auth: false, message: 'Token não enviado.' })
+  }
   jwt.verify(token, process.env.SECRET, function (err, decoded) {
-    if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' })
+    if (err) {
+      return res.status(500).send({ auth: false, message: 'Erro ao autenticar usando token.' })
+    }
     // se tudo estiver ok, salva no request para uso posterior
-    req.userId = decoded.usuario
+    // req.userId = decoded.usuario
     next()
   })
 }
-/*
-function verificaToken (token) {
-  console.log('verificando Token')
-  if (!token) {
-    return null
-  } else {
-    jwt.verify(token, process.env.SECRET, function (err, decoded) {
-      if (err) return null
-      console.log('decoded')
-      console.log(decoded)
-      // TODO recuperar usuario do banco
-      const userLogado = { usuario: decoded.usuario, nome: decoded.nome, roles: decoded.roles }
 
-      var newToken = jwt.sign(userLogado, process.env.SECRET, {
-        expiresIn: tempoExpiracao // '1h'
-      })
-      return newToken
-    })
-  }
+function gerarToken (userLogado) {
+  return jwt.sign(userLogado, process.env.SECRET, {
+    expiresIn: tempoExpiracao // '1h'
+  })
 }
-*/
