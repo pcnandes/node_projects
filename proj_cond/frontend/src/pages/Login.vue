@@ -23,7 +23,6 @@
         <q-btn color="primary" type="submit">Login</q-btn>
         <q-checkbox v-model="lembreDeMim" label="Lembre-se de mim" />
         <a href="">Esqueci a senha</a>
-        {{ usuario }}
     </form>
   </q-page>
 </template>
@@ -54,12 +53,12 @@ export default {
   methods: {
     onSubmit () {
       this.$store.dispatch('auth/login', {'credenciais': this.form, 'lembreDeMim': this.lembreDeMim})
-        .then(() => {
-          console.log('login com sucesso redirecionar para a pagina')
-          this.$router.push(`/home/`)
-        })
-        .catch(() => {
-          console.log('deu erro no login')
+        .then((res) => {
+          console.log('sucesso login? ', res)
+          if (res) {
+            console.log('login com sucesso redirecionar para a pagina')
+            this.$router.push(`/home/`)
+          } else console.log('deu erro no login')
         })
     }
   },

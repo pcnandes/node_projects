@@ -23,26 +23,17 @@ export default function ({store}/* { store, ssrContext } */) {
 
   Router.beforeEach((to, from, next) => {
     console.log('tratando navigation guard')
-    let logado = store.getters['auth/isLogado']
-    if (!logado) {
-      store.dispatch('auth/retoken')
-        .then(res => {
-          console.log('res retoken')
-          console.log(res)
-          if (res) {
-            if (to.fullPath === '/') {
-              next({path: '/home'})
-            } else next()
-          } else {
-            let redirect = to.fullPath === '/' ? undefined : '/'
-            next({path: redirect})
-          }
-        })
-    } else {
-      if (to.fullPath === '/') {
-        next({path: '/home'})
-      } else next()
-    }
+    store.dispatch('auth/retoken')
+      .then(res => {
+        if (res) {
+          if (to.fullPath === '/') {
+            next({path: '/home'})
+          } else next()
+        } else {
+          let redirect = to.fullPath === '/' ? undefined : '/'
+          next({path: redirect})
+        }
+      })
   })
 
   return Router

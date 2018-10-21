@@ -8,6 +8,9 @@
           SINDCON
           <div slot="subtitle">Sistema de gestão de condomínio</div>
         </q-toolbar-title>
+        <q-btn flat round dense icon="mail" title="Mensagens"/>
+        <q-btn flat round dense icon="people" title="Usuário"/>
+        <q-btn flat round dense icon="power_settings_new" title="Sair" @click="logout"/>
       </q-toolbar>
     </q-layout-header>
     <q-page-container>
@@ -17,7 +20,6 @@
 </template>
 
 <script>
-import { openURL } from 'quasar'
 
 export default {
   name: 'MyLayout',
@@ -27,7 +29,10 @@ export default {
     }
   },
   methods: {
-    openURL
+    logout () {
+      this.$store.dispatch('auth/logout')
+        .then(this.$router.push('/'))
+    }
   }
 }
 </script>
