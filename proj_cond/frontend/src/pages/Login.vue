@@ -11,13 +11,20 @@
       </div>
       <form v-on:submit.prevent="onSubmit()" class="login_bloco column">
         <q-field>
-          <q-select v-model="form.condominio" :options="condominios" placeholder="Condomínio" inverted-light color="white"/>
+          <q-select v-model="form.condominio" :options="condominios" placeholder="Condomínio"
+            inverted-light color="white"
+            @blur="$v.form.condominio.$touch"
+            :error="$v.form.condominio.$error"/>
         </q-field>
         <q-field>
-          <q-input v-model.trim="form.usuario" placeholder="Usuário" inverted-light color="white" autofocus/>
+          <q-input v-model.trim="form.usuario" placeholder="Usuário"
+            inverted-light color="white" autofocus
+            @blur="$v.form.usuario.$touch" :error="$v.form.usuario.$error"/>
         </q-field>
         <q-field>
-          <q-input v-model="form.senha" type="password" placeholder="Senha" inverted-light color="white"/>
+          <q-input v-model="form.senha" type="password" placeholder="Senha"
+            inverted-light color="white"
+            @blur="$v.form.senha.$touch" :error="$v.form.senha.$error"/>
         </q-field>
         <br/>
         <q-btn color="primary" type="submit">Login</q-btn>
@@ -31,6 +38,8 @@
 
 <script>
 import { QBtn, QToolbar, QIcon, QToolbarTitle, QField, QInput, QSelect, QCheckbox } from 'quasar'
+import { required } from 'vuelidate/lib/validators'
+
 export default {
   name: 'PageIndex',
   components: { QBtn, QToolbar, QIcon, QToolbarTitle, QField, QInput, QSelect, QCheckbox },
@@ -38,12 +47,19 @@ export default {
     return {
       lista: [],
       form: {
-        condominio: '',
+        condominio: 'golden_residence',
         usuario: '',
         senha: ''
       },
       lembreDeMim: false,
       condominios: [{label: 'Golden Residence', value: 'golden_residence'}, {label: 'Alpha Ville', value: 'alpha_ville'}]
+    }
+  },
+  validations: {
+    form: {
+      condominio: { required },
+      usuario: { required },
+      senha: { required }
     }
   },
   mounted () {
@@ -52,6 +68,11 @@ export default {
   created () { },
   methods: {
     onSubmit () {
+      this.$v.form.$touch()
+      if (this.$v.form.$error) {
+        this.$q.notify('Preencha as informaçoes de login.')
+        return
+      }
       this.$store.dispatch('auth/login', {'credenciais': this.form, 'lembreDeMim': this.lembreDeMim})
         .then((res) => {
           console.log('sucesso login? ', res)

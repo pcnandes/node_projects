@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import { openURL } from 'quasar'
 
 export default {
   name: 'MyLayout',
@@ -27,7 +26,7 @@ export default {
     }
   },
   methods: {
-    openURL
+
   }
 }
 </script>
