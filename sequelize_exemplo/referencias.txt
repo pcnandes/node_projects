@@ -1,0 +1,16 @@
+https://blog.rocketseat.com.br/nodejs-express-sequelize/
+
+
+comandos
+npm init -y
+npm install sequelize express body-parser --save
+npm install -D sequelize-cli
+#inicializar sequelize
+node_modules/.bin/sequelize init
+
+config/database.json -> arquivo de configuracao
+referencia: http://docs.sequelizejs.com/manual/installation/usage.html
+
+
+.sequelizerc - indicar localizacao dos arquivos de seuqliza
+http://docs.sequelizejs.com/manual/tutorial/migrations.html#the-sequelizerc-file
