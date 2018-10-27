@@ -7,8 +7,8 @@
           <q-icon name="menu" />
         </q-btn>
         <q-toolbar-title>
-          SINDCON
-          <div slot="subtitle">Sistema de gestão de condomínio</div>
+          <router-link to="/home" class="logo_nome">SINDCON</router-link>
+          <span slot="subtitle">Sistema de gestão de condomínio</span>
         </q-toolbar-title>
         <q-btn flat round dense icon="notification_important" title="Mensagens"/>
         <q-btn-dropdown flat dense :label="$store.state.auth.usuario.login">
@@ -97,4 +97,8 @@ export default {
 </script>
 
 <style>
+.logo_nome{
+  text-decoration: none;
+  color: inherit;
+}
 </style>
