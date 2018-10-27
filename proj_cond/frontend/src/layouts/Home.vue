@@ -23,13 +23,13 @@
             <q-item title="Cadastro" @click.native="logout">
               <q-item-side icon="people" />
               <q-item-main>
-                <q-item-title label>Cadastro</q-item-title>
+                <q-item-tile label>Cadastro</q-item-tile>
               </q-item-main>
             </q-item>
             <q-item title="Efetua logout do sistema" @click.native="logout">
               <q-item-side icon="power_settings_new" />
               <q-item-main>
-                <q-item-title label>Sair</q-item-title>
+                <q-item-tile label>Sair</q-item-tile>
               </q-item-main>
             </q-item>
           </q-list>
@@ -41,9 +41,17 @@
       :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null"
     >
       <q-list no-border link inset-delimiter>
+        <q-item to="agenda_condominio">
+          <q-item-side icon="today" />
+          <q-item-main label="Agenda Condomínio"/>
+        </q-item>
         <q-item to="cadastro_morador">
           <q-item-side icon="person" />
           <q-item-main label="Cadastro morador"/>
+        </q-item>
+        <q-item to="cadastro_colaborador">
+          <q-item-side icon="perm_contact_calendar" />
+          <q-item-main label="Cadastro colaboradores"/>
         </q-item>
         <q-item to="pre_assembleia">
           <q-item-side icon="question_answer" />

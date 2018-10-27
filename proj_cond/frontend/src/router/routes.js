@@ -13,6 +13,8 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/Home.vue') },
       { path: '/cadastro_morador', component: () => import('pages/CadastroMorador.vue') },
+      { path: '/cadastro_colaborador', component: () => import('pages/CadastroColaborador.vue') },
+      { path: '/agenda_condominio', component: () => import('pages/AgendaCondominio.vue') },
       { path: '/pre_assembleia', component: () => import('pages/PreAssembleia.vue') },
       { path: '/assembleia', component: () => import('pages/Assembleia.vue') },
       { path: '/livro_ocorrencia', component: () => import('pages/LivroOcorrencia.vue') },

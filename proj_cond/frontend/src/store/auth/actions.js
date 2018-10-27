@@ -19,23 +19,32 @@ export const logout = ({commit}) => {
   commit('apagarToken')
 }
 
-export const retoken = ({commit, dispatch}) => {
-  let token = localStorage.getItem(ID_TOKEN)
-  if (token) {
-    // cria outra instancia do axios para evitar o axios.defaults.headers['x-access-token']
-    const instance = axios.create({
-      headers: {
-        common: { 'x-access-token': JSON.parse(token) }
-      }
-    })
-    return instance.post('/public/retoken')
-      .then(res => {
-        return dispatch('setToken', res.data.token)
+export const retoken = ({commit, dispatch, getters}, force) => {
+  // let usuario = getters.getUsuario
+  // console.log(usuario)
+  let expiracao = getters.getExpiracaoToken
+  let now = new Date()
+  console.log(expiracao)
+  if (!force && expiracao && expiracao.getTime() > now.getTime()) {
+    return true
+  } else {
+    let token = localStorage.getItem(ID_TOKEN)
+    if (token) {
+      // cria outra instancia do axios para evitar o axios.defaults.headers['x-access-token']
+      const instance = axios.create({
+        headers: {
+          common: { 'x-access-token': JSON.parse(token) }
+        }
       })
-      .catch(() => {
-        commit('clearToken')
-        return false
-      })
+      return instance.post('/public/retoken')
+        .then(res => {
+          return dispatch('setToken', res.data.token)
+        })
+        .catch(() => {
+          commit('clearToken')
+          return false
+        })
+    }
   }
   return false
 }
@@ -43,7 +52,7 @@ export const retoken = ({commit, dispatch}) => {
 export const setToken = ({commit, dispatch, state}, encodedToken) => {
   console.log('entrou setToken')
   try {
-    var decodedToken = jwt.decode(encodedToken)
+    let decodedToken = jwt.decode(encodedToken)
     if (decodedToken && decodedToken.exp) {
       const dataExpiracao = new Date(0)
       const now = new Date()
@@ -57,12 +66,13 @@ export const setToken = ({commit, dispatch, state}, encodedToken) => {
         // cria um timer para atualização do token automaticamente
         state.timerToken = setTimeout(() => {
           console.log('Executando timer retoken')
-          dispatch('retoken')
+          dispatch('retoken', true)
         }, Math.max(dataExpiracao.getTime() - now.getTime() - (1000 * 60), 1)) // (1000 * 60) = 1 minuto
 
         // gravo usuario no localStorage
         localStorage.setItem(ID_TOKEN, JSON.stringify(encodedToken))
         commit('setUsuario', usuario)
+        commit('setExpiracaoToken', dataExpiracao)
       }
     }
     return true

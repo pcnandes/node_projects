@@ -1,6 +1,10 @@
 <template>
   <q-page class="flex flex-center">
-    Usuario logado!!!
+  <ul>
+    <li>Descricao do condominio</li>
+    <li>Downloads (regimento interno)</li>
+    <li>Regras gerais (texto que o sindico pode editar)</li>
+  </ul>
     teste{{lista}}
   </q-page>
 </template>
@@ -10,7 +14,7 @@
 
 <script>
 export default {
-  name: 'PageIndex',
+  name: 'Home',
 
   data () {
     return {

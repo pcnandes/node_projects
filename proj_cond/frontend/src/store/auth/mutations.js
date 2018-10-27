@@ -1,8 +1,11 @@
 import { ID_TOKEN } from '../../const'
 
 export const setUsuario = (state, usuario) => {
-  console.log('setUsuario', usuario)
   state.usuario = usuario
+}
+
+export const setExpiracaoToken = (state, expiracaoToken) => {
+  state.expiracaoToken = expiracaoToken
 }
 
 export const apagarToken = (state) => {
