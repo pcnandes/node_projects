@@ -63,6 +63,7 @@ module.exports = function (ctx) {
         'QListHeader',
         'QItem',
         'QItemMain',
+        'QItemTile',
         'QItemSide'
       ],
       directives: [

@@ -1,6 +1,7 @@
 // ESTUDAR https://code4coders.wordpress.com/2016/10/14/desenvolvendo-uma-aplicacao-restful-api-em-node-js-express-js-com-mongodb/
 
-require('dotenv-safe').load()
+// require('dotenv-safe').load()
+require('dotenv-safe').config()
 require('jsonwebtoken')
 const express = require('express')
 const cors = require('cors')

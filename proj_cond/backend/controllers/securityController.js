@@ -1,16 +1,23 @@
 const jwt = require('jsonwebtoken')
 const tempoExpiracao = 60 * 3 // 3 minutos
+const { Usuario } = require('./../config/sequelize')
+// TODO estudar e usar os codigos http corretos
 
-exports.login = function (req, res, next) {
+exports.login = async function (req, res, next) {
   let credenciais = req.body
-  // TODO recuperar no banco dados do usuario
-  if (credenciais.usuario === 'paulo' && credenciais.senha === '123') {
-    // TODO recuperar usuário logado do banco
-    const userLogado = { usuario: 1, nome: 'Paulo Fernandes', roles: ['Administrador', 'Gerente'] }
-    const token = gerarToken(userLogado)
-    res.status(200).send({ 'token': token })
-  } else {
-    res.status(401).send('Login inválidooooo!')
+  try {
+    if (credenciais.usuario && credenciais.senha) {
+      // quando nao se pretende manipular ou alterar o  objeto user raw para retotnar objetos simples (plain)
+      let usuarioLogado = await Usuario.findOne({ where: { login: credenciais.usuario }, raw: true })
+      if (usuarioLogado.senha === credenciais.senha) {
+        // const token = gerarToken(usuarioLogado.get({ plain: true }))
+        const token = gerarToken(usuarioLogado)
+        res.status(200).send({ 'token': token })
+      } res.status(401).send('Login ou senha inválido')
+    } else res.status(401).send('Informe o login e a senha!')
+  } catch (err) {
+    console.log(err)
+    res.status(401).send('Login inválido!')
   }
 }
 
@@ -24,9 +31,10 @@ exports.retoken = function (req, res, next) {
   if (token) {
     jwt.verify(token, process.env.SECRET, function (err, decoded) {
       if (!err) {
+        console.log('decoded', decoded)
         // TODO recuperar usuario do banco
-        const userLogado = { usuario: decoded.usuario, nome: decoded.nome, roles: decoded.roles }
-        token = gerarToken(userLogado)
+        const usuarioLogado = decoded.usuarioLogado
+        token = gerarToken(usuarioLogado)
       } else {
         token = null
       }
@@ -59,8 +67,8 @@ exports.verifyJWT = function (req, res, next) {
   })
 }
 
-function gerarToken (userLogado) {
-  return jwt.sign(userLogado, process.env.SECRET, {
+function gerarToken (usuario) {
+  return jwt.sign({ usuarioLogado: usuario }, process.env.SECRET, {
     expiresIn: tempoExpiracao // '1h'
   })
 }

@@ -78,7 +78,7 @@ export default {
           console.log('sucesso login? ', res)
           if (res) {
             console.log('login com sucesso redirecionar para a pagina')
-            this.$router.push(`/home/`)
+            this.$router.push('/home')
           } else console.log('deu erro no login')
         })
     }

@@ -51,12 +51,7 @@ export const setToken = ({commit, dispatch, state}, encodedToken) => {
       // verifica se o token não expirou
       if (dataExpiracao.getTime() > now.getTime()) {
         // constroi o objeto usuário a partir do token
-        const usuario = {
-          login: decodedToken.usuario,
-          nome: decodedToken.nome,
-          roles: decodedToken.roles
-        }
-
+        const usuario = decodedToken.usuarioLogado
         // configura o cabeçalho padrão das requisições HTTP para conter o token
         axios.defaults.headers['x-access-token'] = encodedToken
         // cria um timer para atualização do token automaticamente
