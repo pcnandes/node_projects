@@ -41,6 +41,10 @@
       :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null"
     >
       <q-list no-border link inset-delimiter>
+        <q-item to="cadastro_condominio">
+          <q-item-side icon="business" />
+          <q-item-main label="Cadastro condomínio"/>
+        </q-item>
         <q-item to="agenda_condominio">
           <q-item-side icon="today" />
           <q-item-main label="Agenda Condomínio"/>
