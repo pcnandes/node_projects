@@ -9,10 +9,23 @@
         <q-btn label="Adicionar bloco" @click="exibeModalBloco = true" color="primary"/>
       </div>
       <q-modal v-model="exibeModalBloco" :content-css="{minWidth: '50vw'}">
-        <div style="padding: 50px">
-          <div class="q-display-1 q-mb-md">Adicionar Bloco</div>
-          tsteeeee
-          <q-btn color="primary" @click="exibeModalBloco = false" label="Adicionar" />
+        <div class="row justify-center" style="padding: 50px">
+          <div class="q-display-1 q-mb-md">Cadastro Bloco</div>
+          <div class="row col-12 justify-between">
+            <q-field :count="10" class="col-5">
+              <q-input v-model="bloco.andares" type="number" float-label="N. de Andares"/>
+            </q-field>
+            <q-field :count="10" class="col-5">
+              <q-input v-model="bloco.unidadesPorAndar" type="number" float-label="Unidades por andar"
+                @blur="gerarPredio()"/>
+            </q-field>
+            <q-btn color="primary" @click="gerarPredio()" label="Gerar Prédio" />
+          </div>
+          {{bloco.unidades}}
+          <div class="row col-12 justify-center">
+            <q-btn color="faded" @click="exibeModalBloco = false" label="Cancelar" />
+            <q-btn color="primary" @click="exibeModalBloco = false" label="Adicionar" />
+          </div>
         </div>
       </q-modal>
 
@@ -34,9 +47,27 @@ export default {
   data () {
     return {
       exibeModalBloco: false,
+      /*
+      condominio = {
+        nome:'',
+        blocos = [{
+          andares: 0,
+          unidadesPorAndar: 0,
+          unidades: [][]}]
+        }
+      }, */
+      bloco: {
+        andares: '',
+        unidadesPorAndar: '',
+        unidades: [] // esse cara serua uma matriz}
+      },
       form: {
         nome: '',
-        blocos: []
+        blocos: {
+          andares: 0,
+          unidadesPorAndar: 0,
+          unidades: [] // esse cara serua uma matriz
+        }
       }
     }
   },
@@ -66,6 +97,18 @@ export default {
             this.$router.push('/home')
           } else console.log('deu erro no login')
         })
+    },
+    gerarPredio () {
+      if (this.bloco.andares && this.bloco.unidadesPorAndar) {
+        console.log(this.bloco.andares, this.bloco.unidadesPorAndar)
+        this.bloco.unidades = new Array(this.bloco.andares)
+        for (let i = 0; i < this.bloco.unidades.length; i++) {
+          this.bloco.unidades[i] = new Array(this.bloco.unidadesPorAndar)
+          for (let y = 0; y < this.bloco.unidades[i].length; y++) {
+            this.bloco.unidades[i][y] = (i + 1) * 100 + y + 1
+          }
+        }
+      }
     }
   }
 }
