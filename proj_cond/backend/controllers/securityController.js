@@ -13,11 +13,11 @@ exports.login = async function (req, res, next) {
         // const token = gerarToken(usuarioLogado.get({ plain: true }))
         const token = gerarToken(usuarioLogado)
         res.status(200).send({ 'token': token })
-      } res.status(401).send('Login ou senha inválido')
+      } res.status(401).send({ data: null, message: 'Usuário ou senha inválidos' })
     } else res.status(401).send('Informe o login e a senha!')
   } catch (err) {
     console.log(err)
-    res.status(401).send('Login inválido!')
+    res.status(500).send({ data: null, message: 'Erro ao acessar dados de usuario' })
   }
 }
 

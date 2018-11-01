@@ -12,7 +12,9 @@ export const login = ({dispatch}, data) => {
       console.log('retorno login', retorno)
       return retorno
     })
-    .catch(() => false)
+    .catch((err) => {
+      throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+    })
 }
 
 export const logout = ({commit}) => {

@@ -76,10 +76,12 @@ export default {
       this.$store.dispatch('auth/login', {'credenciais': this.form, 'lembreDeMim': this.lembreDeMim})
         .then((res) => {
           console.log('sucesso login? ', res)
-          if (res) {
-            console.log('login com sucesso redirecionar para a pagina')
-            this.$router.push('/home')
-          } else console.log('deu erro no login')
+          console.log('login com sucesso redirecionar para a pagina')
+          this.$router.push('/home')
+        })
+        .catch((err) => {
+          console.log('deu erro ', err)
+          this.$q.notify(err.message)
         })
     }
   },
