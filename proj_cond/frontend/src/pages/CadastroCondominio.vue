@@ -9,42 +9,43 @@
         <q-btn label="Adicionar bloco" @click="exibeModalBloco = true" color="primary"/>
       </div>
       <q-modal v-model="exibeModalBloco" :content-css="{minWidth: '50vw'}">
-        <div class="row col-12 justify-center" style="padding: 50px">
-          <div class="row col-12 justify-center q-display-1 q-mb-sm">Cadastro Bloco</div>
-          <div class="row col-9 justify-center q-mb-md" >
-            <q-field :count="10" class="col-5 q-mr-sm">
-              <q-input v-model="bloco.nome" type="text" float-label="Nome do bloco"/>
-            </q-field>
-            <q-field :count="10" class="col-4">
-              <q-input v-model="bloco.numeroPrimeiraUnidade" type="number" float-label="n. primeira Unidade"/>
-            </q-field>
-            <q-field :count="10" class="q-mr-sm col-4">
-              <q-input v-model="bloco.andares" type="number" float-label="n. Andares do bloco"/>
-            </q-field>
-            <q-field :count="10" class="q-mr-sm col-4">
-              <q-input v-model="bloco.unidadesPorAndar" type="number" float-label="Unidades por andar"/>
-            </q-field>
-            <q-btn class="col-1" flat dense round  color="primary"
-              @click="gerarPredio()" aria-label="Confirmar" icon="check">
-            </q-btn>
-          </div>
-          <div class="row col-10 justify-center q-mb-md" >
-            <div class="row col-9 justify-center" v-for="(andar, i) in bloco.unidades" :key="i">
-              <div class="q-mr-sm q-mb-sm divUnidade" v-for="(unidade, y) in andar" :key="y">
-                <q-input
-                  :value="unidade"
-                  @change="val => {model = val}"
-                />
-                <q-btn flat dense round class="botaoExcluirUnidade"
-                  @click="deletarUnidade()" aria-label="Deletar unidade" icon="delete">
-                </q-btn>
+        <div class="doc-container justify-center gutter-y-sm" style="padding: 20px;">
+            <div class="row justify-center q-display-1">Cadastro Bloco</div>
+            <div class="row gutter-sm" >
+              <q-field :count="10" class="col-md-6 col-xs-12">
+                <q-input v-model="bloco.nome" type="text" float-label="Nome do bloco"/>
+              </q-field>
+              <q-field :count="10" class="col-md-6 col-xs-12">
+                <q-input v-model="bloco.numeroPrimeiraUnidade" type="number" float-label="n. primeira Unidade"/>
+              </q-field>
+              <q-field :count="10" class="col-md-6 col-xs-12">
+                <q-input v-model="bloco.andares" type="number" float-label="n. Andares do bloco"/>
+              </q-field>
+              <q-field :count="10" class="col-md-6 col-xs-12">
+                <q-input v-model="bloco.unidadesPorAndar" type="number" float-label="Unidades por andar"/>
+              </q-field>
+              <div class="col-12 row justify-end">
+                <q-btn class="col-xs-12 col-md-auto" color="secondary" @click="gerarPredio()" label="Gerar bloco" />
               </div>
             </div>
-          </div>
-          <div class="row col-12 justify-center">
-            <q-btn color="faded" class="q-mr-sm" @click="exibeModalBloco = false" label="Cancelar" />
-            <q-btn color="primary" @click="exibeModalBloco = false" label="Adicionar" />
-          </div>
+            <div>
+              <div class="row col-12 justify-center" v-for="(andar, i) in bloco.unidades" :key="i">
+                <div class="q-mr-sm q-mb-sm divUnidade" v-for="(unidade, y) in andar" :key="y">
+                  <q-input
+                    :value="unidade"
+                    @change="val => {model = val}"
+                  />
+                  <q-btn flat dense round class="botaoExcluirUnidade material-icons primary"
+                    @click="deletarUnidade(i, y)" title="Deletar unidade" icon="delete">
+                  </q-btn>
+                </div>
+              </div>
+            </div>
+
+            <div class="row justify-center gutter-sm">
+              <div class="row col-xs-12  col-md-auto"><q-btn class="col-xs-12" color="faded" @click="exibeModalBloco = false" label="Cancelar" /></div>
+              <div class="row col-xs-12  col-md-auto"><q-btn class="col-xs-12" color="primary" @click="exibeModalBloco = false" label="Adicionar" /></div>
+            </div>
         </div>
       </q-modal>
 
@@ -131,6 +132,10 @@ export default {
           }
         }
       }
+    },
+    deletarUnidade (andar, unidade) {
+      this.bloco.unidades[andar].splice(unidade, 1)
+      console.log(this.bloco)
     }
   }
 }
@@ -139,10 +144,22 @@ export default {
 <style>
   .divUnidade {
     position:relative;
-    border: 1px solid black; width: 80px;
+    border: 1px solid #5a5a5a;
+    min-width: 60px;
+    max-width: 90px;
+    margin-bottom: 8px;
+    margin-right: 8px;
   }
   .botaoExcluirUnidade {
     position:absolute; top:0; right:0;
     margin:0;
   }
+  .material-icons.primary { color: #5a5a5a; }
+   @media (max-width: 575px) {
+    .divUnidade {
+      margin-bottom: 5px;
+      margin-right: 5px;
+      max-width: 70px;
+    }
+   }
 </style>

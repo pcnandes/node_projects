@@ -41,35 +41,35 @@
       :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null"
     >
       <q-list no-border link inset-delimiter>
-        <q-item to="cadastro_condominio">
+        <q-item to="cadastro_condominio" @click.native="closeMenu()">
           <q-item-side icon="business" />
           <q-item-main label="Cadastro condomínio"/>
         </q-item>
-        <q-item to="agenda_condominio">
+        <q-item to="agenda_condominio" @click.native="closeMenu()">
           <q-item-side icon="today" />
           <q-item-main label="Agenda Condomínio"/>
         </q-item>
-        <q-item to="cadastro_morador">
+        <q-item to="cadastro_morador" @click.native="closeMenu()">
           <q-item-side icon="person" />
           <q-item-main label="Cadastro morador"/>
         </q-item>
-        <q-item to="cadastro_colaborador">
+        <q-item to="cadastro_colaborador" @click.native="closeMenu()">
           <q-item-side icon="perm_contact_calendar" />
           <q-item-main label="Cadastro colaboradores"/>
         </q-item>
-        <q-item to="pre_assembleia">
+        <q-item to="pre_assembleia" @click.native="closeMenu()">
           <q-item-side icon="question_answer" />
           <q-item-main label="Pré-assembleia"/>
         </q-item>
-        <q-item to="assembleia">
+        <q-item to="assembleia" @click.native="closeMenu()">
           <q-item-side icon="gavel" />
           <q-item-main label="Assembléia"/>
         </q-item>
-        <q-item to="livro_ocorrencia">
+        <q-item to="livro_ocorrencia" @click.native="closeMenu()">
           <q-item-side icon="assignment" />
           <q-item-main label="Livro de Ocorrência"/>
         </q-item>
-        <q-item to="chat_sindico">
+        <q-item to="chat_sindico" @click.native="closeMenu()">
           <q-item-side icon="chat"/>
           <q-item-main label="Fale com o Síndico"/>
         </q-item>
@@ -95,6 +95,9 @@ export default {
     logout () {
       this.$store.dispatch('auth/logout')
         .then(this.$router.push('/'))
+    },
+    closeMenu () {
+      this.leftDrawerOpen = false
     }
   }
 }

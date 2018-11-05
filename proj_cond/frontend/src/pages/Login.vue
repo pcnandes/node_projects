@@ -26,8 +26,7 @@
             inverted-light color="white"
             @blur="$v.form.senha.$touch" :error="$v.form.senha.$error"/>
         </q-field>
-        <br/>
-        <q-btn color="primary" type="submit">Login</q-btn>
+        <q-btn class="btn-login" color="primary" type="submit">Login</q-btn>
         <q-checkbox v-model="lembreDeMim" label="Lembre-se de mim" />
         <a href="">Esqueci a senha</a>
     </form>
@@ -130,6 +129,9 @@ export default {
   .welcome_bloco > ul > li::before {
      font-family: "Material Icons"; content: "done ";
   }
+  .btn-login {
+    margin-top: 40px;
+  }
   .login_bloco {
     background-color: #DCDCDC;
     padding: 24px;
@@ -144,5 +146,24 @@ export default {
   }
   .login_bloco > div, button, a {
     margin-top: 15px;
+  }
+
+  @media (max-width: 575px) {
+    .pagina {
+      padding-top: 0px;
+    }
+    .welcome_bloco > h1 {
+      font-size: 25px;
+      margin: 20px 10px 15px 10px;
+    }
+    .welcome_bloco > ul {
+      font-size: 12px;
+    }
+    .welcome_bloco > ul > li {
+      margin-bottom: .5em;
+    }
+    .btn-login {
+      margin-top: 15px;
+    }
   }
 </style>
