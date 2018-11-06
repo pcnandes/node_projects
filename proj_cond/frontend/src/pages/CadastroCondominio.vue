@@ -29,8 +29,10 @@
               </div>
             </div>
             <div>
-              <div class="row col-12 justify-center" v-for="(andar, i) in bloco.unidades" :key="i">
-                <div class="q-mr-sm q-mb-sm divUnidade" v-for="(unidade, y) in andar" :key="y">
+              {{classUnidade}}
+              <div class="row col-10 justify-center" v-for="(andar, i) in bloco.unidades" :key="i">
+                <!--q-mr-sm q-mb-sm divUnidade-->
+                <div class="col-auto divUnidade" v-for="(unidade, y) in andar" :key="y">
                   <q-input
                     :value="unidade"
                     @change="val => {model = val}"
@@ -90,7 +92,8 @@ export default {
           unidadesPorAndar: 0,
           unidades: [] // esse cara serua uma matriz
         }
-      }
+      },
+      classUnidade: 'col-auto'
     }
   },
   validations: {
@@ -99,6 +102,9 @@ export default {
       usuario: { required },
       senha: { required }
     }
+  },
+  computed: {
+
   },
   mounted () {
 
@@ -131,6 +137,8 @@ export default {
             this.bloco.unidades[i][y] = i * 100 + primeira + y
           }
         }
+        // TODO ver se vale implementar regra
+        // this.classUnidade = this.bloco.unidadesPorAndar <= 10 ? 'col-1' : 'col-2'
       }
     },
     deletarUnidade (andar, unidade) {
@@ -145,8 +153,8 @@ export default {
   .divUnidade {
     position:relative;
     border: 1px solid #5a5a5a;
-    min-width: 60px;
-    max-width: 90px;
+    min-width: 60px!important;
+    max-width: 88px!important;
     margin-bottom: 8px;
     margin-right: 8px;
   }
@@ -159,7 +167,8 @@ export default {
     .divUnidade {
       margin-bottom: 5px;
       margin-right: 5px;
-      max-width: 70px;
+      min-width: 60px!important;;
+      max-width: 70px!important;;
     }
    }
 </style>
