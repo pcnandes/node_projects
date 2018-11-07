@@ -8,7 +8,7 @@
       <div class="row justify-center">
         <q-btn label="Adicionar bloco" @click="exibeModalBloco = true" color="primary"/>
       </div>
-      <q-modal v-model="exibeModalBloco" :content-css="{minWidth: '50vw'}">
+      <q-modal v-model="exibeModalBloco" no-backdrop-dismiss no-esc-dismiss :content-css="{minWidth: '50vw'}">
         <div class="doc-container justify-center gutter-y-sm" style="padding: 20px;">
             <div class="row justify-center q-display-1">Cadastro Bloco</div>
             <div class="row gutter-sm" >
@@ -29,13 +29,12 @@
               </div>
             </div>
             <div>
-              {{classUnidade}}
               <div class="row col-10 justify-center" v-for="(andar, i) in bloco.unidades" :key="i">
                 <!--q-mr-sm q-mb-sm divUnidade-->
                 <div class="col-auto divUnidade" v-for="(unidade, y) in andar" :key="y">
                   <q-input
                     :value="unidade"
-                    @change="val => {model = val}"
+                    @input="val => {bloco.unidades[i][y] = val}"
                   />
                   <q-btn flat dense round class="botaoExcluirUnidade material-icons primary"
                     @click="deletarUnidade(i, y)" title="Deletar unidade" icon="delete">
@@ -50,7 +49,7 @@
             </div>
         </div>
       </q-modal>
-
+      {{bloco.unidades}}
       Cadastro de colaboradores
       <ul>
         <li>Criar cadastro de porteiros e outros empregados contendo nome e horário de trabalho</li>
@@ -62,6 +61,7 @@
 <script>
 import { QBtn, QField, QInput, QModal } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
+import Vue from 'vue'
 
 export default {
   name: 'CadastroMorador',
@@ -92,8 +92,7 @@ export default {
           unidadesPorAndar: 0,
           unidades: [] // esse cara serua uma matriz
         }
-      },
-      classUnidade: 'col-auto'
+      }
     }
   },
   validations: {
@@ -143,7 +142,10 @@ export default {
     },
     deletarUnidade (andar, unidade) {
       this.bloco.unidades[andar].splice(unidade, 1)
-      console.log(this.bloco)
+      // verifica se existem elementos no array
+      if (this.bloco.unidades[andar].length > 0) Vue.set(this.bloco.unidades, andar, this.bloco.unidades[andar])
+      else this.bloco.unidades.splice(andar, 1)
+      console.log(this.bloco.unidades)
     }
   }
 }
