@@ -45,3 +45,6 @@ REATE TABLE produtos (
 6.3- rodar o mocha (responsável por executar os testes)
 ./NODE_ENV=test node_modules/mocha/bin/mocha
 
+7 ROdar com ambiente de producao
+./NODE_ENV=production nodemon app
+
