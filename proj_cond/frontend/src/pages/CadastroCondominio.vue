@@ -1,23 +1,33 @@
 <template>
-   <q-page padding class="docs-input row justify-center">
-    <div style="width: 800px; max-width: 90vw;" >
-      <q-field :count="50" helper="Nome do condomínio" >
+   <q-page padding class="docs-input row justify-center pagina">
+    <div class='full-width' style="max-width: 90vw;" >
+      <q-field :count="50" >
         <q-input v-model="condominio.nome" float-label="Nome do Condomínio"/>
       </q-field>
       <br/>
-      <div class="row justify-center">
-        <q-btn label="Adicionar bloco" @click="prepararAdicionarBloco()" color="primary"/>
+      <div class="row justify-center q-mb-lg">
+        <q-btn class="col-xs-12" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="primary"/>
       </div>
       <div class="row justify-center" v-if="condominio.blocos && condominio.blocos.length>0">
         <q-list class="col-12">
-          <q-collapsible icon="explore" :label="bloco.nome"
-            v-for="(bloco, i) in condominio.blocos" :key="i">
+          <q-collapsible icon="business" :label="'Bloco ' + bl.nome"
+            v-for="(bl, i) in condominio.blocos" :key="i">
             <div>
-              {{bloco.unidades}}
+              <div class="row col-10 justify-center" v-for="(andar, i) in bl.unidades" :key="i">
+                <div class="col-auto divUnidade row justify-center" v-for="(unidade, y) in andar" :key="y">
+                  {{unidade}}
+                </div>
+              </div>
+            </div>
+            <div class="row col-12 justify-center gutter-sm q-mt-xs">
+              <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Alterar bloco" @click="prepararAdicionarBloco()" color="faded"/></div>
+              <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Excluir bloco" @click="prepararAdicionarBloco()" color="negative"/></div>
             </div>
           </q-collapsible>
         </q-list>
+
       </div>
+
       <q-modal v-model="exibeModalBloco" no-backdrop-dismiss no-esc-dismiss :content-css="{minWidth: '50vw'}">
         <i class="material-icons light_gray absolute-top-right"
           title="Essa tela facilitará a criação de um bloco. Informe o 'Quantidade de andares' e 'Unidades por andar' para 'Gerar Bloco'. Caso a 'Primeira unidade' nao seja a 101, informe.">
@@ -194,8 +204,6 @@ export default {
     position:absolute; top:0; right:0;
     margin:0;
   }
-  .material-icons.primary { color: #5a5a5a; }
-  .material-icons.light_gray { color: #9c9b9b; }
 
   @media (max-width: 575px) {
     .divUnidade {

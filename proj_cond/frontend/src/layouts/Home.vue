@@ -75,7 +75,7 @@
         </q-item>
       </q-list>
     </q-layout-drawer>
-    <q-page-container>
+    <q-page-container class="bg-faded">
       <router-view/>
     </q-page-container>
   </q-layout>
@@ -104,8 +104,20 @@ export default {
 </script>
 
 <style>
-.logo_nome{
-  text-decoration: none;
-  color: inherit;
-}
+  .logo_nome{
+    text-decoration: none;
+    color: inherit;
+  }
+  .pagina {
+    margin: 0 auto; /*centralizo meu elemento na pagina*/
+    width: 100%;
+    max-width: 1200px; /*defino um tamanho maximo caso o site seja aberto em dispositivos com muita resolução*/
+    background-color: rgb(247, 247, 247);
+    padding-top: 5px;
+    /*
+    padding-left: 5%;
+    padding-right: 5%; */
+  }
+  .material-icons.primary { color: #5a5a5a; }
+  .material-icons.light_gray { color: #9c9b9b; }
 </style>
