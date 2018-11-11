@@ -6,21 +6,24 @@
       </q-field>
       <br/>
       <div class="row justify-center q-mb-lg">
-        <q-btn class="col-xs-12" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="primary"/>
+        <q-btn class="col-xs-12 col-md-auto" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="primary"/>
       </div>
       <div class="row justify-center" v-if="condominio.blocos && condominio.blocos.length>0">
         <q-list class="col-12">
           <q-collapsible icon="business" :label="'Bloco ' + bl.nome"
             v-for="(bl, i) in condominio.blocos" :key="i">
-            <div>
-              <div class="row col-10 justify-center" v-for="(andar, i) in bl.unidades" :key="i">
-                <div class="col-auto divUnidade row justify-center" v-for="(unidade, y) in andar" :key="y">
-                  {{unidade}}
+            <div class="row col-12 justify-center">
+              <div>
+                <div class="row col-10" v-for="(andar, i) in bl.andar" :key="i">
+                  <div class="divAndar justify-center">{{andar.andar}}</div>
+                  <div class="col-auto divUnidade" v-for="(unidade, y) in andar.unidades" :key="y">
+                    {{unidade}}
+                  </div>
                 </div>
               </div>
             </div>
             <div class="row col-12 justify-center gutter-sm q-mt-xs">
-              <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Alterar bloco" @click="prepararAdicionarBloco()" color="faded"/></div>
+              <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Alterar bloco" @click="prepararAlterarBloco(bl)" color="faded"/></div>
               <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Excluir bloco" @click="prepararAdicionarBloco()" color="negative"/></div>
             </div>
           </q-collapsible>
@@ -57,13 +60,17 @@
                 <q-btn class="col-xs-12 col-md-auto" color="secondary" @click="gerarBloco()" label="Gerar bloco" />
               </div>
             </div>
-            <div>
-              <div class="row col-10 justify-center" v-for="(andar, i) in bloco.unidades" :key="i">
-                <div class="col-auto divUnidade" v-for="(unidade, y) in andar" :key="y">
-                  <q-input :value="unidade"
-                    @input="val => {bloco.unidades[i][y] = val}"/>
-                  <q-btn flat dense round class="botaoExcluirUnidade material-icons primary"
-                    @click="deletarUnidade(i, y)" title="Deletar unidade" icon="delete"/>
+            <div class="row justify-center">
+              <div>
+                <div class="row col-10" v-for="(andar, i) in bloco.andar" :key="i">
+                  <div class="divAndar"><q-input :value="andar.andar" align="center"
+                      @input="val => {bloco.andar[i].andar = val}"/></div>
+                  <div class="col-auto divUnidade" v-for="(unidade, y) in andar.unidades" :key="y">
+                    <q-input :value="unidade"
+                      @input="val => {bloco.andar[i].unidades[y] = val}"/>
+                    <q-btn flat dense round class="botaoExcluirUnidade material-icons primary"
+                      @click="deletarUnidade(i, y)" title="Deletar unidade" icon="delete"/>
+                  </div>
                 </div>
               </div>
             </div>
@@ -83,13 +90,19 @@ import { QBtn, QField, QInput, QModal, QCollapsible } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
 import Vue from 'vue'
 
+class Pavimento {
+  constructor (andar, unidades) {
+    this.andar = andar
+    this.unidades = unidades
+  }
+}
 class Bloco {
   constructor () {
     this.nome = ''
     this.numeroPrimeiraUnidade = ''
     this.andares = ''
     this.unidadesPorAndar = ''
-    this.unidades = [] // esse cara é uma matriz [andar][unidade]
+    this.andar = [] // ex { andar: 1, undades [] }
   }
 }
 class AreaComum {
@@ -114,7 +127,7 @@ class Garagem {
 class Condominio {
   constructor () {
     this.nome = ''
-    this.blocos = [] // new Blocos
+    this.blocos = []
   }
 }
 
@@ -154,9 +167,13 @@ export default {
       this.exibeModalBloco = true
       this.bloco = new Bloco()
     },
+    prepararAlterarBloco (bloco) {
+      this.exibeModalBloco = true
+      this.bloco = bloco
+    },
     adicionarBloco () {
       this.$v.bloco.$touch()
-      if (this.$v.bloco.$error || !this.bloco.unidades || this.bloco.unidades.length === 0) {
+      if (this.$v.bloco.$error || !this.bloco.andar || this.bloco.andar.length === 0) {
         this.$q.notify('Preencha as informações do bloco e clique em Gerar Bloco.')
       } else {
         this.condominio.blocos.push(this.bloco)
@@ -171,21 +188,23 @@ export default {
       } else {
         console.log('gerandoPredio')
         const primeira = this.bloco.numeroPrimeiraUnidade ? this.bloco.numeroPrimeiraUnidade : 101
-        this.bloco.unidades = new Array(this.bloco.andares)
-        for (let i = 0; i < this.bloco.unidades.length; i++) {
-          this.bloco.unidades[i] = new Array(this.bloco.unidadesPorAndar)
-          for (let y = 0; y < this.bloco.unidades[i].length; y++) {
-            this.bloco.unidades[i][y] = i * 100 + primeira + y
+        this.bloco.andar = new Array(this.bloco.andares)
+        for (let i = 0; i < this.bloco.andar.length; i++) {
+          // defino o numero do andar
+          this.bloco.andar[i] = new Pavimento(i + Math.floor(primeira / 100),
+            new Array(this.bloco.unidadesPorAndar))
+          for (let y = 0; y < this.bloco.andar[i].unidades.length; y++) {
+            this.bloco.andar[i].unidades[y] = i * 100 + primeira + y
           }
         }
       }
     },
     deletarUnidade (andar, unidade) {
-      this.bloco.unidades[andar].splice(unidade, 1)
+      this.bloco.andar[andar].unidades.splice(unidade, 1)
       // verifica se existem elementos no array
-      if (this.bloco.unidades[andar].length > 0) Vue.set(this.bloco.unidades, andar, this.bloco.unidades[andar])
-      else this.bloco.unidades.splice(andar, 1)
-      console.log(this.bloco.unidades)
+      if (this.bloco.andar[andar].unidades.length > 0) Vue.set(this.bloco.andar, andar, this.bloco.andar[andar])
+      else this.bloco.andar.splice(andar, 1)
+      console.log(this.bloco.andar)
     }
   }
 }
@@ -197,8 +216,16 @@ export default {
     border: 1px solid #5a5a5a;
     min-width: 60px!important;
     max-width: 88px!important;
-    margin-bottom: 8px;
-    margin-right: 8px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    text-align: center;
+  }
+  .divAndar {
+    width: 30px;
+    background-color: #5a5a5a;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    text-align: center;
   }
   .botaoExcluirUnidade {
     position:absolute; top:0; right:0;
@@ -207,8 +234,8 @@ export default {
 
   @media (max-width: 575px) {
     .divUnidade {
-      margin-bottom: 5px;
-      margin-right: 5px;
+      margin-bottom: 2px;
+      margin-right: 2px;
       min-width: 60px!important;;
       max-width: 70px!important;;
     }

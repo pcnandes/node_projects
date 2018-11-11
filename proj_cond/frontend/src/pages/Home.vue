@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex flex-center pagina">
   <ul>
     <li>Descricao do condominio</li>
     <li>Downloads (regimento interno)</li>

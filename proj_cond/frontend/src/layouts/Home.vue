@@ -111,7 +111,7 @@ export default {
   .pagina {
     margin: 0 auto; /*centralizo meu elemento na pagina*/
     width: 100%;
-    max-width: 1200px; /*defino um tamanho maximo caso o site seja aberto em dispositivos com muita resolução*/
+    max-width: 85vw; /*defino um tamanho maximo caso o site seja aberto em dispositivos com muita resolução*/
     background-color: rgb(247, 247, 247);
     padding-top: 5px;
     /*
@@ -120,4 +120,9 @@ export default {
   }
   .material-icons.primary { color: #5a5a5a; }
   .material-icons.light_gray { color: #9c9b9b; }
+  @media (max-width: 575px) {
+    .pagina {
+      max-width: 100%;
+    }
+  }
 </style>
