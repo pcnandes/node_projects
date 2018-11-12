@@ -1,5 +1,9 @@
+'use strict'
 const Sequelize = require('sequelize')
 const UsuarioModel = require('../models/Usuario')
+const CondominioModel = require('../models/Condominio')
+const BlocoModel = require('../models/Bloco')
+const UnidadeModel = require('../models/Unidade')
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -28,6 +32,19 @@ const sequelize = new Sequelize(
 )
 
 const Usuario = UsuarioModel(sequelize, Sequelize)
+const Condominio = CondominioModel(sequelize, Sequelize)
+const Bloco = BlocoModel(sequelize, Sequelize)
+const Unidade = UnidadeModel(sequelize, Sequelize)
+
+// relacionamentos
+// http://docs.sequelizejs.com/class/lib/associations/base.js~Association.html
+// Condominio -> Bloco
+Condominio.hasMany(Bloco, { as: 'blocos', constraints: false, allowNull: true, defaultValue: null })
+Bloco.hasOne(Condominio)
+// Bloco Unidade
+Bloco.hasMany(Unidade, { as: 'unidades', constraints: false, allowNull: true, defaultValue: null })
+Unidade.hasOne(Bloco)
+
 // testa conexao
 sequelize
   .authenticate()
@@ -45,5 +62,5 @@ sequelize.sync({ force: false })
   })
 
 module.exports = {
-  Usuario
+  Usuario, Condominio, Bloco, Unidade
 }
