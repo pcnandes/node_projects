@@ -60,11 +60,13 @@
                 <q-btn class="col-xs-12 col-md-auto" color="secondary" @click="gerarBloco()" label="Gerar bloco" />
               </div>
             </div>
-            <div class="row justify-center">
+            <div class="row col-12 justify-center">
               <div>
                 <div class="row col-10" v-for="(andar, i) in bloco.andar" :key="i">
-                  <div class="divAndar"><q-input :value="andar.andar" align="center"
-                      @input="val => {bloco.andar[i].andar = val}"/></div>
+                  <div class="divAndar">
+                    <q-input :value="andar.andar" align="center"
+                      @input="val => {bloco.andar[i].andar = val}"/>
+                  </div>
                   <div class="col-auto divUnidade" v-for="(unidade, y) in andar.unidades" :key="y">
                     <q-input :value="unidade"
                       @input="val => {bloco.andar[i].unidades[y] = val}"/>
@@ -238,6 +240,10 @@ export default {
       margin-right: 2px;
       min-width: 60px!important;;
       max-width: 70px!important;;
+    }
+    .divAndar {
+      margin-bottom: 2px;
+      margin-right: 2px;
     }
   }
 </style>

@@ -15,4 +15,5 @@ export const apagarToken = (state) => {
   }
   state.usuario = {}
   localStorage.removeItem(ID_TOKEN)
+  state.expiracaoToken = null
 }

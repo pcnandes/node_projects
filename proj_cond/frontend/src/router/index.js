@@ -30,8 +30,10 @@ export default function ({store}/* { store, ssrContext } */) {
             next({path: '/home'})
           } else next()
         } else {
-          let redirect = to.fullPath === '/' ? undefined : '/'
-          next({path: redirect})
+          if (to.fullPath === '/') next()
+          else next('/')
+          // let redirect = to.fullPath === '/' ? undefined : '/'
+          // next({path: redirect})
         }
       })
   })

@@ -18,7 +18,7 @@ export const login = ({dispatch}, data) => {
 }
 
 export const logout = ({commit}) => {
-  commit('apagarToken')
+  return commit('apagarToken')
 }
 
 export const retoken = ({commit, dispatch, getters}, force) => {
