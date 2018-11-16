@@ -1,4 +1,19 @@
-
+// https://markus.oberlehner.net/blog/vue-form-validation-with-vuelidate/
+class Andar {
+  constructor (andar, unidades) {
+    this.andar = andar
+    this.unidades = unidades
+  }
+}
+class Bloco {
+  constructor () {
+    this.nome = ''
+    this.numeroPrimeiraUnidade = ''
+    this.andares = ''
+    this.unidadesPorAndar = ''
+    this.andar = [] // ex[{ andar: 1, unidades: [] }]
+  }
+}
 class AreaComum {
   constructor () {
     this.titulo = ''
@@ -24,4 +39,4 @@ class Condominio {
     this.blocos = []
   }
 }
-export { AreaComum, Garagem, Condominio }
+export { AreaComum, Garagem, Condominio, Bloco, Andar }

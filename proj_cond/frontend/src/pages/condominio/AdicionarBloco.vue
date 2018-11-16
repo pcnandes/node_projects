@@ -1,5 +1,6 @@
 <template>
-  <q-modal v-model="exibeModal" no-backdrop-dismiss no-esc-dismiss :content-css="{minWidth: '50vw'}">
+  <q-modal v-model="exibeModal" no-backdrop-dismiss no-esc-dismiss
+    :content-css="{minWidth: '50vw', maxWidth: '80vw'}" @show="prepararModal">
     <i class="material-icons light_gray absolute-top-right"
       title="Essa tela facilitará a criação de um bloco. Informe o 'Quantidade de andares' e 'Unidades por andar' para 'Gerar Bloco'. Caso a 'Primeira unidade' nao seja a 101, informe.">
       help
@@ -44,10 +45,12 @@
             </div>
           </div>
         </div>
-
+        value {{value}}
+        <br/>
+        bloco {{bloco}}
         <div class="row justify-center gutter-sm">
-          <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" color="faded" @click="exibeModal = false" label="Cancelar" /></div>
-          <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" color="primary" @click="adicionarBloco()" label="Adicionar" /></div>
+          <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" color="faded" @click="fecharModal" label="Cancelar" /></div>
+          <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" color="primary" @click="addAltBloco()" label="Adicionar" /></div>
         </div>
     </div>
   </q-modal>
@@ -57,30 +60,20 @@
 import { QBtn, QField, QInput, QModal } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
 import Vue from 'vue'
-
-class Pavimento {
-  constructor (andar, unidades) {
-    this.andar = andar
-    this.unidades = unidades
-  }
-}
-class Bloco {
-  constructor () {
-    this.nome = ''
-    this.numeroPrimeiraUnidade = ''
-    this.andares = ''
-    this.unidadesPorAndar = ''
-    this.andar = [] // ex { andar: 1, undades [] }
-  }
-}
+import { Bloco, Andar } from './mixin.js'
 
 export default {
   components: {
     QBtn, QField, QInput, QModal
   },
   props: {
-    exibeModal: {required: false, type: Boolean, default: false},
-    bloco: {type: Object, default: () => new Bloco()}
+    exibeModal: {required: true, type: Boolean, default: false},
+    value: {required: true, type: Object, default: () => new Bloco()}
+  },
+  data () {
+    return {
+      bloco: new Bloco()
+    }
   },
   validations: {
     bloco: {
@@ -103,7 +96,7 @@ export default {
         this.bloco.andar = new Array(this.bloco.andares)
         for (let i = 0; i < this.bloco.andar.length; i++) {
           // defino o numero do andar
-          this.bloco.andar[i] = new Pavimento(i + Math.floor(primeira / 100),
+          this.bloco.andar[i] = new Andar(i + Math.floor(primeira / 100),
             new Array(this.bloco.unidadesPorAndar))
           for (let y = 0; y < this.bloco.andar[i].unidades.length; y++) {
             this.bloco.andar[i].unidades[y] = i * 100 + primeira + y
@@ -117,6 +110,21 @@ export default {
       if (this.bloco.andar[andar].unidades.length > 0) Vue.set(this.bloco.andar, andar, this.bloco.andar[andar])
       else this.bloco.andar.splice(andar, 1)
       console.log(this.bloco.andar)
+    },
+    addAltBloco () {
+      this.$v.bloco.$touch()
+      if (this.$v.bloco.$error || !this.bloco.andar || this.bloco.andar.length === 0) {
+        this.$q.notify('Preencha as informações do bloco e clique em Gerar Bloco.')
+      } else {
+        this.fecharModal()
+        this.$emit('acaoAlterarBloco', this.bloco)
+      }
+    },
+    prepararModal () {
+      this.bloco = JSON.parse(JSON.stringify(this.value))
+    },
+    fecharModal () {
+      this.$emit('fechar')
     }
   }
 }

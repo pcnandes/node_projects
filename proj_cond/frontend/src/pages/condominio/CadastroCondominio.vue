@@ -30,8 +30,7 @@
         </q-list>
       </div>
     </div>
-    <adicionar-bloco :exibeModal="exibeModalBloco"></adicionar-bloco>
-    {{exibeModalBloco}}
+    <adicionar-bloco :exibeModal="exibeModalBloco" @fechar="fecharModal" :value="bloco" @acaoAlterarBloco="addAltBloco"></adicionar-bloco>
    </q-page>
 </template>
 
@@ -39,7 +38,7 @@
 import { QBtn, QField, QInput, QModal, QCollapsible } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
 // import Vue from 'vue'
-import { AreaComum, Garagem, Condominio } from './classes.js'
+import { Condominio, Bloco, Andar } from './mixin.js'
 import AdicionarBloco from './AdicionarBloco.vue'
 
 export default {
@@ -48,10 +47,11 @@ export default {
   data () {
     return {
       exibeModalBloco: false,
-      // bloco: new Bloco(),
-      areaComum: new AreaComum(),
-      garagem: new Garagem(),
-      condominio: new Condominio()
+      bloco: new Bloco(),
+      // areaComum: new AreaComum(),
+      // garagem: new Garagem(),
+      condominio: new Condominio(),
+      andar: new Andar()
     }
   },
   validations: {
@@ -69,23 +69,20 @@ export default {
   },
   created () { },
   methods: {
-    /*
     prepararAdicionarBloco () {
       this.exibeModalBloco = true
       this.bloco = new Bloco()
-    }, */
+    },
     prepararAlterarBloco (bloco) {
       this.exibeModalBloco = true
       this.bloco = bloco
     },
-    adicionarBloco () {
-      this.$v.bloco.$touch()
-      if (this.$v.bloco.$error || !this.bloco.andar || this.bloco.andar.length === 0) {
-        this.$q.notify('Preencha as informações do bloco e clique em Gerar Bloco.')
-      } else {
-        this.condominio.blocos.push(this.bloco)
-        this.exibeModalBloco = false
-      }
+    addAltBloco (bloco) {
+      console.log('incAlt', bloco)
+      this.condominio.blocos.push(bloco)
+    },
+    fecharModal () {
+      this.exibeModalBloco = false
     }
   }
 }
