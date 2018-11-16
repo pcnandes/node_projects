@@ -24,13 +24,15 @@
             </div>
             <div class="row col-12 justify-center gutter-sm q-mt-xs">
               <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Alterar bloco" @click="prepararAlterarBloco(bl)" color="faded"/></div>
-              <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Excluir bloco" @click="prepararAdicionarBloco()" color="negative"/></div>
+              <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Excluir bloco" @click="prepararExclusaoBloco()" color="negative"/></div>
             </div>
           </q-collapsible>
         </q-list>
       </div>
     </div>
-    <adicionar-bloco :exibeModal="exibeModalBloco" @fechar="fecharModal" :value="bloco" @acaoAlterarBloco="addAltBloco"></adicionar-bloco>
+    <adicionar-bloco :exibeModal="exibeModalBloco" @fechar="fecharModal"
+      v-model="bloco" @acaoAdicionarBloco="addAltBloco" :modo="modoAdicionarBloco">
+    </adicionar-bloco>
    </q-page>
 </template>
 
@@ -46,6 +48,7 @@ export default {
   components: { QBtn, QField, QInput, QModal, QCollapsible, 'adicionar-bloco': AdicionarBloco },
   data () {
     return {
+      modoAdicionarBloco: 'INCLUSAO', // 'INCUSAO' 'ALTERACAO'
       exibeModalBloco: false,
       bloco: new Bloco(),
       // areaComum: new AreaComum(),
@@ -61,25 +64,22 @@ export default {
       senha: { required }
     }
   },
-  computed: {
-
-  },
-  mounted () {
-
-  },
-  created () { },
   methods: {
     prepararAdicionarBloco () {
+      this.modoAdicionarBloco = 'INCLUSAO'
       this.exibeModalBloco = true
       this.bloco = new Bloco()
     },
     prepararAlterarBloco (bloco) {
+      this.modoAdicionarBloco = 'ALTERACAO'
       this.exibeModalBloco = true
       this.bloco = bloco
     },
     addAltBloco (bloco) {
-      console.log('incAlt', bloco)
-      this.condominio.blocos.push(bloco)
+      // se o bloco existe eu adiciono se nao existe nao faço nada pois o obj ja foi alterado pelo componente
+      if (bloco) {
+        this.condominio.blocos.push(bloco)
+      }
     },
     fecharModal () {
       this.exibeModalBloco = false

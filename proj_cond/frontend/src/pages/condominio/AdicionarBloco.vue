@@ -45,12 +45,9 @@
             </div>
           </div>
         </div>
-        value {{value}}
-        <br/>
-        bloco {{bloco}}
         <div class="row justify-center gutter-sm">
           <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" color="faded" @click="fecharModal" label="Cancelar" /></div>
-          <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" color="primary" @click="addAltBloco()" label="Adicionar" /></div>
+          <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" color="primary" @click="addAltBloco()" label="Confirmar" /></div>
         </div>
     </div>
   </q-modal>
@@ -68,6 +65,7 @@ export default {
   },
   props: {
     exibeModal: {required: true, type: Boolean, default: false},
+    modo: {required: true, type: String},
     value: {required: true, type: Object, default: () => new Bloco()}
   },
   data () {
@@ -91,7 +89,6 @@ export default {
       if (this.$v.bloco.andares.$error || this.$v.bloco.unidadesPorAndar.$error) {
         this.$q.notify('Informe a Qtd. andares e Unidades por andar.')
       } else {
-        console.log('gerandoPredio')
         const primeira = this.bloco.numeroPrimeiraUnidade ? this.bloco.numeroPrimeiraUnidade : 101
         this.bloco.andar = new Array(this.bloco.andares)
         for (let i = 0; i < this.bloco.andar.length; i++) {
@@ -117,10 +114,15 @@ export default {
         this.$q.notify('Preencha as informações do bloco e clique em Gerar Bloco.')
       } else {
         this.fecharModal()
-        this.$emit('acaoAlterarBloco', this.bloco)
+        if (this.modo === 'ALTERACAO') {
+          this.$emit('change', this.bloco)
+        } else if (this.modo === 'INCLUSAO') {
+          this.$emit('acaoAdicionarBloco', this.bloco)
+        }
       }
     },
     prepararModal () {
+      this.$v.bloco.$reset()
       this.bloco = JSON.parse(JSON.stringify(this.value))
     },
     fecharModal () {
