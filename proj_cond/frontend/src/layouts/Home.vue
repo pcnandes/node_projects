@@ -118,6 +118,21 @@ export default {
     padding-left: 5%;
     padding-right: 5%; */
   }
+  .barra-botoes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    background-color: rgb(212, 212, 212);
+    border-width: 1px;
+    border-color: rgb(187, 187, 187);
+    border-style: solid;
+    border-radius: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+  }
+  .barra-botoes > div {
+    padding-left: 16px;
+  }
   .material-icons.primary { color: #5a5a5a; }
   .material-icons.light_gray { color: #9c9b9b; }
   @media (max-width: 575px) {

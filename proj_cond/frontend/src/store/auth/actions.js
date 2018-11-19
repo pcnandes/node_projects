@@ -6,7 +6,7 @@ import { ID_TOKEN } from '../../const'
 // falta implementar lembrar de mim
 export const login = ({dispatch}, data) => {
   // efetuo login
-  return axios.post('/public/login', data.credenciais)
+  return axios.post('/api/public/login', data.credenciais)
     .then((res) => {
       let retorno = dispatch('setToken', res.data.token)
       console.log('retorno login', retorno)
@@ -38,7 +38,7 @@ export const retoken = ({commit, dispatch, getters}, force) => {
           common: { 'x-access-token': JSON.parse(token) }
         }
       })
-      return instance.post('/public/retoken')
+      return instance.post('/api/public/retoken')
         .then(res => {
           return dispatch('setToken', res.data.token)
         })

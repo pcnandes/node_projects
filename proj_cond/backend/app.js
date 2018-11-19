@@ -12,7 +12,7 @@ const cors = require('cors')
 // var cookieParser = require('cookie-parser');
 const logger = require('morgan')
 
-const indexRoutes = require('./routes/indexRoutes')
+// const indexRoutes = require('./routes/indexRoutes')
 const publicRoutes = require('./routes/publicRoutes')
 const condominioRoutes = require('./routes/condominioRoutes')
 
@@ -25,8 +25,8 @@ app.use(express.urlencoded({ extended: false }))
 // app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRoutes)
-app.use('/public', publicRoutes)
-app.use('/condominio', condominioRoutes)
+// app.use('/', indexRoutes)
+app.use('/api/public', publicRoutes)
+app.use('/api/condominio', condominioRoutes)
 
 module.exports = app

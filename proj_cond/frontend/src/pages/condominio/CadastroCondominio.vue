@@ -6,7 +6,7 @@
       </q-field>
       <br/>
       <div class="row justify-center q-mb-lg">
-        <q-btn class="col-xs-12 col-md-auto" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="primary"/>
+        <q-btn class="col-xs-12 col-md-auto" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
       </div>
       <div class="row justify-center" v-if="condominio.blocos && condominio.blocos.length>0">
         <q-list class="col-12">
@@ -29,7 +29,8 @@
           </q-collapsible>
         </q-list>
       </div>
-      <div class="row justify-center gutter-sm q-mt-xs">
+      <div class="barra-botoes">
+        <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Cancelar" @click="cancelar" color="primary"/></div>
         <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Salvar" @click="salvar" color="primary"/></div>
       </div>
     </div>
@@ -95,14 +96,26 @@ export default {
       this.exibeModalBloco = false
     },
     salvar () {
-      axios.post('/condominio', this.condominio)
-        .then((res) => {
-          this.condominio = res.condominio
-        })
-        .catch((err) => {
-          console.error('ERRO: ', err.response.erro)
-          throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
-        })
+      // cadastrar condominio
+      if (!this.condominio.id) {
+        axios.post('/api/condominio', this.condominio)
+          .then((res) => {
+            this.condominio = res.data
+          })
+          .catch((err) => {
+            console.error('ERRO: ', err.response.erro)
+            throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+          })
+      } else {
+        axios.put(`/api/condominio/${this.condominio.id}`, this.condominio)
+          .then((res) => {
+            this.condominio = res.data
+          })
+          .catch((err) => {
+            console.error('ERRO: ', err.response.erro)
+            throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+          })
+      }
     }
   }
 }

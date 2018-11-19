@@ -15,6 +15,7 @@ localhost:8080
 
 1.5- Banco de dados MySql 5.7.24
 https://dev.mysql.com/downloads/installer/ (escolher Looking for previous GA versions?)
+1.5.1-linux usar xampp https://www.apachefriends.org/pt_br/index.html
 
 2 - OQ USO
 2.1 - backend
