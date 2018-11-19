@@ -14,6 +14,7 @@ const logger = require('morgan')
 
 const indexRoutes = require('./routes/indexRoutes')
 const publicRoutes = require('./routes/publicRoutes')
+const condominioRoutes = require('./routes/condominioRoutes')
 
 var app = express()
 // habilita cors domain https://github.com/expressjs/cors
@@ -26,5 +27,6 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use('/', indexRoutes)
 app.use('/public', publicRoutes)
+app.use('/condominio', condominioRoutes)
 
 module.exports = app

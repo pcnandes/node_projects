@@ -56,7 +56,6 @@
 <script>
 import { QBtn, QField, QInput, QModal } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
-import Vue from 'vue'
 import { Bloco, Andar } from './mixin.js'
 
 export default {
@@ -104,9 +103,8 @@ export default {
     deletarUnidade (andar, unidade) {
       this.bloco.andar[andar].unidades.splice(unidade, 1)
       // verifica se existem elementos no array
-      if (this.bloco.andar[andar].unidades.length > 0) Vue.set(this.bloco.andar, andar, this.bloco.andar[andar])
+      if (this.bloco.andar[andar].unidades.length > 0) this.$set(this.bloco.andar, andar, this.bloco.andar[andar])
       else this.bloco.andar.splice(andar, 1)
-      console.log(this.bloco.andar)
     },
     addAltBloco () {
       this.$v.bloco.$touch()
@@ -115,7 +113,10 @@ export default {
       } else {
         this.fecharModal()
         if (this.modo === 'ALTERACAO') {
-          this.$emit('change', this.bloco)
+          // this.$emit('input', this.value)
+          // https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+          Object.assign(this.value, this.bloco)
+          // this.$emit('update:value', this.value)
         } else if (this.modo === 'INCLUSAO') {
           this.$emit('acaoAdicionarBloco', this.bloco)
         }

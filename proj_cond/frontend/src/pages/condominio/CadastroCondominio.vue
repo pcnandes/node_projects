@@ -29,6 +29,9 @@
           </q-collapsible>
         </q-list>
       </div>
+      <div class="row justify-center gutter-sm q-mt-xs">
+        <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Salvar" @click="salvar" color="primary"/></div>
+      </div>
     </div>
     <adicionar-bloco :exibeModal="exibeModalBloco" @fechar="fecharModal"
       v-model="bloco" @acaoAdicionarBloco="addAltBloco" :modo="modoAdicionarBloco">
@@ -42,6 +45,7 @@ import { required } from 'vuelidate/lib/validators'
 // import Vue from 'vue'
 import { Condominio, Bloco, Andar } from './mixin.js'
 import AdicionarBloco from './AdicionarBloco.vue'
+import axios from 'axios'
 
 export default {
   name: 'CadastroCondominio',
@@ -74,15 +78,31 @@ export default {
       this.modoAdicionarBloco = 'ALTERACAO'
       this.exibeModalBloco = true
       this.bloco = bloco
+      console.log('bloco cadastro', this.bloco)
     },
     addAltBloco (bloco) {
       // se o bloco existe eu adiciono se nao existe nao faço nada pois o obj ja foi alterado pelo componente
       if (bloco) {
         this.condominio.blocos.push(bloco)
+      } else {
+        console.log('alterando bloco', this.bloco)
+        console.log('alterando condominio', this.condominio)
+        // this.$set(this.condominio.blocos, 0, this.condominio.blocos)
+        // this.this.condominio.assign(this.condominio.blocos, this.bloco)
       }
     },
     fecharModal () {
       this.exibeModalBloco = false
+    },
+    salvar () {
+      axios.post('/condominio', this.condominio)
+        .then((res) => {
+          this.condominio = res.condominio
+        })
+        .catch((err) => {
+          console.error('ERRO: ', err.response.erro)
+          throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+        })
     }
   }
 }
