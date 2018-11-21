@@ -1,4 +1,4 @@
-import condominio from '../pages/condominio/router'
+import condominio from '../pages/condominio/routes'
 
 const routes = [
   {
@@ -14,7 +14,6 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/Home.vue') },
       { path: '/cadastro_condominio', component: () => import('pages/condominio/Condominio.vue'), children: condominio },
-      // { path: '/cadastro_condominio', component: () => import('pages/condominio/CadastroCondominio.vue') },
       { path: '/cadastro_usuario', component: () => import('pages/CadastroUsuario.vue') },
       { path: '/cadastro_colaborador', component: () => import('pages/CadastroColaborador.vue') },
       { path: '/agenda_condominio', component: () => import('pages/AgendaCondominio.vue') },

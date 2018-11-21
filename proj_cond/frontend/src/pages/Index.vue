@@ -13,11 +13,9 @@ export default {
 
   data () {
     return {
-      lista: []
     }
   },
   created () {
-    this.listar()
   },
   methods: {
 

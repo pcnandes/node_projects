@@ -1,5 +1,5 @@
 <template>
-  <q-page class="pagina tertiary">
+  <q-page class="pagina_login tertiary">
       <div class="welcome_bloco">
         <h1>Um novo jeito de administar seu condomínio</h1>
         <ul>
@@ -92,7 +92,7 @@ export default {
 }
 </script>
 <style scoped>
-  .pagina {
+  .pagina_login {
     display: flex;
     min-height: 350px;
     /*align-items: stretch;*/
@@ -149,7 +149,7 @@ export default {
   }
 
   @media (max-width: 575px) {
-    .pagina {
+    .pagina_login {
       padding-top: 0px;
     }
     .welcome_bloco > h1 {

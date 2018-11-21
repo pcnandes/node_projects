@@ -94,7 +94,7 @@ export default {
   methods: {
     logout () {
       this.$store.dispatch('auth/logout')
-        .then(this.$router.push('/logout'))
+        .then(this.$router.push('/'))
     },
     closeMenu () {
       this.leftDrawerOpen = false

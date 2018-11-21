@@ -31,7 +31,7 @@ export default function ({store}/* { store, ssrContext } */) {
           } else next()
         } else {
           if (to.fullPath === '/') next()
-          else next('/')
+          else next({to: '/', replace: true})
           // let redirect = to.fullPath === '/' ? undefined : '/'
           // next({path: redirect})
         }

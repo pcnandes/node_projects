@@ -85,7 +85,7 @@ export const setToken = ({commit, dispatch, state}, encodedToken) => {
 }
 export const hasRole = ({getters}, holes) => {
   // verifico se existe exigencia de perfil e se o usuario possui o perfil
-  if (!holes || holes.lenght === 0 || holes.indexOf(getters.getUsuario().perfil) > 0) {
+  if (!holes || holes.lenght === 0 || holes.indexOf(getters.getUsuario.perfil) > -1) {
     return true
   } else return false
 }
