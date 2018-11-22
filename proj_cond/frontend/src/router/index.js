@@ -28,7 +28,10 @@ export default function ({store}/* { store, ssrContext } */) {
         if (res) {
           if (to.fullPath === '/') {
             next({path: '/home'})
-          } else next()
+          } else {
+            verificaPermissaoRota(to, next, store)
+            // next()
+          }
         } else {
           if (to.fullPath === '/') next()
           else next({to: '/', replace: true})
@@ -39,4 +42,18 @@ export default function ({store}/* { store, ssrContext } */) {
   })
 
   return Router
+}
+
+function verificaPermissaoRota (to, next, store) {
+  console.log('verificaPermissaoRota')
+  if (to.meta.perfis && to.meta.perfis.length > 0) {
+    store.dispatch('auth/hasRole', ['ADMIN', 'SINDICO'])
+      .then((res) => {
+        if (res) next()
+        else {
+          this.$q.notify('Usuário logado nao tem acesso ao cadastro de condominio')
+          next(false)
+        }
+      })
+  } else next()
 }
