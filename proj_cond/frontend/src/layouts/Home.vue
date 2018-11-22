@@ -40,7 +40,13 @@
       v-model="leftDrawerOpen"
       :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null"
     >
+    {{itensMenu}}
       <q-list no-border link inset-delimiter>
+        <q-item v-for="(item, i) in itensMenu" :key="i" :to="item.path" @click.native="closeMenu()">
+          <q-item-side icon="business" />
+          <q-item-main :label="item.tituloMenu"/>
+        </q-item>
+        <!--
         <q-item to="cadastro_condominio" @click.native="closeMenu()">
           <q-item-side icon="business" />
           <q-item-main label="Cadastro condomínio"/>
@@ -73,6 +79,7 @@
           <q-item-side icon="chat"/>
           <q-item-main label="Fale com o Síndico"/>
         </q-item>
+        -->
       </q-list>
     </q-layout-drawer>
     <q-page-container class="bg-faded">
@@ -83,12 +90,30 @@
 
 <script>
 import { QBtnDropdown } from 'quasar'
+import routes from '../router/routes'
 export default {
   components: { QBtnDropdown },
   name: 'Home',
   data () {
     return {
       leftDrawerOpen: false
+    }
+  },
+  computed: {
+    itensMenu () {
+      return routes.filter(route => {
+        // console.log(route)
+        if (route.children) {
+          let retorno = route.children.filter(children => {
+            if (children.itemMenu) {
+              return children
+            }
+          })
+          console.log(retorno)
+          return retorno
+        }
+        return false
+      })
     }
   },
   methods: {

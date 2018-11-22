@@ -13,13 +13,42 @@ const routes = [
     component: () => import('layouts/Home.vue'),
     children: [
       { path: '', component: () => import('pages/Home.vue') },
-      { path: '/cadastro_condominio', component: () => import('pages/condominio/Condominio.vue'), children: condominio },
-      { path: '/cadastro_usuario', component: () => import('pages/CadastroUsuario.vue') },
-      { path: '/cadastro_colaborador', component: () => import('pages/CadastroColaborador.vue') },
-      { path: '/agenda_condominio', component: () => import('pages/AgendaCondominio.vue') },
-      { path: '/pre_assembleia', component: () => import('pages/PreAssembleia.vue') },
-      { path: '/assembleia', component: () => import('pages/Assembleia.vue') },
-      { path: '/livro_ocorrencia', component: () => import('pages/LivroOcorrencia.vue') },
+      { path: '/cadastro_condominio',
+        component: () => import('pages/condominio/Condominio.vue'),
+        children: condominio,
+        itemMenu: true,
+        tituloMenu: 'Cadastro de condomínio'
+      },
+      { path: '/cadastro_usuario',
+        component: () => import('pages/CadastroUsuario.vue'),
+        itemMenu: true,
+        tituloMenu: 'Cadastro de usuário'
+      },
+      { path: '/cadastro_colaborador',
+        component: () => import('pages/CadastroColaborador.vue'),
+        itemMenu: true,
+        tituloMenu: 'Cadastro de colaborador'
+      },
+      { path: '/agenda_condominio',
+        component: () => import('pages/AgendaCondominio.vue'),
+        itemMenu: true,
+        tituloMenu: 'Agenda do condomínio'
+      },
+      { path: '/pre_assembleia',
+        component: () => import('pages/PreAssembleia.vue'),
+        itemMenu: true,
+        tituloMenu: 'Pré-assembléia'
+      },
+      { path: '/assembleia',
+        component: () => import('pages/Assembleia.vue'),
+        itemMenu: true,
+        tituloMenu: 'Assembléia'
+      },
+      { path: '/livro_ocorrencia',
+        component: () => import('pages/LivroOcorrencia.vue'),
+        itemMenu: true,
+        tituloMenu: 'Livro de ocorrência'
+      },
       { path: '/chat_sindico', component: () => import('pages/ChatSindico.vue') }
     ]
   }
