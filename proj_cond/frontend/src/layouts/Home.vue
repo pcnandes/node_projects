@@ -40,12 +40,12 @@
       v-model="leftDrawerOpen"
       :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null"
     >
-    {{itensMenu}}
       <q-list no-border link inset-delimiter>
         <q-item v-for="(item, i) in itensMenu" :key="i" :to="item.path" @click.native="closeMenu()">
           <q-item-side icon="business" />
           <q-item-main :label="item.tituloMenu"/>
         </q-item>
+      </q-list>
         <!--
         <q-item to="cadastro_condominio" @click.native="closeMenu()">
           <q-item-side icon="business" />
@@ -79,8 +79,7 @@
           <q-item-side icon="chat"/>
           <q-item-main label="Fale com o Síndico"/>
         </q-item>
-        -->
-      </q-list>
+      </q-list> -->
     </q-layout-drawer>
     <q-page-container class="bg-faded">
       <router-view/>
@@ -101,6 +100,19 @@ export default {
   },
   computed: {
     itensMenu () {
+      let retorno = []
+      // rotas pais
+      let _rotas = routes.filter(route => {
+        return route.children && route.children.length > 0
+      })
+      _rotas.forEach(r => {
+        retorno = r.children.filter(children => {
+          // TODO verificar permissoes de usuario
+          return children.itemMenu
+        })
+      })
+      return retorno
+      /*
       return routes.filter(route => {
         // console.log(route)
         if (route.children) {
@@ -113,7 +125,7 @@ export default {
           return retorno
         }
         return false
-      })
+      }) */
     }
   },
   methods: {
