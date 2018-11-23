@@ -17,39 +17,46 @@ const routes = [
         component: () => import('pages/condominio/Condominio.vue'),
         children: condominio,
         itemMenu: true,
-        tituloMenu: 'Cadastro de condomínio'
+        tituloMenu: 'Cadastro de condomínio',
+        icone: 'business'
       },
       { path: '/cadastro_usuario',
         component: () => import('pages/CadastroUsuario.vue'),
         itemMenu: true,
-        tituloMenu: 'Cadastro de usuário'
+        tituloMenu: 'Cadastro de usuário',
+        icone: 'today'
       },
       { path: '/cadastro_colaborador',
         component: () => import('pages/CadastroColaborador.vue'),
         itemMenu: true,
-        tituloMenu: 'Cadastro de colaborador'
+        tituloMenu: 'Cadastro de colaborador',
+        icone: 'perm_contact_calendar'
       },
       { path: '/agenda_condominio',
         component: () => import('pages/AgendaCondominio.vue'),
         itemMenu: true,
-        tituloMenu: 'Agenda do condomínio'
+        tituloMenu: 'Agenda do condomínio',
+        icone: 'today'
       },
       { path: '/pre_assembleia',
         component: () => import('pages/PreAssembleia.vue'),
         itemMenu: true,
-        tituloMenu: 'Pré-assembléia'
+        tituloMenu: 'Pré-assembléia',
+        icone: 'question_answer'
       },
       { path: '/assembleia',
         component: () => import('pages/Assembleia.vue'),
         itemMenu: true,
-        tituloMenu: 'Assembléia'
+        tituloMenu: 'Assembléia',
+        icone: 'gavel'
       },
       { path: '/livro_ocorrencia',
         component: () => import('pages/LivroOcorrencia.vue'),
         itemMenu: true,
-        tituloMenu: 'Livro de ocorrência'
+        tituloMenu: 'Livro de ocorrência',
+        icone: 'assignment'
       },
-      { path: '/chat_sindico', component: () => import('pages/ChatSindico.vue') }
+      { path: '/chat_sindico', component: () => import('pages/ChatSindico.vue'), icone: 'chat' }
     ]
   }
 ]

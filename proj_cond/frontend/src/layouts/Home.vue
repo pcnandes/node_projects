@@ -42,7 +42,7 @@
     >
       <q-list no-border link inset-delimiter>
         <q-item v-for="(item, i) in itensMenu" :key="i" :to="item.path" @click.native="closeMenu()">
-          <q-item-side icon="business" />
+          <q-item-side :icon="item.icone" />
           <q-item-main :label="item.tituloMenu"/>
         </q-item>
       </q-list>
@@ -101,31 +101,16 @@ export default {
   computed: {
     itensMenu () {
       let retorno = []
-      // rotas pais
-      let _rotas = routes.filter(route => {
-        return route.children && route.children.length > 0
-      })
-      _rotas.forEach(r => {
-        retorno = r.children.filter(children => {
+      routes.forEach(route => {
+        if (route.children && route.children.length > 0) {
+          let rotas = route.children.filter(children => {
           // TODO verificar permissoes de usuario
-          return children.itemMenu
-        })
+            return children.itemMenu
+          })
+          retorno = retorno.concat(rotas)
+        }
       })
       return retorno
-      /*
-      return routes.filter(route => {
-        // console.log(route)
-        if (route.children) {
-          let retorno = route.children.filter(children => {
-            if (children.itemMenu) {
-              return children
-            }
-          })
-          console.log(retorno)
-          return retorno
-        }
-        return false
-      }) */
     }
   },
   methods: {

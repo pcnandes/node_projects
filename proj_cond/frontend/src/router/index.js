@@ -45,13 +45,14 @@ export default function ({store}/* { store, ssrContext } */) {
 }
 
 function verificaPermissaoRota (to, next, store) {
-  console.log('verificaPermissaoRota')
+  console.log('verificaPermissaoRota', to)
   if (to.meta.perfis && to.meta.perfis.length > 0) {
-    store.dispatch('auth/hasRole', ['ADMIN', 'SINDICO'])
+    store.dispatch('auth/hasRole', to.meta.perfis)
       .then((res) => {
         if (res) next()
         else {
-          this.$q.notify('Usuário logado nao tem acesso ao cadastro de condominio')
+          // this.$q.notify('Usuário logado nao tem acesso ao cadastro de condominio')
+          console.log('SEM ACESSO A PAGINA')
           next(false)
         }
       })
