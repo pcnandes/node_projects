@@ -1,9 +1,14 @@
 const { Condominio } = require('./../config/sequelize')
+const { Bloco } = require('./../config/sequelize')
 
 exports.salvar = async function (req, res) {
   try {
+    let cond = Condominio.build({ ...req.body })
+    cond.setBlocos([Bloco.build({ ...req.body.blocos[0] })])
+
     let condominio = req.body
     console.log(condominio)
+
     const retorno = await Condominio.create({
       nome: condominio.nome
     })
