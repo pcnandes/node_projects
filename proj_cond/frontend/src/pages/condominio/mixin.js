@@ -35,6 +35,7 @@ class Garagem {
 }
 class Condominio {
   constructor () {
+    this.id = null
     this.nome = ''
     this.blocos = []
   }

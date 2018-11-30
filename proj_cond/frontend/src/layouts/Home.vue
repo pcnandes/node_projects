@@ -144,13 +144,14 @@ export default {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    background-color: rgb(212, 212, 212);
+    background-color: rgb(221, 221, 221);
     border-width: 1px;
     border-color: rgb(187, 187, 187);
     border-style: solid;
     border-radius: 10px;
     padding-bottom: 10px;
     padding-top: 10px;
+    margin-top: 20px;
   }
   .barra-botoes > div {
     padding-left: 16px;

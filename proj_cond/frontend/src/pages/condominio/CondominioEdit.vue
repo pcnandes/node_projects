@@ -30,7 +30,7 @@
         </q-list>
       </div>
       <div class="barra-botoes">
-        <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Cancelar" @click="cancelar" color="primary"/></div>
+        <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Cancelar" @click="cancelar" color="faded"/></div>
         <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Salvar" @click="salvar" color="primary"/></div>
       </div>
     </div>
@@ -53,6 +53,7 @@ export default {
   components: { QBtn, QField, QInput, QModal, QCollapsible, 'adicionar-bloco': AdicionarBloco },
   data () {
     return {
+      condominioId: this.$route.params.id,
       modoAdicionarBloco: 'INCLUSAO', // 'INCUSAO' 'ALTERACAO'
       exibeModalBloco: false,
       bloco: new Bloco(),
@@ -70,6 +71,23 @@ export default {
     }
   },
   methods: {
+    carregarPagina () {
+      console.log('carregar pagina', this.condominioId)
+      if (this.condominioId) {
+        axios.get(`/api/condominio/${this.condominioId}`)
+          .then((res) => {
+            console.log(res.data)
+            this.condominios = new Condominio()
+            this.condominio.nome = res.data.id
+            this.condominio.nome = res.data.nome
+            res.log(this.condominio)
+          })
+          .catch((err) => {
+            console.error('ERRO: ', err.response.erro, err.erro)
+            throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+          })
+      }
+    },
     prepararAdicionarBloco () {
       this.modoAdicionarBloco = 'INCLUSAO'
       this.exibeModalBloco = true
@@ -116,7 +134,14 @@ export default {
             throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
           })
       }
+    },
+    cancelar () {
+      this.$router.go(-1)
     }
+  },
+  mounted () {
+    console.log('monted')
+    this.carregarPagina()
   }
 }
 </script>

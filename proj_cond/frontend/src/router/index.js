@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import { Notify } from 'quasar'
 
 import routes from './routes'
 
@@ -34,9 +35,11 @@ export default function ({store}/* { store, ssrContext } */) {
           }
         } else {
           if (to.fullPath === '/') next()
-          else next({to: '/', replace: true})
-          // let redirect = to.fullPath === '/' ? undefined : '/'
-          // next({path: redirect})
+          else next({path: '/'})
+          /* { // next({to: '/', replace: true})
+            let redirect = to.fullPath === '/' ? undefined : '/'
+            next({path: redirect})
+          } */
         }
       })
   })
@@ -45,14 +48,13 @@ export default function ({store}/* { store, ssrContext } */) {
 }
 
 function verificaPermissaoRota (to, next, store) {
-  console.log('verificaPermissaoRota', to)
   if (to.meta.perfis && to.meta.perfis.length > 0) {
     store.dispatch('auth/hasRole', to.meta.perfis)
       .then((res) => {
         if (res) next()
         else {
           // this.$q.notify('Usuário logado nao tem acesso ao cadastro de condominio')
-          console.log('SEM ACESSO A PAGINA')
+          Notify.create('O usuário logado não tem acesso ao cadastro de condomínio')
           next(false)
         }
       })

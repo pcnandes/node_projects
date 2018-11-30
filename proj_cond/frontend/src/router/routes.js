@@ -13,7 +13,7 @@ const routes = [
     component: () => import('layouts/Home.vue'),
     children: [
       { path: '', component: () => import('pages/Home.vue') },
-      { path: '/cadastro_condominio',
+      { path: '/condominio',
         component: () => import('pages/condominio/Condominio.vue'),
         children: condominio,
         itemMenu: true,
