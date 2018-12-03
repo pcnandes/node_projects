@@ -39,12 +39,11 @@ const Unidade = UnidadeModel(sequelize, Sequelize)
 // relacionamentos
 // http://docs.sequelizejs.com/class/lib/associations/base.js~Association.html
 // Condominio -> Bloco
-// Condominio.hasMany(Bloco, { as: 'blocos', foreignKey: 'bloco_id', constraints: false, allowNull: true, defaultValue: null })
-Condominio.hasMany(Bloco, { as: 'blocos', foreignKey: { name: 'condominio_id', allowNull: true }, defaultValue: null })
-// Bloco.hasOne(Condominio, { constraints: false })
+Condominio.hasMany(Bloco, { foreignKey: { name: 'condominio_id', allowNull: true }, defaultValue: null })
+Bloco.belongsTo(Condominio)
 // Bloco Unidade
-Bloco.hasMany(Unidade, { as: 'unidades', foreignKey: { name: 'bloco_id', allowNull: true }, defaultValue: null })
-// Unidade.hasOne(Bloco, { constraints: false })
+Bloco.hasMany(Unidade, { foreignKey: { name: 'bloco_id', allowNull: true }, defaultValue: null })
+Unidade.belongsTo(Bloco)
 
 // testa conexao
 sequelize

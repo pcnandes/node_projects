@@ -56,7 +56,7 @@
 <script>
 import { QBtn, QField, QInput, QModal } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
-import { Bloco, Andar } from './mixin.js'
+import { Bloco } from './mixin.js'
 
 export default {
   components: {
@@ -88,7 +88,7 @@ export default {
       if (this.$v.bloco.andares.$error || this.$v.bloco.unidadesPorAndar.$error) {
         this.$q.notify('Informe a Qtd. andares e Unidades por andar.')
       } else {
-        const primeira = this.bloco.numeroPrimeiraUnidade ? this.bloco.numeroPrimeiraUnidade : 101
+        /* const primeira = this.bloco.numeroPrimeiraUnidade ? this.bloco.numeroPrimeiraUnidade : 101
         this.bloco.andar = new Array(this.bloco.andares)
         for (let i = 0; i < this.bloco.andar.length; i++) {
           // defino o numero do andar
@@ -97,7 +97,7 @@ export default {
           for (let y = 0; y < this.bloco.andar[i].unidades.length; y++) {
             this.bloco.andar[i].unidades[y] = i * 100 + primeira + y
           }
-        }
+        } */
       }
     },
     deletarUnidade (andar, unidade) {

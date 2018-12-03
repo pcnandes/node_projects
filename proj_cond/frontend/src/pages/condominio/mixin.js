@@ -1,8 +1,14 @@
 // https://markus.oberlehner.net/blog/vue-form-validation-with-vuelidate/
-class Andar {
+/* class Andar {
   constructor (andar, unidades) {
     this.andar = andar
     this.unidades = unidades
+  }
+} */
+class Unidade {
+  constructor () {
+    this.andar = ''
+    this.nome = ''
   }
 }
 class Bloco {
@@ -34,10 +40,52 @@ class Garagem {
   }
 }
 class Condominio {
-  constructor () {
-    this.id = null
-    this.nome = ''
-    this.blocos = []
+  constructor (id = null, nome = '', blocos = []) {
+    this.id = id
+    this.nome = nome
+    this.blocos = blocos
   }
 }
-export { AreaComum, Garagem, Condominio, Bloco, Andar }
+
+function condominioBackToFront (condominio) {
+  console.log('condominioBackToFront')
+  condominio.blocos = condominio.blocos.map(bloco => {
+    let _bloco = []
+    let andar = []
+    for (let i = 0; i < bloco.unidades.length; i++) {
+      if (andar.length === 0) {
+        andar.push(bloco.unidades[i])
+        // verifico se estou no mesmo andar
+      } else if (andar[andar.length - 1].andar === bloco.unidades[i].andar) {
+        andar.push(bloco.unidades[i])
+      // se mudou o andar
+      } else {
+        _bloco.push(andar)
+        andar = []
+        andar.push(bloco.unidades[i])
+      }
+    }
+    _bloco.push(andar)
+    return _bloco
+  })
+  return condominio
+}
+
+function condominioToBackend (condominio) {
+  let retorno = JSON.parse(JSON.stringify(condominio))
+  retorno.blocos.map(bloco => {
+    let bl = {}
+    bl.nome = bloco.nome
+    let unidades = []
+    bloco.andar.forEach(andar => {
+      unidades = andar.unidades.map(unidade => {
+        return {id: unidade.id, nome: unidade.nome, 'andar': andar.andar}
+      })
+    })
+    bl.unidades = unidades
+    return bl
+  })
+  return retorno
+}
+
+export { AreaComum, Garagem, Condominio, Bloco, Unidade, condominioToBackend, condominioBackToFront }

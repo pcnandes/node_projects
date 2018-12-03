@@ -34,7 +34,9 @@ exports.carregar = async function (req, res) {
   try {
     let id = req.params.id
     if (id) {
-      let retorno = await Condominio.findById(id)
+      let retorno = await Condominio.findByPk(id, {
+        include: { model: Bloco, include: ['unidades'] }
+      })
       return res.status(200).send(retorno)
     } else res.status(500).send({ data: null, message: 'Id nao informado', erro: null })
   } catch (err) {

@@ -12,15 +12,21 @@
         <q-list class="col-12">
           <q-collapsible icon="business" :label="'Bloco ' + bl.nome"
             v-for="(bl, i) in condominio.blocos" :key="i">
+
             <div class="row col-12 justify-center">
-              <div>
+                <span v-for="(unidade, i) in bl.unidades" :key="i" v-bind:class="unidade.andar===1?'col-12':'col-auto'">
+                  <div class="divUnidade" :class="col-5">
+                    {{unidade.nome}}
+                  </div>
+                </span>
+                <!--
                 <div class="row col-10" v-for="(andar, i) in bl.andar" :key="i">
                   <div class="divAndar justify-center">{{andar.andar}}</div>
                   <div class="col-auto divUnidade" v-for="(unidade, y) in andar.unidades" :key="y">
                     {{unidade}}
                   </div>
                 </div>
-              </div>
+                -->
             </div>
             <div class="row col-12 justify-center gutter-sm q-mt-xs">
               <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Alterar bloco" @click="prepararAlterarBloco(bl)" color="faded"/></div>
@@ -29,6 +35,7 @@
           </q-collapsible>
         </q-list>
       </div>
+      {{condominio}}
       <div class="barra-botoes">
         <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Cancelar" @click="cancelar" color="faded"/></div>
         <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Salvar" @click="salvar" color="primary"/></div>
@@ -44,7 +51,7 @@
 import { QBtn, QField, QInput, QModal, QCollapsible } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
 // import Vue from 'vue'
-import { Condominio, Bloco, Andar } from './mixin.js'
+import { Condominio, Bloco, condominioToBackend, condominioBackToFront } from './mixin.js'
 import AdicionarBloco from './AdicionarBloco.vue'
 import axios from 'axios'
 
@@ -59,8 +66,8 @@ export default {
       bloco: new Bloco(),
       // areaComum: new AreaComum(),
       // garagem: new Garagem(),
-      condominio: new Condominio(),
-      andar: new Andar()
+      condominio: new Condominio()
+      // andar: new Andar()
     }
   },
   validations: {
@@ -76,11 +83,8 @@ export default {
       if (this.condominioId) {
         axios.get(`/api/condominio/${this.condominioId}`)
           .then((res) => {
-            console.log(res.data)
-            this.condominios = new Condominio()
-            this.condominio.nome = res.data.id
-            this.condominio.nome = res.data.nome
-            res.log(this.condominio)
+            this.condominio = condominioBackToFront(res.data)
+            // Object.assign(this.condominio, res.data)
           })
           .catch((err) => {
             console.error('ERRO: ', err.response.erro, err.erro)
@@ -116,6 +120,9 @@ export default {
     salvar () {
       // cadastrar condominio
       if (!this.condominio.id) {
+        let cond = condominioToBackend(this.condominio)
+        console.log(cond)
+        /*
         axios.post('/api/condominio', this.condominio)
           .then((res) => {
             this.condominio = res.data
@@ -123,7 +130,7 @@ export default {
           .catch((err) => {
             console.error('ERRO: ', err.response.erro)
             throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
-          })
+          }) */
       } else {
         axios.put(`/api/condominio/${this.condominio.id}`, this.condominio)
           .then((res) => {
