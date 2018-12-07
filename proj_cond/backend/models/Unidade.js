@@ -7,7 +7,7 @@ module.exports = (sequelize, type) => {
     },
     nome: {
       type: type.STRING,
-      allowNull: true,
+      allowNull: false,
       validate: {
         notEmpty: true,
         len: [2, 50]
@@ -15,9 +15,9 @@ module.exports = (sequelize, type) => {
     },
     andar: {
       type: type.INTEGER,
+      allowNull: false,
       validate: {
         isInt: true,
-        notNull: true,
         min: 1
       }
     }

@@ -5,20 +5,14 @@
         <q-input v-model="condominio.nome" float-label="Nome do Condomínio"/>
       </q-field>
       <br/>
-      <div class="row justify-center q-mb-lg">
-        <q-btn class="col-xs-12 col-md-auto" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
-      </div>
       <div class="row justify-center" v-if="condominio.blocos && condominio.blocos.length>0">
         <q-list class="col-12">
           <q-collapsible icon="business" :label="'Bloco ' + bl.nome"
             v-for="(bl, i) in condominio.blocos" :key="i">
-
             <div class="row col-12 justify-center">
-                <span v-for="(unidade, i) in bl.unidades" :key="i" v-bind:class="unidade.andar===1?'col-12':'col-auto'">
-                  <div class="divUnidade" :class="col-5">
-                    {{unidade.nome}}
-                  </div>
-                </span>
+                <div class="divUnidade" v-for="(unidade, y) in bl.unidades" :key="y" >
+                  {{unidade.nome}}
+                </div>
                 <!--
                 <div class="row col-10" v-for="(andar, i) in bl.andar" :key="i">
                   <div class="divAndar justify-center">{{andar.andar}}</div>
@@ -35,7 +29,10 @@
           </q-collapsible>
         </q-list>
       </div>
-      {{condominio}}
+      <br/>
+      <div class="row justify-center q-mb-lg">
+        <q-btn class="col-xs-12 col-md-auto" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
+      </div>
       <div class="barra-botoes">
         <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Cancelar" @click="cancelar" color="faded"/></div>
         <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Salvar" @click="salvar" color="primary"/></div>
@@ -51,7 +48,7 @@
 import { QBtn, QField, QInput, QModal, QCollapsible } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
 // import Vue from 'vue'
-import { Condominio, Bloco, condominioToBackend, condominioBackToFront } from './mixin.js'
+import { Condominio, Bloco } from './mixin.js'
 import AdicionarBloco from './AdicionarBloco.vue'
 import axios from 'axios'
 
@@ -83,7 +80,9 @@ export default {
       if (this.condominioId) {
         axios.get(`/api/condominio/${this.condominioId}`)
           .then((res) => {
-            this.condominio = condominioBackToFront(res.data)
+            console.log(new Condominio(res.data.id, res.data.nome, res.data.blocos))
+            this.condominio = res.data
+            // this.condominio = condominioBackToFront(res.data)
             // Object.assign(this.condominio, res.data)
           })
           .catch((err) => {
@@ -120,9 +119,6 @@ export default {
     salvar () {
       // cadastrar condominio
       if (!this.condominio.id) {
-        let cond = condominioToBackend(this.condominio)
-        console.log(cond)
-        /*
         axios.post('/api/condominio', this.condominio)
           .then((res) => {
             this.condominio = res.data
@@ -130,7 +126,7 @@ export default {
           .catch((err) => {
             console.error('ERRO: ', err.response.erro)
             throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
-          }) */
+          })
       } else {
         axios.put(`/api/condominio/${this.condominio.id}`, this.condominio)
           .then((res) => {
@@ -144,6 +140,27 @@ export default {
     },
     cancelar () {
       this.$router.go(-1)
+    },
+    verificaTamanhoCol (bloco) {
+      let predio = []
+      let andar = {}
+      console.log(bloco)
+      if (bloco) {
+        bloco.unidades.forEach(unidade => {
+          if (!andar.andar) {
+            andar.andar = unidade.andar
+            andar.unidade = 1
+          } else if (unidade.andar === andar.andar) andar.unidade += 1
+          else {
+            predio.push(andar)
+            andar = {}
+            andar.andar = unidade.andar
+            andar.unidade = 1
+          }
+        })
+        predio.push(andar)
+      }
+      return predio
     }
   },
   mounted () {

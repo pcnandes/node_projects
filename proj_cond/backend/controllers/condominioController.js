@@ -1,7 +1,7 @@
 const { Condominio } = require('./../config/sequelize')
 const { Bloco } = require('./../config/sequelize')
 
-exports.salvar = async function (req, res) {
+exports.novo = async function (req, res) {
   try {
     let cond = Condominio.build({ ...req.body })
     cond.setBlocos([Bloco.build({ ...req.body.blocos[0] })])
@@ -13,6 +13,16 @@ exports.salvar = async function (req, res) {
       nome: condominio.nome
     })
     return res.status(200).send(retorno)
+  } catch (err) {
+    console.erro(err)
+    return res.status(400).send({ data: null, message: 'Erro ao cadastrar condominio', erro: err })
+  }
+}
+
+exports.salvar = async function (req, res) {
+  try {
+    // ver como fazer...
+    return res.status(200).send()
   } catch (err) {
     console.erro(err)
     return res.status(400).send({ data: null, message: 'Erro ao cadastrar condominio', erro: err })

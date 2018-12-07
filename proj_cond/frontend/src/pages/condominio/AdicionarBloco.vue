@@ -9,27 +9,35 @@
         <div class="row justify-center q-display-1">
           Cadastro Bloco
         </div>
+        {{bloco}}
         <div class="row gutter-sm" >
-          <q-field :count="10" class="col-md-6 col-xs-12">
+          <q-field :count="10" class="col-md-6 col-xs-12" v-bind:class="modo==='ALTERACAO'?'col-md-12':''">
             <q-input v-model="bloco.nome" type="text" float-label="Nome do bloco"
               @blur="$v.bloco.nome.$touch" :error="$v.bloco.nome.$error"/>
           </q-field>
-          <q-field :count="10" class="col-md-6 col-xs-12">
-            <q-input v-model="bloco.numeroPrimeiraUnidade" type="number" float-label="Primeira Unidade"/>
+          <q-field :count="10" class="col-md-6 col-xs-12" v-if="modo==='INCLUSAO'">
+            <q-input v-model="numeroPrimeiraUnidade" type="number" float-label="Primeira Unidade"/>
           </q-field>
-          <q-field :count="10" class="col-md-6 col-xs-12">
-            <q-input v-model="bloco.andares" type="number" float-label="Qtd. andares"
-              @blur="$v.bloco.andares.$touch" :error="$v.bloco.andares.$error"/>
+          <q-field :count="10" class="col-md-6 col-xs-12" v-if="modo==='INCLUSAO'">
+            <q-input v-model="andares" type="number" float-label="Qtd. andares"
+              @blur="$v.andares.$touch" :error="$v.andares.$error"/>
           </q-field>
-          <q-field :count="10" class="col-md-6 col-xs-12">
-            <q-input v-model="bloco.unidadesPorAndar" type="number" float-label="Unidades por andar"
-              @blur="$v.bloco.unidadesPorAndar.$touch" :error="$v.bloco.unidadesPorAndar.$error"/>
+          <q-field :count="10" class="col-md-6 col-xs-12" v-if="modo==='INCLUSAO'">
+            <q-input v-model="unidadesPorAndar" type="number" float-label="Unidades por andar"
+              @blur="$v.unidadesPorAndar.$touch" :error="$v.unidadesPorAndar.$error"/>
           </q-field>
-          <div class="col-12 row justify-end">
+          <div class="col-12 row justify-end" v-if="modo==='INCLUSAO'">
             <q-btn class="col-xs-12 col-md-auto" color="secondary" @click="gerarBloco()" label="Gerar bloco" />
           </div>
         </div>
         <div class="row col-12 justify-center">
+          <div class="divUnidade" v-for="(unidade, i) in bloco.unidades" :key="i">
+            <q-input :value="unidade.nome"
+              @input="val => {bloco.unidades[i].nome = val}"/>
+            <q-btn flat dense round class="botaoExcluirUnidade material-icons primary"
+              @click="deletarUnidade(i)" title="Deletar unidade" icon="delete"/>
+          </div>
+          <!--
           <div>
             <div class="row col-10" v-for="(andar, i) in bloco.andar" :key="i">
               <div class="divAndar">
@@ -43,7 +51,7 @@
                   @click="deletarUnidade(i, y)" title="Deletar unidade" icon="delete"/>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="row justify-center gutter-sm">
           <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" color="faded" @click="fecharModal" label="Cancelar" /></div>
@@ -64,20 +72,24 @@ export default {
   },
   props: {
     exibeModal: {required: true, type: Boolean, default: false},
-    modo: {required: true, type: String},
+    modo: {required: true, type: String}, // INCLUSAO, ALTERACAO
     value: {required: true, type: Object, default: () => new Bloco()}
   },
   data () {
     return {
-      bloco: new Bloco()
+      bloco: new Bloco(),
+      andares: null,
+      unidadesPorAndar: null,
+      numeroPrimeiraUnidade: null
     }
   },
   validations: {
     bloco: {
       nome: { required },
-      andares: { required },
-      unidadesPorAndar: { required }
-    }
+      unidades: []
+    },
+    andares: { required },
+    unidadesPorAndar: { required }
   },
   monted () {
   },
@@ -100,15 +112,15 @@ export default {
         } */
       }
     },
-    deletarUnidade (andar, unidade) {
-      this.bloco.andar[andar].unidades.splice(unidade, 1)
+    deletarUnidade (unidade) {
+      this.bloco.unidades.splice(unidade, 1)
       // verifica se existem elementos no array
-      if (this.bloco.andar[andar].unidades.length > 0) this.$set(this.bloco.andar, andar, this.bloco.andar[andar])
-      else this.bloco.andar.splice(andar, 1)
+      // if (this.bloco.unidades.length > 0) this.$set(this.bloco.andar, andar, this.bloco.andar[andar])
+      // else this.bloco.andar.splice(andar, 1)
     },
     addAltBloco () {
       this.$v.bloco.$touch()
-      if (this.$v.bloco.$error || !this.bloco.andar || this.bloco.andar.length === 0) {
+      if (this.$v.bloco.$error || this.bloco.unidades.length === 0) {
         this.$q.notify('Preencha as informações do bloco e clique em Gerar Bloco.')
       } else {
         this.fecharModal()
@@ -123,6 +135,7 @@ export default {
       }
     },
     prepararModal () {
+      console.log('preparando modal')
       this.$v.bloco.$reset()
       this.bloco = JSON.parse(JSON.stringify(this.value))
     },

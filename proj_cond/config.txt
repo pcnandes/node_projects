@@ -49,3 +49,22 @@ http://www.luiztools.com.br/post/como-usar-nodejs-mysql/#9
 EStudar:
 https://medium.com/matheus-rossi/pwa-vue-js-quasar-ac97d775fcca
 https://alinex.github.io/2018/01/04/quasar-start.html
+
+
+4 TESTES
+4.1 instalacao dos modulos
+npm i mocha chai supertest testdouble request should -D
+// para que o mocha aceite ES6
+npm install --save-dev babel-register babel-preset-stage-3 babel-preset-env
+criar arquivo .babelrc
+
+
+TODO 
+criar um banco de testes e fazer com que o ambiente de teste use esse banco (testar)
+criar testes unitarios e de integracao
+apagar banco de testes antes de executar os testes
+criar respostas default erroHandler e succesHandler
+verificar uso do lodash
+VERIFICAR SE FUNCIONA
+http://expressjs.com/pt-br/advanced/best-practice-performance.html
+npm install compression

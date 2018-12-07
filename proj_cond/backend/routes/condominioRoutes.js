@@ -6,9 +6,10 @@ const router = express.Router()
 
 router.route('/')
   .get(security.verifyJWT, condominio.listar)
-  .post(security.verifyJWT, condominio.salvar)
+  .post(security.verifyJWT, condominio.novo)
 
 router.route('/:id')
   .get(security.verifyJWT, condominio.carregar)
+  .put(security.verifyJWT, condominio.salvar)
 
 module.exports = router
