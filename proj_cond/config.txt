@@ -57,6 +57,9 @@ npm i mocha chai supertest testdouble request should -D
 // para que o mocha aceite ES6
 npm install --save-dev babel-register babel-preset-stage-3 babel-preset-env
 criar arquivo .babelrc
+***ATENCAO** nao preciso usar babel para rodar os testes
+chamada para teste compilando com babel
+"unit-test": "NODE_ENV=test mocha --opts ./test/unit/config/mocha.opts --require babel-core/register --require babel-polyfill ./test/unit/condominio.test.js"
 
 
 TODO 

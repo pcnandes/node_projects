@@ -1,6 +1,7 @@
+'use strict'
 // ESTUDAR https://code4coders.wordpress.com/2016/10/14/desenvolvendo-uma-aplicacao-restful-api-em-node-js-express-js-com-mongodb/
+var http = require('http')
 
-// require('dotenv-safe').load()
 // permite que valores nulos sejam configurados
 // em produção essas variaveis deverão ser configuradas no ambiente nao no .env
 if (process.env.NODE_ENV !== 'production') {
@@ -25,7 +26,12 @@ const logger = require('morgan')
 const publicRoutes = require('./routes/publicRoutes')
 const condominioRoutes = require('./routes/condominioRoutes')
 
+const { sequelize } = require('./config/sequelize')
+
 var app = express()
+
+app.set('port', process.env.PORT || '3000')
+
 // habilita cors domain https://github.com/expressjs/cors
 app.use(cors())
 app.use(logger('dev'))
@@ -39,5 +45,18 @@ app.use(compression())
 // app.use('/', indexRoutes)
 app.use('/api/public', publicRoutes)
 app.use('/api/condominio', condominioRoutes)
+
+// iniciar o servidor após subir o banco
+sequelize.sync({ force: false }).then(() => {
+  console.log(`base de dados e tabelas criados!`)
+  var server = http.createServer(app)
+  server.listen(process.env.PORT || '3000')
+
+  // TODO verificar se nao seria interessante usar uma ferramenta de Debug aqui. Ver /bin/www
+  // servidor iniciado
+  server.on('listening', () => console.log(`Server está rodando na porta ${process.env.PORT || '3000'}`))
+  // erro
+  server.on('error', (error) => console.log(`Ocorreu um erro: ${error}`))
+})
 
 module.exports = app

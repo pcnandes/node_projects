@@ -41,10 +41,11 @@ const Unidade = UnidadeModel(sequelize, Sequelize)
 // Condominio -> Bloco
 // Condominio.Bloco = Condominio.hasMany(Bloco, { as: 'blocos' })
 // Condominio.Bloco fica sendo o nome da associação, podendo ser acessado no create
-Condominio.Bloco = Condominio.hasMany(Bloco)
+Condominio.Bloco = Condominio.hasMany(Bloco, { foreignKey: { allowNull: false }, onDelete: 'CASCADE', hooks: true })
 Bloco.belongsTo(Condominio)
 // Bloco Unidade
-Bloco.Unidade = Bloco.hasMany(Unidade, { foreignKey: { name: 'bloco_id', allowNull: true }, defaultValue: null })
+// onDelete: 'CASCADE' -> 
+Bloco.Unidade = Bloco.hasMany(Unidade, { foreignKey: { allowNull: false }, onDelete: 'CASCADE', hooks: true })
 Unidade.belongsTo(Bloco)
 
 // testa conexao
@@ -57,12 +58,16 @@ sequelize
     console.error('Unable to connect to the database:', err)
   })
 
+// const sync = sequelize.sync({ force: false })
+
 // se passar true o modelo sera criado a cada inicializacao
-sequelize.sync({ force: false })
+
+/*
+const sync = sequelize.sync({ force: false })
   .then(() => {
     console.log(`base de dados e tabelas criados!`)
   })
-
+*/
 module.exports = {
-  Usuario, Condominio, Bloco, Unidade
+  Usuario, Condominio, Bloco, Unidade, sequelize
 }

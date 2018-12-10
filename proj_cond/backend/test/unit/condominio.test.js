@@ -1,5 +1,7 @@
-import { expect } from './config/helpers'
-const { Condominio, Bloco } = require('../../config/sequelize')
+const { expect } = require('./config/helpers')
+// import { Condominio, Bloco } from '../../config/sequelize.js'
+const { initdb } = require('../../config/sequelize.test.js')
+const { Condominio, Bloco } = require('../../config/sequelize.js')
 
 const novoCondominio = {
   nome: 'condominio test',
@@ -25,6 +27,30 @@ const novoCondominio = {
     }
   ]
 }
+// gambiarra para iniciar o banco antes de iniciar os testes
+before((done) => {
+  initdb().then(() => {
+    console.log(`base de dados e tabelas criados!`)
+    done()
+  })
+})
+
+// executa antes de cada caso de testes
+beforeEach((done) => {
+  // deleto todos os registros
+  Condominio.destroy({
+    where: {}
+  })
+    // no retorno da deleção crio um condominio
+    .then(() => {
+      return Condominio.create(novoCondominio, {
+        include: [{
+          association: Condominio.Bloco,
+          include: [{ association: Bloco.Unidade }]
+        }]
+      })
+    }).then(() => done())
+})
 
 describe('Teste Unitario do CondominioController', () => {
   it('deve criar um novo usuario', () => {
@@ -51,7 +77,12 @@ describe('Teste Unitario do CondominioController', () => {
   })
 
   it('deve buscar um usuario com todas as suas hierarquias', () => {
-    return Condominio.findByPk(1, {
+    return Condominio.create(novoCondominio, {
+      include: [{
+        association: Condominio.Bloco,
+        include: [{ association: Bloco.Unidade }]
+      }]
+    }).then(condInc => Condominio.findByPk(condInc.id, {
       include: { model: Bloco, include: ['unidades'] }
     }).then(data => {
       expect(data.dataValues).to.have.all.keys(
@@ -63,6 +94,6 @@ describe('Teste Unitario do CondominioController', () => {
       expect(data.dataValues.blocos[0].unidades[0].dataValues).to.have.all.keys(
         ['bloco_id', 'id', 'nome', 'andar']
       )
-    })
+    }))
   })
 })

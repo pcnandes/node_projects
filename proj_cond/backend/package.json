@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "unit-test": "NODE_ENV=test mocha --require babel-core/register --require babel-polyfill ./test/unit/condominio.test.js"
+    "start": "node ./app",
+    "unit-test": "NODE_ENV=test mocha ./test/unit/condominio.test.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
@@ -20,11 +20,6 @@
     "sequelize": "^4.41.2"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-3": "^6.24.1",
-    "babel-register": "^6.26.0",
     "chai": "^4.2.0",
     "eslint": "^5.9.0",
     "eslint-config-standard": "^12.0.0",
