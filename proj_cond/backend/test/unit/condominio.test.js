@@ -40,9 +40,29 @@ describe('Teste Unitario do CondominioController', () => {
         )
       })
   })
-/*
-  it('teste 2', (done) => {
-    expect(200).to.equal(200)
+
+  it('deve listar todos os usuarios', () => {
+    return Condominio.findAll().then(data => {
+      expect(data).to.be.an('array')
+      expect(data[0].dataValues).to.have.all.keys(
+        ['id', 'nome']
+      )
+    })
   })
-*/
+
+  it('deve buscar um usuario com todas as suas hierarquias', () => {
+    return Condominio.findByPk(1, {
+      include: { model: Bloco, include: ['unidades'] }
+    }).then(data => {
+      expect(data.dataValues).to.have.all.keys(
+        ['id', 'nome', 'blocos']
+      )
+      expect(data.dataValues.blocos[0].dataValues).to.have.all.keys(
+        ['condominio_id', 'id', 'nome', 'unidades']
+      )
+      expect(data.dataValues.blocos[0].unidades[0].dataValues).to.have.all.keys(
+        ['bloco_id', 'id', 'nome', 'andar']
+      )
+    })
+  })
 })
