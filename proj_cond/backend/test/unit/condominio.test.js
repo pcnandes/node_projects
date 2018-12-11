@@ -8,22 +8,7 @@ const novoCondominio = {
   blocos: [
     {
       nome: 'bolco1',
-      unidades: [{
-        nome: '101',
-        andar: 1
-      },
-      {
-        nome: '102',
-        andar: 1
-      },
-      {
-        nome: '201',
-        andar: 2
-      },
-      {
-        nome: '202',
-        andar: 2
-      }]
+      unidades: [{ nome: '101', andar: 1 }, { nome: '102', andar: 1 }, { nome: '201', andar: 2 }]
     }
   ]
 }
@@ -44,6 +29,7 @@ beforeEach((done) => {
     // no retorno da deleção crio um condominio
     .then(() => {
       return Condominio.create(novoCondominio, {
+        // inclusao em cascata do bloco e das unidades
         include: [{
           association: Condominio.Bloco,
           include: [{ association: Bloco.Unidade }]
@@ -95,5 +81,45 @@ describe('Teste Unitario do CondominioController', () => {
         ['bloco_id', 'id', 'nome', 'andar']
       )
     }))
+  })
+
+  it('Altera nome do condominio', async () => {
+    let condominio = await Condominio.findOne(
+      { limit: 1,
+        include: [{
+          association: Condominio.Bloco,
+          include: [{ association: Bloco.Unidade }]
+        }]
+      })
+    condominio = JSON.parse(JSON.stringify(condominio))
+    condominio.nome = 'Nome Alterado'
+    let qtdAlterados = await Condominio.update(condominio, { where: { id: condominio.id } })
+    expect(qtdAlterados[0]).to.be.equal(1)
+    let condAlterado = await Condominio.findOne({ where: condominio.id })
+    // console.log('retornooooo', retorno)
+    expect(condAlterado.nome).to.be.equal('Nome Alterado')
+  })
+
+  it('Altera bloco do condominio', async () => {
+    // nao esta atualizando o filho...
+    // testar.. https://github.com/RobinBuschmann/sequelize-typescript/issues/309
+    // https://stackoverflow.com/questions/33918383/sequelize-update-with-association
+    // http://docs.sequelizejs.com/manual/tutorial/transactions.html
+    let condominio = await Condominio.findOne(
+      { limit: 1,
+        include: [{
+          association: Condominio.Bloco,
+          include: [{ association: Bloco.Unidade }]
+        }]
+      })
+    condominio = JSON.parse(JSON.stringify(condominio))
+    condominio.blocos[0].nome = 'Nome Bloco Alterado'
+    let qtdAlterados = await Condominio.update(condominio, {
+      where: { id: condominio.id }
+    })
+    expect(qtdAlterados[0]).to.be.equal(1)
+    let condAlterado = await Condominio.findOne({ where: condominio.id })
+    // console.log('retornooooo', retorno)
+    expect(condAlterado.blocos[0].nome).to.be.equal('Nome Bloco Alterado')
   })
 })
