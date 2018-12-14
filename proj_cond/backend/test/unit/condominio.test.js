@@ -1,7 +1,8 @@
 const { expect } = require('./config/helpers')
 // import { Condominio, Bloco } from '../../config/sequelize.js'
-const { initdb } = require('../../config/sequelize.test.js')
-const { Condominio, Bloco } = require('../../config/sequelize.js')
+const { initdb, sequelize } = require('../../config/sequelize.test.js')
+const { Condominio, Bloco, Unidade } = require('../../config/sequelize.js')
+const persist = require('../../persist/condominioPersist')
 
 const novoCondominio = {
   nome: 'condominio test',
@@ -9,6 +10,9 @@ const novoCondominio = {
     {
       nome: 'bolco1',
       unidades: [{ nome: '101', andar: 1 }, { nome: '102', andar: 1 }, { nome: '201', andar: 2 }]
+    },
+    {
+      nome: 'bolco2'
     }
   ]
 }
@@ -39,49 +43,6 @@ beforeEach((done) => {
 })
 
 describe('Teste Unitario do CondominioController', () => {
-  it('deve criar um novo usuario', () => {
-    return Condominio.create(novoCondominio, {
-      include: [{
-        association: Condominio.Bloco,
-        include: [{ association: Bloco.Unidade }]
-      }]
-    })
-      .then(data => {
-        expect(data.dataValues).to.have.all.keys(
-          ['id', 'nome', 'blocos']
-        )
-      })
-  })
-
-  it('deve listar todos os usuarios', () => {
-    return Condominio.findAll().then(data => {
-      expect(data).to.be.an('array')
-      expect(data[0].dataValues).to.have.all.keys(
-        ['id', 'nome']
-      )
-    })
-  })
-
-  it('deve buscar um usuario com todas as suas hierarquias', () => {
-    return Condominio.create(novoCondominio, {
-      include: [{
-        association: Condominio.Bloco,
-        include: [{ association: Bloco.Unidade }]
-      }]
-    }).then(condInc => Condominio.findByPk(condInc.id, {
-      include: { model: Bloco, include: ['unidades'] }
-    }).then(data => {
-      expect(data.dataValues).to.have.all.keys(
-        ['id', 'nome', 'blocos']
-      )
-      expect(data.dataValues.blocos[0].dataValues).to.have.all.keys(
-        ['condominio_id', 'id', 'nome', 'unidades']
-      )
-      expect(data.dataValues.blocos[0].unidades[0].dataValues).to.have.all.keys(
-        ['bloco_id', 'id', 'nome', 'andar']
-      )
-    }))
-  })
 
   it('Altera nome do condominio', async () => {
     let condominio = await Condominio.findOne(
@@ -91,35 +52,60 @@ describe('Teste Unitario do CondominioController', () => {
           include: [{ association: Bloco.Unidade }]
         }]
       })
+    // transformo em um json para simular recebimento de obj
     condominio = JSON.parse(JSON.stringify(condominio))
-    condominio.nome = 'Nome Alterado'
-    let qtdAlterados = await Condominio.update(condominio, { where: { id: condominio.id } })
-    expect(qtdAlterados[0]).to.be.equal(1)
-    let condAlterado = await Condominio.findOne({ where: condominio.id })
-    // console.log('retornooooo', retorno)
-    expect(condAlterado.nome).to.be.equal('Nome Alterado')
-  })
+    // altero o condominio
+    condominio.nome = 'Nome Alteradooooo'
+    // altero o bloco1
+    condominio.blocos[0].nome = 'Bloco alteraddooooooo'
+    condominio.blocos.push({ nome: 'Bloco Adicionado' })
 
-  it('Altera bloco do condominio', async () => {
-    // nao esta atualizando o filho...
-    // testar.. https://github.com/RobinBuschmann/sequelize-typescript/issues/309
-    // https://stackoverflow.com/questions/33918383/sequelize-update-with-association
-    // http://docs.sequelizejs.com/manual/tutorial/transactions.html
-    let condominio = await Condominio.findOne(
-      { limit: 1,
-        include: [{
-          association: Condominio.Bloco,
-          include: [{ association: Bloco.Unidade }]
-        }]
+    let condominioBd = await Condominio.findByPk(condominio.id,
+      { include: [{
+        association: Condominio.Bloco,
+        include: [{ association: Bloco.Unidade }]
+      }]
       })
-    condominio = JSON.parse(JSON.stringify(condominio))
-    condominio.blocos[0].nome = 'Nome Bloco Alterado'
-    let qtdAlterados = await Condominio.update(condominio, {
-      where: { id: condominio.id }
+    // da problema com os filhos
+    // Object.assign(condominioBd, condominio)
+    // altero no nome do condominio
+    condominioBd.nome = condominio.nome
+
+    // let novos = condominio.blocos.filter(alteados => condominioBd.blocos.find(original => original.id === alteados.id) === undefined)
+
+    let blocos = []
+    // PRECISO IDENTIFICAR OS NOVOS E OS ALTERADOS, PARA OS NOVOS PRECISO
+    /* condominio.blocos.forEach(_bloco => {
+      _bloco = Bloco.build({ ..._bloco })
+      _bloco.condominio_id = condominioBd.id
+      blocos.push(_bloco)
+    }) */
+
+    // altero no nome de um bloco
+    condominioBd.blocos[0].nome = condominio.blocos[0].nome
+    // condominioBd.setBlocos(blocos)
+
+    condominioBd.blocos.push(Bloco.build({ nome: 'bloco novooo', condominio_id: condominioBd.id }))
+
+    // O PROBLEMA ACONTECE PQ QUANDO EDCLUO UM BLOCO ELE TENTA SETAR NULO NO FK DO ID EXCLUIDO
+    // ISSO OCORRE QUANDO FAZ SETBLOCOS
+    // remove o bloco 2
+    condominioBd.blocos.splice(1, 1)
+    console.log('bloccccccooooosss', condominioBd.blocos)
+
+    sequelize.transaction(t1 => {
+      return Promise.all([
+        ...condominioBd.blocos.map(_bloco => {
+          // console.log(_bloco)
+          _bloco.save({ transaction: t1 })
+        }),
+        condominioBd.setBlocos(condominioBd.blocos),
+        condominioBd.save({ transaction: t1 })
+      ])
     })
-    expect(qtdAlterados[0]).to.be.equal(1)
-    let condAlterado = await Condominio.findOne({ where: condominio.id })
-    // console.log('retornooooo', retorno)
-    expect(condAlterado.blocos[0].nome).to.be.equal('Nome Bloco Alterado')
   })
 })
+
+function verificaAteracaoBloco(blocoOriginal, blocoAlterado) {
+
+}

@@ -11,4 +11,4 @@ const initdb = function () {
   return sequelize.sync({ force: true })
   // export { Usuario, Condominio, Bloco, Unidade }
 }
-module.exports = { initdb }
+module.exports = { initdb, sequelize }

@@ -13,5 +13,12 @@ module.exports = (sequelize, type) => {
         len: [2, 50]
       }
     }
+  },
+  {
+    hooks: {
+      beforeUpdate: (condominio, options) => {
+        console.log('updateeee')
+      }
+    }
   })
 }
