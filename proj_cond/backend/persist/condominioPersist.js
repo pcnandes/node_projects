@@ -16,15 +16,6 @@ exports.alterar = async function (condominio) {
 
   let excluidos = getExlusoes(condominioBd.blocos, condominio.blocos)
 
-  let temp = [...condominio.blocos.filter(bloco => {
-    // se nao estiver na lista de excluidos eu chamo o upsert
-    if (!excluidos || excluidos.indexOf(bloco.id) < 0) {
-      bloco.condomonio_id = condominioBd.id
-      return true
-    }
-  })]
-  console.log('temmmp', temp)
-
   let resultT = await sequelize.transaction(t1 => {
     return Promise.all([
       /*
@@ -39,6 +30,9 @@ exports.alterar = async function (condominio) {
           // FATA ATUALIZAR AS UNIDADES
           // preciso buscar o bloco do banco em condominioBD e verificar os excluidos
           // semelhante ao bloco
+          blocoBD = condominioBd.blocos.filter(_blocoBD => {
+            
+          })
 
           Bloco.upsert(bloco, { transaction: t1 })
         }
