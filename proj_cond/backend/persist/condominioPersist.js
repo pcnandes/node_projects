@@ -3,57 +3,78 @@ const { sequelize } = require('./../config/sequelize.test.js')
 
 exports.alterar = async function (condominio) {
   // carrego o condominio do banco
-  let condominiBD = await Condominio.findOne(
-    { where: { id: condominio.id },
-      include: [{
-        association: Condominio.Bloco,
-        include: [{ association: Bloco.Unidade }]
-      }]
+  let condominioBd = await Condominio.findByPk(condominio.id,
+    { include: [{
+      association: Condominio.Bloco,
+      include: [{ association: Bloco.Unidade }]
+    }]
     })
   // verifico se existe o registro no banco
-  if (!condominiBD.id) {
+  if (!condominioBd.id) {
     throw new Error()
   }
-  let incAltDel = getAlteracoes(condominiBD.blocos, condominio.blocos)
 
-  // garanto que veio um json PRECISO DISSO?
-  condominio = JSON.parse(JSON.stringify(condominio))
+  let excluidos = getExlusoes(condominioBd.blocos, condominio.blocos)
 
-  // inicio da tranzação
-  return sequelize.transaction(t1 => {
-    // atualizo todos os blocos
+  let temp = [...condominio.blocos.filter(bloco => {
+    // se nao estiver na lista de excluidos eu chamo o upsert
+    if (!excluidos || excluidos.indexOf(bloco.id) < 0) {
+      bloco.condomonio_id = condominioBd.id
+      return true
+    }
+  })]
+  console.log('temmmp', temp)
+
+  let resultT = await sequelize.transaction(t1 => {
     return Promise.all([
-      ...incAltDel.novos.map(async blocoInc => {
-        // await condominiBD.create(Bloco, bloco, { transaction: t1 })
-        blocoInc.condominio_id = condominio.id
-        await Bloco.create(blocoInc, { transaction: t1 })
-        return 'I'
+      /*
+      ...alteracoesBlocos.incAlt.map(item => {
+        item.condominio_id = condominioBd.id
+        Bloco.upsert(item, { transaction: t1 })
+      }), */
+      ...condominio.blocos.filter(bloco => {
+        // se nao estiver na lista de excluidos eu chamo o upsert
+        if (!excluidos || excluidos.indexOf(bloco.id) < 0) {
+          bloco.condominio_id = condominioBd.id
+          // FATA ATUALIZAR AS UNIDADES
+          // preciso buscar o bloco do banco em condominioBD e verificar os excluidos
+          // semelhante ao bloco
+
+          Bloco.upsert(bloco, { transaction: t1 })
+        }
       }),
-      ...incAltDel.alterados.map(async blocoAlt => {
-        const bloco = condominio.blocos.find(_bloco => _bloco.id === blocoAlt.id)
-        Object.assign(blocoAlt, bloco)
-        await blocoAlt.save({ transaction: t1 })
-        return 'A'
-      }),
-      ...incAltDel.excluidos.map(async blocoDel => {
-        await blocoDel.destroy({ transaction: t1 })
-        return 'E'
-      }),
-      Condominio.update(condominio, { where: { id: condominio.id }, transaction: t1 }).then(x => { return 'U' })
+      // todo verificar delete cascade
+      Bloco.destroy({ where: { id: excluidos } }),
+      Condominio.update(condominio, { where: { id: condominio.id }, transaction: t1 })
     ])
   })
+  return resultT
 }
 
-function getAlteracoes (source, updated) {
-  let novos = updated.filter(updatedItem => source.find(sourceItem => sourceItem.id === updatedItem.id) === undefined)
-  let alterados = source.filter(sourceItem => updated.find(updatedItem => updatedItem.id === sourceItem.id) !== undefined)
-  let excluidos = source.filter(sourceItem => updated.find(updatedItem => updatedItem.id === sourceItem.id) === undefined)
+function getExlusoes (banco, alterados) {
+  let excluidos = []
+  if (!!banco && !!alterados) {
+    excluidos = banco.filter(itemBd => alterados.find(itemAlt => itemAlt.id === itemBd.id) === undefined)
+    if (excluidos) {
+      excluidos = excluidos.map(item => item.id)
+    }
+  }
+  return excluidos
+}
 
+function getAlteracoes (banco, alterados) {
+  let incAlt
+  let excluidos
+  if (!!banco && !!alterados) {
+    incAlt = alterados.filter(itemAlt => (banco.find(itemBd => itemAlt.id === undefined || itemAlt.id === itemBd.id)))
+    excluidos = banco.filter(itemBd => alterados.find(itemAlt => itemAlt.id === itemBd.id) === undefined)
+    if (excluidos) {
+      excluidos = excluidos.map(item => item.id)
+    }
+  }
   const alteracoes = {
-    novos: novos,
-    alterados: alterados,
+    incAlt: incAlt,
     excluidos: excluidos
   }
-
   return alteracoes
 }
