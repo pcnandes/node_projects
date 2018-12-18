@@ -66,4 +66,5 @@ describe('Teste Unitario do CondominioController', () => {
     condominio.blocos.push({ nome: 'Bloco Adicionado' })
     console.log(await persist.alterar(condominio))
   })
+
 })

@@ -1,5 +1,5 @@
 module.exports = (sequelize, type) => {
-  return sequelize.define('condominio', {
+  let Condominio = sequelize.define('condominio', {
     id: {
       type: type.INTEGER,
       primaryKey: true,
@@ -16,9 +16,9 @@ module.exports = (sequelize, type) => {
   },
   {
     hooks: {
-      beforeUpdate: (condominio, options) => {
-        console.log('updateeee')
-      }
+      beforeUpdate: async (condominio, options) => {}
     }
   })
+
+  return Condominio
 }
