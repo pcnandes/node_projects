@@ -21,17 +21,15 @@ exports.alterar = async function (condominio) {
 
   // let resultT = await sequelize.transaction(t1 => {
   Promise.all([
-    ...condominio.blocos.filter(async bloco => {
-      // se nao estiver na lista de excluidos eu chamo o upsert
-      if (!excluidos || excluidos.indexOf(bloco.id) < 0) {
+    ...condominio.blocos.filter(bloco => !excluidos || excluidos.indexOf(bloco.id) < 0)
+      .map(bloco => {
         bloco.condominio_id = condominioBd.id
         if (bloco.id) {
-          blocoPersist.alterarCascade(bloco, t1)
+          return blocoPersist.alterarCascade(bloco, t1)
         } else {
-          blocoPersist.incluir(bloco, t1)
+          return blocoPersist.incluir(bloco, t1)
         }
-      }
-    }),
+      }),
     // todo verificar delete cascade
     blocoPersist.excluir(excluidos),
     Condominio.update(condominio, { where: { id: condominio.id }, transaction: t1 })

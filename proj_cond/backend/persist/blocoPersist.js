@@ -19,30 +19,18 @@ exports.alterarCascade = async function (bloco, transaction) {
 
   transaction = !transaction ? await sequelize.transaction() : transaction
 
-  if (bloco.unidades) {
-    let resultado
-    Promise.all([
-      ...bloco.unidades.filter(unidade => {
-        // se nao estiver na lista de excluidos eu chamo o upsert
-        if (!excluidos || excluidos.indexOf(unidade.id) < 0) {
-          unidade.bloco_id = blocoBd.id
-          Unidade.upsert(unidade, { transaction })
-        }
+  return Promise.all([
+    ...bloco.unidades.filter(unidade => !excluidos || excluidos.indexOf(unidade.id) < 0)
+      .map(unidade => {
+        unidade.bloco_id = blocoBd.id
+        return Unidade.upsert({}, { transaction })
       }),
-      // todo verificar delete cascade
-      Unidade.destroy({ where: { id: excluidos } }),
-      Bloco.update(bloco, { where: { id: bloco.id }, transaction })
-    ]).then(resultados => {
-      console.log(resultados)
-      return Promise.resolve()
-    }).catch(err => {
-      console.log('entrou no catch', resultado)
-      return Promise.reject(err)
-    })
-  } else {
-    return Bloco.update(bloco, { where: { id: bloco.id }, transaction })
-  }
+    // todo verificar delete cascade
+    Unidade.destroy({ where: { id: excluidos } }),
+    Bloco.update(bloco, { where: { id: bloco.id }, transaction })
+  ])
 }
+
 exports.incluir = function (bloco, transaction) {
   return Bloco.create(bloco,
     { include: [{ association: Bloco.Unidade }],
