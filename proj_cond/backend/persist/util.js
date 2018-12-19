@@ -9,3 +9,7 @@ exports.getItensExcluidos = function (originais, alterados) {
   }
   return excluidos
 }
+
+exports.parseJson = function (obj) {
+  return JSON.parse(JSON.stringify(obj))
+}

@@ -14,22 +14,30 @@ exports.alterarCascade = async function (bloco, transaction) {
   if (!blocoBd.id) {
     throw new Error()
   }
-
   let excluidos = util.getItensExcluidos(blocoBd.unidades, bloco.unidades)
-
   transaction = !transaction ? await sequelize.transaction() : transaction
 
-  return Promise.all([
-    ...bloco.unidades.filter(unidade => !excluidos || excluidos.indexOf(unidade.id) < 0)
+  let promises = []
+  if (bloco.unidades) {
+    // adiciono as promises para dicionar as unidades alteradas
+    promises.push(...bloco.unidades.filter(unidade => !excluidos || excluidos.indexOf(unidade.id) < 0)
       .map(unidade => {
         unidade.bloco_id = blocoBd.id
         return Unidade.upsert(unidade, { transaction })
-      }),
-    // todo verificar delete cascade
-    Unidade.destroy({ where: { id: excluidos } }),
-    Bloco.update(bloco, { where: { id: bloco.id }, transaction })
-  ])
-    .then(() => bloco.id)
+      }))
+  }
+
+  // adiciono as exclusoes de blocos
+  if (excluidos && excluidos.lenght > 0) {
+    Unidade.destroy({ where: { id: excluidos }, transaction })
+  }
+  // adiciono o update do condominio
+  promises.push(Bloco.update(bloco, { where: { id: bloco.id }, transaction }))
+
+  return Promise.all(promises)
+    .then(() => {
+      return bloco.id
+    })
     .catch(err => {
       // verifico se a transsacao ainda está ativa
       if (!transaction.finished) transaction.rollback()
