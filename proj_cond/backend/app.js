@@ -30,7 +30,7 @@ const { sequelize } = require('./config/sequelize')
 
 var app = express()
 
-app.set('port', process.env.PORT || '3000')
+app.set('port', process.env.SERVER_PORT || '3000')
 
 // habilita cors domain https://github.com/expressjs/cors
 app.use(cors())
@@ -42,7 +42,6 @@ app.use(express.urlencoded({ extended: false }))
 // habilita compressao GZIP na resposta, promete maior velocidade no trafego de dados.. PRECISA TESTAR
 app.use(compression())
 
-// app.use('/', indexRoutes)
 app.use('/api/public', publicRoutes)
 app.use('/api/condominio', condominioRoutes)
 
@@ -50,7 +49,7 @@ app.use('/api/condominio', condominioRoutes)
 sequelize.sync({ force: false }).then(() => {
   console.log(`base de dados e tabelas criados!`)
   var server = http.createServer(app)
-  server.listen(process.env.PORT || '3000')
+  server.listen(process.env.SERVER_PORT || '3000')
 
   // TODO verificar se nao seria interessante usar uma ferramenta de Debug aqui. Ver /bin/www
   // servidor iniciado

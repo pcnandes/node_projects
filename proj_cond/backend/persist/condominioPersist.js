@@ -57,7 +57,7 @@ exports.alterar = async function (condominio, transaction) {
       }))
   }
   // adiciono as exclusoes de blocos
-  if (excluidos && excluidos.lenght > 0) {
+  if (excluidos && excluidos.length > 0) {
     promises.push(blocoPersist.excluir(excluidos, transaction))
   }
   // adiciono o update do condominio

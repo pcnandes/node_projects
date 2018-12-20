@@ -1,7 +1,6 @@
-const { expect, assert } = require('./config/helpers')
-// import { Condominio, Bloco } from '../../config/sequelize.js'
-const { initdb, sequelize } = require('../../config/sequelize.test.js')
-const { Condominio, Bloco, Unidade } = require('../../config/sequelize.js')
+const { expect } = require('./config/helpers')
+const { initdb } = require('../../config/sequelize.test.js')
+const { Condominio, Bloco } = require('../../config/sequelize.js')
 const persist = require('../../persist/condominioPersist')
 
 const novoCondominio = {
@@ -116,7 +115,102 @@ describe('Teste Unitario do CondominioController', () => {
     })
   })
 
-  it('Altera condominio', async () => {
+  it('Altera condominio altera bloco', async () => {
+    let condominio = await Condominio.findOne(
+      { limit: 1,
+        include: [{
+          association: Condominio.Bloco,
+          include: [{ association: Bloco.Unidade }]
+        }]
+      })
+    // transformo em um json para simular recebimento de obj
+    condominio = JSON.parse(JSON.stringify(condominio))
+    // altero o bloco1
+    condominio.blocos[0].nome = 'Bloco alteraddooooooo'
+    let idAlterado = await persist.alterar(condominio)
+    return persist.carregar(idAlterado).then(data => {
+      expect(data.blocos).to.have.lengthOf(condominio.blocos.length)
+      expect(data.blocos.map(i => i.nome)).to.deep.include('Bloco alteraddooooooo')
+    })
+  })
+
+  it('Altera condominio exclui bloco', async () => {
+    let condominio = await Condominio.findOne(
+      { limit: 1,
+        include: [{
+          association: Condominio.Bloco,
+          include: [{ association: Bloco.Unidade }]
+        }]
+      })
+    // transformo em um json para simular recebimento de obj
+    condominio = JSON.parse(JSON.stringify(condominio))
+    // excluo um bloco
+    let qtdBlocos = condominio.blocos.length
+    condominio.blocos.splice(1, 1)
+    let idAlterado = await persist.alterar(condominio)
+    return persist.carregar(idAlterado).then(data => {
+      expect(data.blocos).to.have.lengthOf(qtdBlocos - 1)
+    })
+  })
+
+  it('Altera condominio altera unidade', async () => {
+    let condominio = await Condominio.findOne(
+      { limit: 1,
+        include: [{
+          association: Condominio.Bloco,
+          include: [{ association: Bloco.Unidade }]
+        }]
+      })
+    // transformo em um json para simular recebimento de obj
+    condominio = JSON.parse(JSON.stringify(condominio))
+    // altero o nome de uma unidade
+    condominio.blocos[0].unidades[0].nome = 'testeee'
+    let idAlterado = await persist.alterar(condominio)
+    return persist.carregar(idAlterado).then(data => {
+      expect(data.blocos[0].unidades.map(i => i.nome)).to.deep.include('testeee')
+    })
+  })
+
+  it('Altera condominio adiciono unidade', async () => {
+    let condominio = await Condominio.findOne(
+      { limit: 1,
+        include: [{
+          association: Condominio.Bloco,
+          include: [{ association: Bloco.Unidade }]
+        }]
+      })
+    // transformo em um json para simular recebimento de obj
+    condominio = JSON.parse(JSON.stringify(condominio))
+    // adiciono uma unidade
+    condominio.blocos[0].unidades.push({ nome: 'Unidade Adicionado' })
+    const qtdUnidades = condominio.blocos[0].unidades.length
+    let idAlterado = await persist.alterar(condominio)
+    return persist.carregar(idAlterado).then(data => {
+      expect(data.blocos[0].unidades).to.have.lengthOf(qtdUnidades)
+      expect(data.blocos[0].unidades.map(i => i.nome)).to.deep.include('Unidade Adicionado')
+    })
+  })
+
+  it('Altera condominio exclui unidade', async () => {
+    let condominio = await Condominio.findOne(
+      { limit: 1,
+        include: [{
+          association: Condominio.Bloco,
+          include: [{ association: Bloco.Unidade }]
+        }]
+      })
+    // transformo em um json para simular recebimento de obj
+    condominio = JSON.parse(JSON.stringify(condominio))
+    // excluo uma unidade
+    let qtdUnidades = condominio.blocos[0].unidades.length
+    condominio.blocos[0].unidades.splice(1, 1)
+    let idAlterado = await persist.alterar(condominio)
+    return persist.carregar(idAlterado).then(data => {
+      expect(data.blocos[0].unidades).to.have.lengthOf(qtdUnidades - 1)
+    })
+  })
+
+  it('Altera condominio Teste FULL', async () => {
     let condominio = await Condominio.findOne(
       { limit: 1,
         include: [{
@@ -135,7 +229,12 @@ describe('Teste Unitario do CondominioController', () => {
     condominio.blocos.splice(1, 1)
     // incluo um blobo
     condominio.blocos.push({ nome: 'Bloco Adicionado' })
-    console.log(await persist.alterar(condominio))
+    let idAlterado = await persist.alterar(condominio)
+    return persist.carregar(idAlterado).then(data => {
+      expect(data.nome).to.deep.equal(condominio.nome)
+      expect(data.blocos).to.have.lengthOf(condominio.blocos.length)
+      expect(data.blocos.map(i => i.nome)).to.deep.include('Bloco alteraddooooooo')
+      expect(data.blocos.map(i => i.nome)).to.deep.include('Bloco Adicionado')
+    })
   })
-
 })

@@ -28,7 +28,7 @@ exports.alterarCascade = async function (bloco, transaction) {
   }
 
   // adiciono as exclusoes de blocos
-  if (excluidos && excluidos.lenght > 0) {
+  if (excluidos && excluidos.length > 0) {
     Unidade.destroy({ where: { id: excluidos }, transaction })
   }
   // adiciono o update do condominio
