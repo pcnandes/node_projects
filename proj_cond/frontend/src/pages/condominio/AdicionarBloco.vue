@@ -9,7 +9,6 @@
         <div class="row justify-center q-display-1">
           Cadastro Bloco
         </div>
-        {{bloco}}
         <div class="row gutter-sm" >
           <q-field :count="10" class="col-md-6 col-xs-12" v-bind:class="modo==='ALTERACAO'?'col-md-12':''">
             <q-input v-model="bloco.nome" type="text" float-label="Nome do bloco"

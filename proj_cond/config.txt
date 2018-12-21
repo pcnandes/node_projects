@@ -63,9 +63,7 @@ chamada para teste compilando com babel
 
 
 TODO 
-criar um banco de testes e fazer com que o ambiente de teste use esse banco (testar)
-criar testes unitarios e de integracao
-apagar banco de testes antes de executar os testes
+ajustar usuario mascarando senha
 criar respostas default erroHandler e succesHandler
 verificar uso do lodash
 VERIFICAR SE FUNCIONA

@@ -35,7 +35,7 @@
       </div>
       <div class="barra-botoes">
         <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Cancelar" @click="cancelar" color="faded"/></div>
-        <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Salvar" @click="salvar" color="primary"/></div>
+        <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Salvar" @click="salvar()" color="primary"/></div>
       </div>
     </div>
     <adicionar-bloco :exibeModal="exibeModalBloco" @fechar="fecharModal"
@@ -80,8 +80,9 @@ export default {
       if (this.condominioId) {
         axios.get(`/api/condominio/${this.condominioId}`)
           .then((res) => {
-            console.log(new Condominio(res.data.id, res.data.nome, res.data.blocos))
+            // console.log(new Condominio(res.data.id, res.data.nome, res.data.blocos))
             this.condominio = res.data
+            console.log(this.condominio)
             // this.condominio = condominioBackToFront(res.data)
             // Object.assign(this.condominio, res.data)
           })
@@ -118,9 +119,12 @@ export default {
     },
     salvar () {
       // cadastrar condominio
+      console.log('salvando condominio FORA')
       if (!this.condominio.id) {
+        console.log('incluindo condominio')
         axios.post('/api/condominio', this.condominio)
           .then((res) => {
+            console.log('resposta salvamento')
             this.condominio = res.data
           })
           .catch((err) => {
@@ -128,8 +132,10 @@ export default {
             throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
           })
       } else {
+        console.log('alterando condominio')
         axios.put(`/api/condominio/${this.condominio.id}`, this.condominio)
           .then((res) => {
+            console.log('condominio alterado', res.data)
             this.condominio = res.data
           })
           .catch((err) => {

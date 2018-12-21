@@ -66,7 +66,8 @@ exports.alterar = async function (condominio, transaction) {
   return Promise.all(promises)
     .then(() => {
       transaction.commit()
-      return condominio.id
+      // return condominio.id
+      return this.carregar(condominio.id)
     })
     .catch(err => {
       transaction.rollback()
