@@ -1,5 +1,5 @@
 module.exports = (sequelize, type) => {
-  let Condominio = sequelize.define('condominio', {
+  const Condominio = sequelize.define('condominio', {
     id: {
       type: type.INTEGER,
       primaryKey: true,
@@ -19,6 +19,10 @@ module.exports = (sequelize, type) => {
       beforeUpdate: async (condominio, options) => {}
     }
   })
+
+  Condominio.associate = function (models) {
+    Condominio.Bloco = Condominio.hasMany(models.bloco, { foreignKey: { allowNull: false }, onDelete: 'CASCADE', hooks: true })
+  }
 
   return Condominio
 }

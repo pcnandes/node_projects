@@ -1,5 +1,5 @@
 module.exports = (sequelize, type) => {
-  return sequelize.define('bloco', {
+  const Bloco = sequelize.define('bloco', {
     id: {
       type: type.INTEGER,
       primaryKey: true,
@@ -15,4 +15,12 @@ module.exports = (sequelize, type) => {
     }
     // unidades
   })
+
+  Bloco.associate = function (model) {
+    console.log('modelllllos', model)
+    Bloco.belongsTo(model.condominio)
+    Bloco.Unidade = Bloco.hasMany(model.unidade, { foreignKey: { allowNull: false }, onDelete: 'CASCADE', hooks: true })
+  }
+
+  return Bloco
 }

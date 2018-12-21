@@ -26,7 +26,8 @@ const logger = require('morgan')
 const publicRoutes = require('./routes/publicRoutes')
 const condominioRoutes = require('./routes/condominioRoutes')
 
-const { sequelize } = require('./config/sequelize')
+// const { sequelize } = require('./config/sequelize')
+const db = require('./models/index')
 
 var app = express()
 
@@ -48,7 +49,7 @@ app.use('/api/public', publicRoutes)
 app.use('/api/condominio', condominioRoutes)
 
 // iniciar o servidor após subir o banco
-sequelize.sync({ force: false }).then(() => {
+db.sequelize.sync({ force: false }).then(() => {
   console.log(`base de dados e tabelas criados!`)
   var server = http.createServer(app)
   server.listen(process.env.SERVER_PORT || '3000')

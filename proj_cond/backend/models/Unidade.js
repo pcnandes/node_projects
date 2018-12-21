@@ -1,5 +1,5 @@
 module.exports = (sequelize, type) => {
-  return sequelize.define('unidade', {
+  const Unidade = sequelize.define('unidade', {
     id: {
       type: type.INTEGER,
       primaryKey: true,
@@ -23,4 +23,10 @@ module.exports = (sequelize, type) => {
     }
     // Coloco os dados de usuário? Como fica o sindico que nao tem unidade, porteiro, etc?
   })
+
+  Unidade.associate = function (models) {
+    Unidade.belongsTo(models.Bloco)
+  }
+
+  return Unidade
 }

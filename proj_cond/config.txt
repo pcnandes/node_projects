@@ -69,3 +69,10 @@ verificar uso do lodash
 VERIFICAR SE FUNCIONA
 http://expressjs.com/pt-br/advanced/best-practice-performance.html
 npm install compression
+
+
+PROBLEMA ATUAL
+https://github.com/sequelize/sequelize/issues/2997
+
+passo a passo para acertar o sequelize
+https://medium.com/@jgrisafe/custom-user-authentication-with-express-sequelize-and-bcrypt-667c4c0edef5
