@@ -19,8 +19,8 @@ const cors = require('cors')
 const logger = require('morgan')
 
 // const indexRoutes = require('./routes/indexRoutes')
-const publicRoutes = require('./routes/publicRoutes')
-const condominioRoutes = require('./routes/condominioRoutes')
+const publicRoutes = require('./api/routes/publicRoutes')
+const condominioRoutes = require('./api/routes/condominioRoutes')
 
 // const { sequelize } = require('./config/sequelize')
 const db = require('./models/index')

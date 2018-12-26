@@ -1,7 +1,7 @@
 const express = require('express')
-const condominio = require('../controllers/condominioController')
+const condominio = require('./../../controllers/condominioController')
 // TODO descobrir uma forma de centralizar a autorização
-const security = require('../controllers/securityController')
+const security = require('./../../controllers/securityController')
 const router = express.Router()
 
 router.route('/')
