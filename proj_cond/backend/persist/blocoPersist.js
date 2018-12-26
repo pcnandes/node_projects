@@ -1,13 +1,10 @@
-const { Bloco, Unidade } = require('./../config/sequelize')
-const { sequelize } = require('./../config/sequelize.test.js')
+const { Bloco, Unidade, sequelize } = require('./../models')
 const util = require('./util')
 
 exports.alterarCascade = async function (bloco, transaction) {
   // carrego o condominio do banco
   let blocoBd = await Bloco.findByPk(bloco.id, {
-    include: [{
-      association: Bloco.Unidade
-    }]
+    include: ['unidades']
   })
 
   // verifico se existe o registro no banco
@@ -47,7 +44,7 @@ exports.alterarCascade = async function (bloco, transaction) {
 
 exports.incluir = function (bloco, transaction) {
   return Bloco.create(bloco,
-    { include: [{ association: Bloco.Unidade }],
+    { include: ['unidades'],
       transaction: transaction
     })
 }

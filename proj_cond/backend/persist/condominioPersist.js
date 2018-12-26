@@ -1,5 +1,4 @@
-const { Condominio, Bloco } = require('./../config/sequelize')
-const { sequelize } = require('./../config/sequelize.test.js')
+const { Condominio, Bloco, sequelize } = require('./../models')
 const blocoPersist = require('./blocoPersist')
 const util = require('./util')
 
@@ -7,23 +6,29 @@ exports.cadastrar = async function (condominio) {
   condominio = util.parseJson(condominio)
   return Condominio.create(condominio, {
     include: [{
-      association: Condominio.Bloco,
-      include: [{ association: Bloco.Unidade }]
+      model: Bloco,
+      as: 'blocos',
+      include: ['unidades']
     }]
   })
 }
 exports.listar = async function (condominio) {
   return Condominio.findAll({
     include: [{
-      association: Condominio.Bloco,
-      include: [{ association: Bloco.Unidade }]
+      model: Bloco,
+      as: 'blocos',
+      include: ['unidades']
     }]
   })
 }
 
 exports.carregar = async function (id) {
   return Condominio.findByPk(id, {
-    include: { model: Bloco, include: ['unidades'] }
+    include: [{
+      model: Bloco,
+      as: 'blocos',
+      include: ['unidades']
+    }]
   })
 }
 
@@ -31,7 +36,8 @@ exports.alterar = async function (condominio, transaction) {
   // carrego o condominio do banco
   let condominioBd = await Condominio.findByPk(condominio.id, {
     include: [{
-      association: Condominio.Bloco
+      model: Bloco,
+      as: 'blocos'
     }]
   })
   // verifico se existe o registro no banco
@@ -73,4 +79,10 @@ exports.alterar = async function (condominio, transaction) {
       transaction.rollback()
       return Promise.reject(err)
     })
+}
+
+exports.excluir = function (id) {
+  return Condominio.destroy({
+    where: { id }
+  })
 }

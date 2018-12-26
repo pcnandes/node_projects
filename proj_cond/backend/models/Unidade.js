@@ -1,5 +1,5 @@
 module.exports = (sequelize, type) => {
-  const Unidade = sequelize.define('unidade', {
+  const Unidade = sequelize.define('Unidade', {
     id: {
       type: type.INTEGER,
       primaryKey: true,
@@ -22,11 +22,11 @@ module.exports = (sequelize, type) => {
       }
     }
     // Coloco os dados de usuário? Como fica o sindico que nao tem unidade, porteiro, etc?
-  })
+  }, { tableName: 'unidade' })
 
-  Unidade.associate = function (models) {
-    Unidade.belongsTo(models.Bloco)
+  // nao sei pq o delete cascade funciona de uma maneira entre Bloco e unidade do que Condominio Bloco
+  Unidade.associate = function ({ Bloco }) {
+    Unidade.belongsTo(Bloco)
   }
-
   return Unidade
 }

@@ -1,5 +1,3 @@
-const { Condominio } = require('./../config/sequelize')
-const { Bloco } = require('./../config/sequelize')
 const persist = require('../persist/condominioPersist')
 
 exports.novo = async function (req, res) {
@@ -25,7 +23,7 @@ exports.novo = async function (req, res) {
 exports.salvar = async function (req, res) {
   try {
     const retorno = await persist.alterar(req.body)
-    return res.status(200).send(retorno)
+    return res.res.sendStatus(200).send(retorno)
   } catch (err) {
     console.erro(err)
     return res.status(400).send({ data: null, message: 'Erro ao cadastrar condominio', erro: err })

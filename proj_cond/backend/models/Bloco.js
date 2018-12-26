@@ -1,5 +1,5 @@
 module.exports = (sequelize, type) => {
-  const Bloco = sequelize.define('bloco', {
+  const Bloco = sequelize.define('Bloco', {
     id: {
       type: type.INTEGER,
       primaryKey: true,
@@ -14,12 +14,13 @@ module.exports = (sequelize, type) => {
       }
     }
     // unidades
-  })
+  }, { tableName: 'bloco', timestamps: false })
 
-  Bloco.associate = function (model) {
-    console.log('modelllllos', model)
-    Bloco.belongsTo(model.condominio)
-    Bloco.Unidade = Bloco.hasMany(model.unidade, { foreignKey: { allowNull: false }, onDelete: 'CASCADE', hooks: true })
+  // nao sei pq o delete cascade funciona de uma maneira entre Bloco e unidade do que Condominio Bloco
+  // aqui precisei indicar o cascade no belongsTo. Ja na unidade, se coloco no Belons To da problema
+  Bloco.associate = function ({ Condominio, Unidade }) {
+    Bloco.belongsTo(Condominio, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' })
+    Bloco.hasMany(Unidade, { as: 'unidades', foreignKey: { allowNull: false }, onDelete: 'CASCADE', hooks: true })
   }
 
   return Bloco

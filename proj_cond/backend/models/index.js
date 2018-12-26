@@ -7,6 +7,8 @@ const config = require(__dirname + '/../config/config.json')[env]
 const db = {}
 
 let sequelize
+// 'use_env_variable' para configurar nossas credenciais de db em
+// process.env. Isso é usado em produção
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config)
 } else {

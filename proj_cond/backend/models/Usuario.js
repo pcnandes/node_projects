@@ -1,5 +1,5 @@
 module.exports = (sequelize, type) => {
-  const Usuario = sequelize.define('usuario', {
+  const Usuario = sequelize.define('Usuario', {
     id: {
       type: type.INTEGER,
       primaryKey: true,
@@ -8,9 +8,9 @@ module.exports = (sequelize, type) => {
     login: { type: type.STRING },
     senha: { type: type.STRING },
     perfil: { type: type.ENUM('ADMIN', 'SINDICO') }
-  })
+  }, { tableName: 'usuario', timestamps: false })
 
-  Usuario.associate = function (models) {
+  Usuario.associate = function () {
     // associations can be defined here
   }
 

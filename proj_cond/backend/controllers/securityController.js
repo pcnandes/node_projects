@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const tempoExpiracao = 60 * 3 // 3 minutos
-const { Usuario } = require('./../config/sequelize')
+const persist = require('../persist/usuarioPersist')
+// const { Usuario } = require('./../config/sequelize')
 // TODO estudar e usar os codigos http corretos
 
 exports.login = async function (req, res, next) {
@@ -8,7 +9,7 @@ exports.login = async function (req, res, next) {
   try {
     if (credenciais.usuario && credenciais.senha) {
       // quando nao se pretende manipular ou alterar o  objeto user raw para retotnar objetos simples (plain)
-      let usuarioLogado = await Usuario.findOne({ where: { login: credenciais.usuario }, raw: true })
+      let usuarioLogado = await persist.findByLogin(credenciais.usuario)
       if (usuarioLogado.senha === credenciais.senha) {
         // const token = gerarToken(usuarioLogado.get({ plain: true }))
         const token = gerarToken(usuarioLogado)

@@ -8,10 +8,6 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv-safe').config({
     allowEmptyValues: true
   })
-  // caso esteja rodando os testes a aplicação vai acessar outro banco
-  if (process.env.NODE_ENV === 'test') {
-    process.env.DB_NAME = process.env.DB_NAME_TEST
-  }
 }
 
 require('jsonwebtoken')
