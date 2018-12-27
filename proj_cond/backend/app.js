@@ -10,7 +10,7 @@ if (process.env.NODE_ENV !== 'production') {
   })
 }
 
-const app = require('./server/api')
+const api = require('./server/api')
 
 // carrego os modelos e as configurações do banco
 const db = require('./server/models')
@@ -18,7 +18,7 @@ const db = require('./server/models')
 // iniciar o servidor após subir o banco
 db.sequelize.sync({ force: false }).then(() => {
   console.log(`base de dados e tabelas criados!`)
-  const server = http.createServer(app)
+  const server = http.createServer(api)
   server.listen(process.env.SERVER_PORT || '3000')
 
   // TODO verificar se nao seria interessante usar uma ferramenta de Debug aqui. Ver /bin/www
@@ -28,4 +28,4 @@ db.sequelize.sync({ force: false }).then(() => {
   server.on('error', (error) => console.log(`Ocorreu um erro: ${error}`))
 })
 
-module.exports = app
+module.exports = api
