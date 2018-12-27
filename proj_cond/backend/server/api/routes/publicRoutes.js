@@ -1,5 +1,5 @@
 const express = require('express')
-const security = require('./../../controllers/securityController')
+const security = require('../../controllers/usuarioController')
 const router = express.Router()
 
 router.route('/login')

@@ -10,7 +10,7 @@ module.exports = (sequelize, type) => {
       allowNull: false,
       validate: {
         notEmpty: true,
-        len: [2, 50]
+        len: [1, 50]
       }
     },
     andar: {

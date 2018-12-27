@@ -1,8 +1,8 @@
 const { expect } = require('./config/helpers')
 const { initdb } = require('./config/sequelize.init.js')
 // const { Condominio, Bloco } = require('../../config/sequelize.js')
-const { Condominio, Bloco, Unidade } = require('./../../models')
-const persist = require('../../persist/condominioPersist')
+const { Condominio, Bloco, Unidade } = require('./../../server/models')
+const persist = require('../../server/persist/condominioPersist')
 
 const novoCondominio = {
   nome: 'condominio test',
@@ -91,13 +91,7 @@ describe('Teste Unitario do CondominioController', () => {
   })
 
   it('Altera nome do condominio', async () => {
-    let condominio = await Condominio.findOne({
-      include: [{
-        model: Bloco,
-        as: 'blocos',
-        include: [{ model: Unidade, as: 'unidades' }]
-      }]
-    })
+    let condominio = await carregarUnidade()
     // transformo em um json para simular recebimento de obj
     condominio = JSON.parse(JSON.stringify(condominio))
     // altero o condominio
@@ -108,13 +102,7 @@ describe('Teste Unitario do CondominioController', () => {
   })
 
   it('Altera condominio adiciona bloco', async () => {
-    let condominio = await Condominio.findOne({ 
-      include: [{
-        model: Bloco,
-        as: 'blocos',
-        include: [{ model: Unidade, as: 'unidades' }]
-      }]
-    })
+    let condominio = await carregarUnidade()
     // transformo em um json para simular recebimento de obj
     condominio = JSON.parse(JSON.stringify(condominio))
     // incluo um blobo
@@ -127,13 +115,7 @@ describe('Teste Unitario do CondominioController', () => {
   })
 
   it('Altera condominio altera bloco', async () => {
-    let condominio = await Condominio.findOne({ 
-      include: [{
-        model: Bloco,
-        as: 'blocos',
-        include: [{ model: Unidade, as: 'unidades' }]
-      }]
-    })
+    let condominio = await carregarUnidade()
     // transformo em um json para simular recebimento de obj
     condominio = JSON.parse(JSON.stringify(condominio))
     // altero o bloco1
@@ -145,13 +127,7 @@ describe('Teste Unitario do CondominioController', () => {
   })
 
   it('Altera condominio exclui bloco', async () => {
-    let condominio = await Condominio.findOne({ 
-      include: [{
-        model: Bloco,
-        as: 'blocos',
-        include: [{ model: Unidade, as: 'unidades' }]
-      }]
-    })
+    let condominio = await carregarUnidade()
     // transformo em um json para simular recebimento de obj
     condominio = JSON.parse(JSON.stringify(condominio))
     // excluo um bloco
@@ -163,13 +139,7 @@ describe('Teste Unitario do CondominioController', () => {
   })
 
   it('Altera condominio altera unidade', async () => {
-    let condominio = await Condominio.findOne({ 
-      include: [{
-        model: Bloco,
-        as: 'blocos',
-        include: [{ model: Unidade, as: 'unidades' }]
-      }]
-    })
+    let condominio = await carregarUnidade()
     // transformo em um json para simular recebimento de obj
     condominio = JSON.parse(JSON.stringify(condominio))
     // altero o nome de uma unidade
@@ -180,17 +150,11 @@ describe('Teste Unitario do CondominioController', () => {
   })
 
   it('Altera condominio adiciono unidade', async () => {
-    let condominio = await Condominio.findOne({ 
-      include: [{
-        model: Bloco,
-        as: 'blocos',
-        include: [{ model: Unidade, as: 'unidades' }]
-      }]
-    })
+    let condominio = await carregarUnidade()
     // transformo em um json para simular recebimento de obj
     condominio = JSON.parse(JSON.stringify(condominio))
     // adiciono uma unidade
-    condominio.blocos[0].unidades.push({ nome: 'Unidade Adicionado' })
+    condominio.blocos[0].unidades.push({ nome: 'Unidade Adicionado', andar: 1 })
     const qtdUnidades = condominio.blocos[0].unidades.length
     return persist.alterar(condominio).then(data => {
       expect(data.blocos[0].unidades).to.have.lengthOf(qtdUnidades)
@@ -199,13 +163,7 @@ describe('Teste Unitario do CondominioController', () => {
   })
 
   it('Altera condominio exclui unidade', async () => {
-    let condominio = await Condominio.findOne({ 
-      include: [{
-        model: Bloco,
-        as: 'blocos',
-        include: [{ model: Unidade, as: 'unidades' }]
-      }]
-    })
+    let condominio = await carregarUnidade()
     // transformo em um json para simular recebimento de obj
     condominio = JSON.parse(JSON.stringify(condominio))
     // excluo uma unidade
@@ -217,13 +175,7 @@ describe('Teste Unitario do CondominioController', () => {
   })
 
   it('Altera condominio Teste FULL', async () => {
-    let condominio = await Condominio.findOne({ 
-      include: [{
-        model: Bloco,
-        as: 'blocos',
-        include: [{ model: Unidade, as: 'unidades' }]
-      }]
-    })
+    let condominio = await carregarUnidade()
     // transformo em um json para simular recebimento de obj
     condominio = JSON.parse(JSON.stringify(condominio))
     // altero o condominio
@@ -243,3 +195,13 @@ describe('Teste Unitario do CondominioController', () => {
     })
   })
 })
+
+function carregarUnidade () {
+  return Condominio.findOne({
+    include: [{
+      model: Bloco,
+      as: 'blocos',
+      include: ['unidades']
+    }]
+  })
+}

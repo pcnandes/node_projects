@@ -7,7 +7,7 @@ module.exports = (sequelize, type) => {
     },
     nome: {
       type: type.STRING,
-      allowNull: true,
+      allowNull: false,
       validate: {
         notEmpty: true,
         len: [2, 50]
