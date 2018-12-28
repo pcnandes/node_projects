@@ -6,13 +6,11 @@ const { onError, onErrorNaoAutorizado } = require('./../api/responses/errorHandl
 // TODO estudar e usar os codigos http corretos
 
 exports.login = async function (req, res, next) {
-  console.log('requisicaooooo', req.body)
-
   let credenciais = req.body
   try {
-    if (credenciais.usuario && credenciais.senha) {
+    if (credenciais.login && credenciais.senha) {
       // quando nao se pretende manipular ou alterar o  objeto user raw para retotnar objetos simples (plain)
-      let usuarioLogado = await persist.findByLogin(credenciais.usuario)
+      let usuarioLogado = await persist.findByLogin(credenciais.login)
       if (usuarioLogado && usuarioLogado.senha === credenciais.senha) {
         // const token = gerarToken(usuarioLogado.get({ plain: true }))
         const token = gerarToken(usuarioLogado)
@@ -62,7 +60,8 @@ exports.logout = function (req, res) {
 
 // TODO trocar nome para verificar acesso e usar verificaCaptcha
 exports.verifyJWT = function (req, res, next) {
-  var token = req.headers['x-access-token']
+  // var token = req.headers['x-access-token']
+  var token = req.headers['authorization']
   if (!token) {
     // return res.status(401).send({ auth: false, message: 'Token não enviado.' })
     return onErrorNaoAutorizado(res, 'Token não enviado.')

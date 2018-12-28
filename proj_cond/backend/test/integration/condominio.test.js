@@ -13,13 +13,10 @@ describe('Testes de Integração condominio', () => {
           .post('/api/public/login')
           .send(JSON.parse(JSON.stringify(u)))
           .end((error, res) => {
-            console.log('respostaaa', res.status)
-            console.log('tokennnnnnnnnnn', token)
             token = res.body.token
             done(error)
           })
       })
-      done()
     })
   })
 
@@ -28,6 +25,7 @@ describe('Testes de Integração condominio', () => {
       // vai subir nossa aplicação para eresponder as requisicoes
       request(app)
         .get('/api/condominio')
+        .set({ 'Authorization': token, Accept: 'application/json' })
         .end((error, res) => {
           expect(res.status).to.equal(HTTPStatus.OK)
           expect(res.body).to.be.an('array')

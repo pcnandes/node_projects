@@ -63,8 +63,9 @@ chamada para teste compilando com babel
 
 
 TODO 
+acertar login de x-access-token para authorization
+ajustar credenciais de usuario para login
 ajustar usuario mascarando senha
-criar respostas default erroHandler e succesHandler
 verificar uso do lodash
 VERIFICAR SE FUNCIONA
 http://expressjs.com/pt-br/advanced/best-practice-performance.html
