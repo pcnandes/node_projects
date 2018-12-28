@@ -1,4 +1,5 @@
---require ./helpers.js
+--require ./test/unit/config/helpers.js
 --reporter spec
 --watch-extensions js
 --slow 5000
+--exit
