@@ -5,4 +5,11 @@ const should = require('should')
 const request = require('request')
 const expect = Chai.expect
 
-module.exports = { should, expect, request, mocha }
+const db = require('./../../../server/models')
+const persist = require('./../../../server/persist/condominioPersist')
+
+const initdb = function () {
+  return db.sequelize.sync({ force: true })
+}
+
+module.exports = { should, expect, request, mocha, initdb, db, persist }

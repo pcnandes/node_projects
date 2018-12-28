@@ -1,9 +1,5 @@
-const { expect } = require('./config/helpers')
-const { initdb } = require('./config/sequelize.init.js')
-// const { Condominio, Bloco } = require('../../config/sequelize.js')
-const { Condominio, Bloco, Unidade } = require('./../../server/models')
-const persist = require('../../server/persist/condominioPersist')
-
+const { expect, initdb, db, persist } = require('./config/helpers')
+const { Condominio, Bloco, Unidade } = db
 const novoCondominio = {
   nome: 'condominio test',
   blocos: [
