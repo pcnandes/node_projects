@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./app",
-    "unit-test": "cross-env NODE_ENV=test mocha --opts ./test/unit/config/mocha.opts ./test/unit/condominio.test.js",
-    "integ-test": "cross-env NODE_ENV=test mocha --opts ./test/integration/config/mocha.opts ./test/integration/condominio.test.js"
+    "unit-test": "cross-env NODE_ENV=test mocha --opts ./test/unit/config/mocha.opts ./test/unit/*.test.js",
+    "integ-test": "cross-env NODE_ENV=test mocha --opts ./test/integration/config/mocha.opts ./test/integration/*.test.js"
   },
   "dependencies": {
     "bcrypt": "^3.0.2",
