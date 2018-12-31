@@ -63,7 +63,7 @@
 <script>
 import { QBtn, QField, QInput, QModal } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
-import { Bloco } from './mixin.js'
+import { getBlocoNew } from './mixin.js'
 
 export default {
   components: {
@@ -72,11 +72,11 @@ export default {
   props: {
     exibeModal: {required: true, type: Boolean, default: false},
     modo: {required: true, type: String}, // INCLUSAO, ALTERACAO
-    value: {required: true, type: Object, default: () => new Bloco()}
+    value: {required: true, type: Object, default: () => getBlocoNew()}
   },
   data () {
     return {
-      bloco: new Bloco(),
+      bloco: getBlocoNew(),
       andares: null,
       unidadesPorAndar: null,
       numeroPrimeiraUnidade: null

@@ -5,7 +5,6 @@ import { ID_TOKEN } from '../../const'
 // TODO
 // falta implementar lembrar de mim
 export const login = ({dispatch}, data) => {
-  // efetuo login
   return axios.post('/api/public/login', data.credenciais)
     .then((res) => {
       let retorno = dispatch('setToken', res.data.token)
@@ -22,11 +21,9 @@ export const logout = ({commit}) => {
 }
 
 export const retoken = ({commit, dispatch, getters}, force) => {
-  // let usuario = getters.getUsuario
-  // console.log(usuario)
   let expiracao = getters.getExpiracaoToken
   let now = new Date()
-  console.log(expiracao)
+  console.log('Executando retoken')
   if (!force && expiracao && expiracao.getTime() > now.getTime()) {
     return true
   } else {
@@ -35,7 +32,7 @@ export const retoken = ({commit, dispatch, getters}, force) => {
       // cria outra instancia do axios para evitar o axios.defaults.headers['x-access-token']
       const instance = axios.create({
         headers: {
-          common: { 'x-access-token': JSON.parse(token) }
+          common: { 'authorization': JSON.parse(token) }
         }
       })
       return instance.post('/api/public/retoken')
@@ -55,16 +52,19 @@ export const setToken = ({commit, dispatch, state}, encodedToken) => {
   console.log('entrou setToken')
   try {
     let decodedToken = jwt.decode(encodedToken)
+    console.log(decodedToken)
     if (decodedToken && decodedToken.exp) {
       const dataExpiracao = new Date(0)
       const now = new Date()
       dataExpiracao.setUTCSeconds(decodedToken.exp)
       // verifica se o token não expirou
+      console.log('tempo expiracao', (dataExpiracao.getTime() - now.getTime()) / 1000)
       if (dataExpiracao.getTime() > now.getTime()) {
         // constroi o objeto usuário a partir do token
-        const usuario = decodedToken.usuarioLogado
+        const usuario = decodedToken.usuario
         // configura o cabeçalho padrão das requisições HTTP para conter o token
-        axios.defaults.headers['x-access-token'] = encodedToken
+        // axios.defaults.headers['x-access-token'] = encodedToken
+        axios.defaults.headers['authorization'] = encodedToken
         // cria um timer para atualização do token automaticamente
         state.timerToken = setTimeout(() => {
           console.log('Executando timer retoken')

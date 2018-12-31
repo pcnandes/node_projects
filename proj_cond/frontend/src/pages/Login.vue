@@ -17,9 +17,9 @@
             :error="$v.form.condominio.$error"/>
         </q-field>
         <q-field>
-          <q-input v-model.trim="form.usuario" placeholder="Usuário"
+          <q-input v-model.trim="form.login" placeholder="Usuário"
             inverted-light color="white" autofocus
-            @blur="$v.form.usuario.$touch" :error="$v.form.usuario.$error"/>
+            @blur="$v.form.login.$touch" :error="$v.form.login.$error"/>
         </q-field>
         <q-field>
           <q-input v-model="form.senha" type="password" placeholder="Senha"
@@ -47,7 +47,7 @@ export default {
       lista: [],
       form: {
         condominio: 'golden_residence',
-        usuario: '',
+        login: '',
         senha: ''
       },
       lembreDeMim: false,
@@ -57,7 +57,7 @@ export default {
   validations: {
     form: {
       condominio: { required },
-      usuario: { required },
+      login: { required },
       senha: { required }
     }
   },
@@ -85,7 +85,7 @@ export default {
     }
   },
   computed: {
-    usuario () {
+    login () {
       return this.$store.state.auth.usuario.nome
     }
   }

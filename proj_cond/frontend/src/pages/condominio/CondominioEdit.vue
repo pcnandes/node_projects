@@ -48,7 +48,7 @@
 import { QBtn, QField, QInput, QModal, QCollapsible } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
 // import Vue from 'vue'
-import { Condominio, Bloco } from './mixin.js'
+import { getBlocoNew, getCondominioNew } from './mixin.js'
 import AdicionarBloco from './AdicionarBloco.vue'
 import axios from 'axios'
 
@@ -60,10 +60,10 @@ export default {
       condominioId: this.$route.params.id,
       modoAdicionarBloco: 'INCLUSAO', // 'INCUSAO' 'ALTERACAO'
       exibeModalBloco: false,
-      bloco: new Bloco(),
+      bloco: getBlocoNew(),
       // areaComum: new AreaComum(),
       // garagem: new Garagem(),
-      condominio: new Condominio()
+      condominio: getCondominioNew()
       // andar: new Andar()
     }
   },
@@ -95,7 +95,7 @@ export default {
     prepararAdicionarBloco () {
       this.modoAdicionarBloco = 'INCLUSAO'
       this.exibeModalBloco = true
-      this.bloco = new Bloco()
+      this.bloco = getBlocoNew()
     },
     prepararAlterarBloco (bloco) {
       this.modoAdicionarBloco = 'ALTERACAO'

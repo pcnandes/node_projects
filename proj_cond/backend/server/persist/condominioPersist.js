@@ -34,12 +34,7 @@ exports.carregar = async function (id) {
 
 exports.alterar = async function (condominio, transaction) {
   // carrego o condominio do banco
-  let condominioBd = await Condominio.findByPk(condominio.id, {
-    include: [{
-      model: Bloco,
-      as: 'blocos'
-    }]
-  })
+  let condominioBd = await Condominio.findByPk(condominio.id, { include: ['blocos'] })
   // verifico se existe o registro no banco
   if (!condominioBd.id) {
     throw new Error()

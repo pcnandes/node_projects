@@ -3,9 +3,7 @@ const util = require('./util')
 
 exports.alterarCascade = async function (bloco, transaction) {
   // carrego o condominio do banco
-  let blocoBd = await Bloco.findByPk(bloco.id, {
-    include: ['unidades']
-  })
+  let blocoBd = await Bloco.findByPk(bloco.id, { include: ['unidades'] })
 
   // verifico se existe o registro no banco
   if (!blocoBd.id) {
@@ -32,9 +30,7 @@ exports.alterarCascade = async function (bloco, transaction) {
   promises.push(Bloco.update(bloco, { where: { id: bloco.id }, transaction }))
 
   return Promise.all(promises)
-    .then(() => {
-      return bloco.id
-    })
+    .then(() => bloco.id)
     .catch(err => {
       // verifico se a transsacao ainda está ativa
       if (!transaction.finished) transaction.rollback()
