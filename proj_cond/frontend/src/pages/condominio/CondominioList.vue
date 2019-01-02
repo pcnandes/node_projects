@@ -1,16 +1,22 @@
 <template>
-  <q-page padding class="justify-center pagina">
-    <q-list highlight class="col-12">
-      <q-list-header>Selecione  o Condomínios</q-list-header>
-      <q-item v-for="c in condominios" :key="c.id" @click.native="detalhar(c)">
-        <q-item-side>
-          <q-item-tile icon="business" color="primary" />
-        </q-item-side>
-        <q-item-main :label="c.nome" />
-      </q-item>
-    </q-list>
+  <q-page class="justify-center pagina">
+    <div class="formulario">
+      <q-list highlight class="col-12">
+        <q-list-header>Selecione  o Condomínios</q-list-header>
+        <q-item v-for="c in condominios" :key="c.id" @click.native="detalhar(c)">
+          <q-item-side>
+            <q-item-tile icon="business" color="primary" />
+          </q-item-side>
+          <q-item-main :label="c.nome" />
+        </q-item>
+      </q-list>
+      <div class="barra-botoes row">
+        <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Adicionar Condomínio" @click="novo()" color="primary"/></div>
+      </div>
+    </div>
     <div class="barra-botoes row">
-      <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Adicionar Condomínio" @click="novo()" color="primary"/></div>
+      <q-btn class="full-width" label="Confirmar" color="primary"/>
+      <q-btn class="full-width" label="Cancelar" color="primary"/>
     </div>
   </q-page>
 </template>

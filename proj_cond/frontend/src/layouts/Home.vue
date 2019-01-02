@@ -135,10 +135,13 @@ export default {
     width: 100%;
     max-width: 85vw; /*defino um tamanho maximo caso o site seja aberto em dispositivos com muita resolução*/
     background-color: rgb(247, 247, 247);
-    padding-top: 5px;
+    padding: 20px;
     /*
     padding-left: 5%;
     padding-right: 5%; */
+  }
+  .formulario {
+    height: calc(100vh - 180px);
   }
   .barra-botoes {
     display: flex;
