@@ -1,18 +1,26 @@
 <template>
    <q-page padding class="docs-input row justify-center pagina">
-    <div class="full-width">
+    <div class='full-width' style="max-width: 90vw;" >
       <q-field :count="50" >
         <q-input v-model="condominio.nome" float-label="Nome do Condomínio"/>
       </q-field>
       <br/>
       <div class="row justify-center" v-if="condominio.blocos && condominio.blocos.length>0">
-        <q-list class="full-width">
+        <q-list class="col-12">
           <q-collapsible icon="business" :label="'Bloco ' + bl.nome"
             v-for="(bl, i) in condominio.blocos" :key="i">
             <div class="row col-12 justify-center">
                 <div class="divUnidade" v-for="(unidade, y) in bl.unidades" :key="y" >
                   {{unidade.nome}}
                 </div>
+                <!--
+                <div class="row col-10" v-for="(andar, i) in bl.andar" :key="i">
+                  <div class="divAndar justify-center">{{andar.andar}}</div>
+                  <div class="col-auto divUnidade" v-for="(unidade, y) in andar.unidades" :key="y">
+                    {{unidade}}
+                  </div>
+                </div>
+                -->
             </div>
             <div class="row col-12 justify-center gutter-sm q-mt-xs">
               <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" label="Alterar bloco" @click="prepararAlterarBloco(bl)" color="faded"/></div>

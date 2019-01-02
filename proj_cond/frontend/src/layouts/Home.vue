@@ -141,9 +141,21 @@ export default {
     padding-right: 5%; */
   }
   .formulario {
-    height: calc(100vh - 180px);
+    min-height: calc(100vh - 450px);
   }
   .barra-botoes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    margin-top: 20px;
+  }
+  .barra-botoes > div {
+    padding-right: 20px;
+  }
+
+  .barra-botoes-principal {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -155,15 +167,31 @@ export default {
     padding-bottom: 10px;
     padding-top: 10px;
     margin-top: 20px;
+    align-content: space-between;
   }
-  .barra-botoes > div {
-    padding-left: 16px;
+  .barra-botoes-principal > div {
+    padding-right: 20px;
   }
+
   .material-icons.primary { color: #5a5a5a; }
   .material-icons.light_gray { color: #9c9b9b; }
   @media (max-width: 575px) {
     .pagina {
       max-width: 100%;
+    }
+    .barra-botoes-principal {
+      flex-direction: column;
+      padding: 0px;
+      padding-bottom: 10px;
+    }
+    .barra-botoes-principal > div {
+      padding-left: 10px;
+      padding-right: 10px;
+      padding-top: 10px;
+    }
+    .barra-botoes > div {
+      padding-right: 10px;
+      padding-left: 10px;
     }
   }
 </style>
