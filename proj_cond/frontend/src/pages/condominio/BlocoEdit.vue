@@ -1,10 +1,10 @@
 <template>
   <q-page class="justify-center pagina">
     <div class="formulario">
-      <q-field :count="50">
+      <q-field :count="50" >
         <q-input v-model="condominio.nome" float-label="Nome do Condomínio"/>
       </q-field>
-      <q-list highlight class="col-12 q-my-lg">
+      <q-list highlight class="col-12">
         <q-list-header>Blocos</q-list-header>
         <q-item v-for="b in condominio.blocos" :key="b.id" @click.native="detalhar(b)">
           <q-item-side>
@@ -13,9 +13,7 @@
           <q-item-main :label="b.nome" />
         </q-item>
       </q-list>
-      <div class="row justify-center q-my-lg">
-        <q-btn class="col-xs-12 col-md-auto" label="Adicionar bloco" @click="adicionarBloco()" color="secondary"/>
-      </div>
+
     </div>
     <div class="barra-botoes-principal row">
       <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Salvar" color="primary"/></div>
@@ -83,10 +81,10 @@ export default {
       this.$router.go(-1)
     },
     detalharBloco (blocoId) {
-      this.$router.push(`${this.condominio.id}/bloco/novo${blocoId}`)
+      this.$router.push('/bolco/' + blocoId)
     },
     adicionarBloco () {
-      this.$router.push(`${this.condominio.id}/bloco/novo`)
+      this.$router.push('/bloco/novo')
     }
   },
   mounted () {
