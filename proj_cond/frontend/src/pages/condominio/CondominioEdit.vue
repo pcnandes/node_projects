@@ -1,25 +1,25 @@
 <template>
   <q-page class="justify-center pagina">
-    <div class="formulario">
-      <q-field :count="50">
-        <q-input v-model="condominio.nome" float-label="Nome do Condomínio"/>
-      </q-field>
-      <q-list highlight class="col-12 q-my-lg">
-        <q-list-header>Blocos</q-list-header>
-        <q-item v-for="b in condominio.blocos" :key="b.id" @click.native="detalhar(b)">
-          <q-item-side>
-            <q-item-tile icon="business" color="primary" />
-          </q-item-side>
-          <q-item-main :label="b.nome" />
-        </q-item>
-      </q-list>
-      <div class="row justify-center q-my-lg">
-        <q-btn class="col-xs-12 col-md-auto" label="Adicionar bloco" @click="adicionarBloco()" color="secondary"/>
-      </div>
+    <q-field :count="50">
+      <q-input v-model="condominio.nome" float-label="Nome do Condomínio"
+        @blur="$v.condominio.nome.$touch" :error="$v.condominio.nome.$error"/>
+    </q-field>
+    <q-list v-if="condominioId && condominio.blocos && condominio.blocos.length>0" highlight class="col-12 q-my-lg">
+      <q-list-header>Blocos</q-list-header>
+      <q-item v-for="b in condominio.blocos" :key="b.id" @click.native="detalhar(b)">
+        <q-item-side>
+          <q-item-tile icon="business" color="primary" />
+        </q-item-side>
+        <q-item-main :label="b.nome" />
+      </q-item>
+    </q-list>
+    <div v-if="condominioId" class="row justify-center q-my-lg">
+      <q-btn class="col-xs-12 col-md-auto" label="Adicionar bloco" @click="adicionarBloco()" color="secondary"/>
     </div>
     <div class="barra-botoes-principal row">
-      <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Salvar" color="primary"/></div>
-      <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Cancelar" color="faded"/></div>
+      <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Salvar" @click="salvar()" color="primary"/></div>
+      <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Excluir" @click="excluir()" color="negative"/></div>
+      <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Cancelar" @click="cancelar()" color="faded"/></div>
     </div>
   </q-page>
 </template>
@@ -36,18 +36,19 @@ export default {
   components: { QBtn, QField, QInput },
   data () {
     return {
-      condominioId: this.$route.params.id,
+      condominioId: null,
       bloco: getBlocoNew(),
       condominio: getCondominioNew()
     }
   },
   validations: {
-    form: {
-      condominio: { required }
+    condominio: {
+      nome: { required }
     }
   },
   methods: {
     carregarPagina () {
+      this.condominioId = this.$route.params.id
       if (this.condominioId) {
         axios.get(`/api/condominio/${this.condominioId}`)
           .then((res) => {
@@ -60,10 +61,16 @@ export default {
       }
     },
     salvar () {
+      this.$v.condominio.nome.$touch()
+      if (this.$v.condominio.nome.$error) {
+        this.$q.notify('Informe o nome do Condomínio')
+      }
       if (!this.condominio.id) {
         axios.post('/api/condominio', this.condominio)
           .then((res) => {
             this.condominio = res.data
+            this.$router.push(`/condominio/${res.data.id}`)
+            this.carregarPagina()
           })
           .catch((err) => {
             console.error('ERRO: ', err.response.erro)
@@ -80,7 +87,10 @@ export default {
       }
     },
     cancelar () {
-      this.$router.go(-1)
+      this.$router.push('/condominio')
+    },
+    excluir () {
+      // TODO mandar modal de confirmaçao antes de excluir
     },
     detalharBloco (blocoId) {
       this.$router.push(`${this.condominio.id}/bloco/novo${blocoId}`)
