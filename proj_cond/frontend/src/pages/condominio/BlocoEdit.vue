@@ -1,20 +1,9 @@
 <template>
   <q-page class="justify-center pagina">
-    <div class="formulario">
-      <q-field :count="50" >
-        <q-input v-model="condominio.nome" float-label="Nome do Condomínio"/>
-      </q-field>
-      <q-list highlight class="col-12">
-        <q-list-header>Blocos</q-list-header>
-        <q-item v-for="b in condominio.blocos" :key="b.id" @click.native="detalhar(b)">
-          <q-item-side>
-            <q-item-tile icon="business" color="primary" />
-          </q-item-side>
-          <q-item-main :label="b.nome" />
-        </q-item>
-      </q-list>
-
-    </div>
+    Condomínio: {{bloco.condominio.nome}}
+    <q-field :count="50" >
+      <q-input v-model="bloco.nome" float-label="Nome/Identificação do bloco"/>
+    </q-field>
     <div class="barra-botoes-principal row">
       <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Salvar" color="primary"/></div>
       <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Cancelar" color="faded"/></div>
@@ -26,27 +15,27 @@
 import { QBtn, QField, QInput } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
 // import Vue from 'vue'
-import { getBlocoNew, getCondominioNew } from './mixin.js'
+import { getBlocoNew } from './mixin.js'
 import axios from 'axios'
 
 export default {
-  name: 'CadastroCondominio',
+  name: 'CadastroBloco',
   components: { QBtn, QField, QInput },
   data () {
     return {
-      condominioId: this.$route.params.id,
-      bloco: getBlocoNew(),
-      condominio: getCondominioNew()
+      blocoId: this.$route.params.id,
+      bloco: getBlocoNew()
     }
   },
   validations: {
-    form: {
-      condominio: { required }
+    bloco: {
+      nome: { required }
     }
   },
   methods: {
     carregarPagina () {
       if (this.condominioId) {
+        // TODO PAREI AQUI.. VOU NO BANCO PEGAR O BLOCO OU PEDO DIRETO DO CONDOMINIO???? COMO PEGAR DIRETO???
         axios.get(`/api/condominio/${this.condominioId}`)
           .then((res) => {
             this.condominio = res.data

@@ -1,5 +1,5 @@
 function getBlocoNew () {
-  return {id: '', nome: '', unidades: []}
+  return {id: '', nome: '', unidades: [], condominio: {}}
 }
 
 function getCondominioNew () {

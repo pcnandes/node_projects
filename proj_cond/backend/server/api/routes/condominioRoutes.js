@@ -11,5 +11,6 @@ router.route('/')
 router.route('/:id')
   .get(security.verifyJWT, condominio.carregar)
   .put(security.verifyJWT, condominio.salvar)
+  .delete(security.verifyJWT, condominio.excluir)
 
 module.exports = router

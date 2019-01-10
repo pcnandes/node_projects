@@ -6,7 +6,7 @@
     </q-field>
     <q-list v-if="condominioId && condominio.blocos && condominio.blocos.length>0" highlight class="col-12 q-my-lg">
       <q-list-header>Blocos</q-list-header>
-      <q-item v-for="b in condominio.blocos" :key="b.id" @click.native="detalhar(b)">
+      <q-item v-for="b in condominio.blocos" :key="b.id" @click.native="detalharBloco(b.id)">
         <q-item-side>
           <q-item-tile icon="business" color="primary" />
         </q-item-side>
@@ -90,10 +90,23 @@ export default {
       this.$router.push('/condominio')
     },
     excluir () {
-      // TODO mandar modal de confirmaçao antes de excluir
+      this.$q.dialog({
+        title: 'Confirma exclusão?',
+        ok: 'Confirmar',
+        cancel: 'Cancelar'
+      }).then(() => {
+        axios.delete(`/api/condominio/${this.condominio.id}`)
+          .then((res) => {
+            this.$q.notify('Condomínio excluído com sucesso!')
+            this.cancelar()
+          })
+          .catch((err) => {
+            throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+          })
+      }).catch(() => {})
     },
     detalharBloco (blocoId) {
-      this.$router.push(`${this.condominio.id}/bloco/novo${blocoId}`)
+      this.$router.push(`${this.condominio.id}/bloco/${blocoId}`)
     },
     adicionarBloco () {
       this.$router.push(`${this.condominio.id}/bloco/novo`)

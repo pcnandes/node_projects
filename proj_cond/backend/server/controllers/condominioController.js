@@ -59,3 +59,15 @@ exports.carregar = async function (req, res) {
     return onError(res, 'Erro ao carregar o condomínio', err)
   }
 }
+
+exports.excluir = async function (req, res) {
+  try {
+    let id = req.params.id
+    if (id) {
+      let retorno = await persist.excluir(id)
+      return onSuccess(res, retorno)
+    } else res.status(500).send({ data: null, message: 'Id não informado', erro: null })
+  } catch (err) {
+    return onError(res, 'Erro ao carregar excluir o condomínio', err)
+  }
+}
