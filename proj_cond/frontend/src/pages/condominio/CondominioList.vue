@@ -1,6 +1,6 @@
 <template>
   <q-page class="justify-center pagina">
-      <q-list highlight class="col-12">
+      <q-list v-if="condominios.length>0" highlight class="col-12">
         <q-list-header>Condomínios cadastrados</q-list-header>
         <q-item v-for="c in condominios" :key="c.id" @click.native="detalhar(c)">
           <q-item-side>
@@ -9,6 +9,7 @@
           <q-item-main :label="c.nome" />
         </q-item>
       </q-list>
+      <p v-else>Nenhum condomínio cadastrado</p>
       <div class="barra-botoes row">
         <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Cadastrar Condomínio" @click="novo()" color="secondary"/></div>
       </div>

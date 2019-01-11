@@ -36,7 +36,7 @@ export default {
   components: { QBtn, QField, QInput },
   data () {
     return {
-      condominioId: null,
+      condominioId: this.$route.params.id,
       bloco: getBlocoNew(),
       condominio: getCondominioNew()
     }
@@ -48,7 +48,6 @@ export default {
   },
   methods: {
     carregarPagina () {
-      this.condominioId = this.$route.params.id
       if (this.condominioId) {
         axios.get(`/api/condominio/${this.condominioId}`)
           .then((res) => {
@@ -63,13 +62,19 @@ export default {
     salvar () {
       this.$v.condominio.nome.$touch()
       if (this.$v.condominio.nome.$error) {
-        this.$q.notify('Informe o nome do Condomínio')
+        this.$q.notify({
+          color: 'negative',
+          position: 'top',
+          message: 'Informe o nome do Condomínio',
+          icon: 'report_problem'
+        })
       }
       if (!this.condominio.id) {
         axios.post('/api/condominio', this.condominio)
           .then((res) => {
             this.condominio = res.data
-            this.$router.push(`/condominio/${res.data.id}`)
+            this.condominioId = res.data.id
+            this.$router.push({ path: `/condominio/${this.condominioId}` })
             this.carregarPagina()
           })
           .catch((err) => {
