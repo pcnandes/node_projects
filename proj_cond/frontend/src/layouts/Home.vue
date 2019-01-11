@@ -88,15 +88,19 @@
 </template>
 
 <script>
-import { QBtnDropdown } from 'quasar'
+import { QBtnDropdown, colors } from 'quasar'
 import routes from '../router/routes'
 export default {
-  components: { QBtnDropdown },
+  components: { QBtnDropdown, colors },
   name: 'Home',
   data () {
     return {
       leftDrawerOpen: false
     }
+  },
+  created () {
+    colors.setBrand('negative', '#BA4747')
+    colors.setBrand('primary', '#1565c0')
   },
   computed: {
     itensMenu () {
@@ -142,17 +146,6 @@ export default {
   }
   .formulario {
     min-height: calc(100vh - 450px);
-  }
-  .barra-botoes {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding-bottom: 10px;
-    padding-top: 10px;
-    margin-top: 20px;
-  }
-  .barra-botoes > div {
-    padding-right: 20px;
   }
 
   .barra-botoes-principal {

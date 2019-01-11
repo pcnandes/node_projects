@@ -71,3 +71,10 @@ npm install compression
 
 passo a passo para acertar o sequelize
 https://medium.com/@jgrisafe/custom-user-authentication-with-express-sequelize-and-bcrypt-667c4c0edef5
+
+
+TODO
+- terminar cadastro de condominio 
+- criar componentes para cada elemento da tela afim de refuzir codigo e embutir comportamento.
+- ver como funciona o this.$refs
+parece que no componente vc define o ref="nome" e no js vc chama this.$refs.nome.Method.
