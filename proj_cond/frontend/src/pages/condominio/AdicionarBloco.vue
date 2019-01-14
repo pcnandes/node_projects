@@ -62,7 +62,8 @@ export default {
       bloco: getBlocoNew(),
       andares: null,
       unidadesPorAndar: null,
-      numeroPrimeiraUnidade: null
+      numeroPrimeiraUnidade: null,
+      modo: 'INCLUSAO'
     }
   },
   validations: {
@@ -77,10 +78,38 @@ export default {
     exibir () {
       this.$v.bloco.$reset()
       this.bloco = JSON.parse(JSON.stringify(this.value))
+      this.modo = this.bloco.id ? 'ALTERACAO' : 'INCLUSAO'
       this.$refs.modalRef.show()
     },
     fechar () {
       this.$refs.modalRef.hide()
+    },
+    gerarBloco () {
+      this.$v.andares.$touch()
+      this.$v.unidadesPorAndar.$touch()
+      if (this.$v.andares.$error || this.$v.unidadesPorAndar.$error) {
+        this.$q.notify('Informe a Qtd. andares e Unidades por andar.')
+      } else {
+        const primeira = this.numeroPrimeiraUnidade ? this.numeroPrimeiraUnidade : 101
+        this.bloco.unidades = new Array(this.andares * this.unidadesPorAndar)
+        let contUnidade = 0
+        for (let i = 0; i < this.bloco.unidades.length; i++) {
+          contUnidade = contUnidade >= this.unidadesPorAndar ? 0 : contUnidade++
+          let andarCorrente = Math.floor(primeira / 100)
+          // defino o numero do andar
+          this.bloco.unidades[i] = {nome: contUnidade * andarCorrente, andar: andarCorrente}
+          /*
+          for (let y = 0; y < this.bloco.andar[i].unidades.length; y++) {
+            this.bloco.andar[i].unidades[y] = i * 100 + primeira + y
+          } */
+        }
+      }
+    },
+    deletarUnidade (unidade) {
+      this.bloco.unidades.splice(unidade, 1)
+      // verifica se existem elementos no array
+      // if (this.bloco.unidades.length > 0) this.$set(this.bloco.andar, andar, this.bloco.andar[andar])
+      // else this.bloco.andar.splice(andar, 1)
     }
   }
 }
