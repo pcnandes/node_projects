@@ -131,10 +131,8 @@ export default {
     prepararAlterarBloco (bloco) {
       console.log(bloco)
     },
-    async prepararAdicionarBloco () {
-      // ver como fazer... https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Promise/resolve
-      let retorno = await this.$refs.blocoModal.exibir()
-      console.log('aquiiiii' + retorno)
+    prepararAdicionarBloco () {
+      this.$refs.blocoModal.exibir()
     }
   },
   mounted () {
