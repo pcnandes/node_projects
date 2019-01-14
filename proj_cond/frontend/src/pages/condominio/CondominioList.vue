@@ -10,7 +10,7 @@
         </q-item>
       </q-list>
       <p v-else>Nenhum condomínio cadastrado</p>
-      <div class="barra-botoes row">
+      <div class="row justify-center q-my-lg">
         <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Cadastrar Condomínio" @click="novo()" color="secondary"/></div>
       </div>
   </q-page>

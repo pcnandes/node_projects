@@ -19,9 +19,13 @@
           <q-btn round flat fab-mini icon="delete" color="faded" title="Excluir Bloco"/>
         </div>
         <div class="row col-12 justify-center">
-            <div class="divUnidade" v-for="(unidade, y) in bl.unidades" :key="y" >
+          <div style="display: table;">
+            <div class="divUnidade"
+              v-bind:class="[unidade.andar !== bl.unidades[Math.max(y - 1,0)].andar ? 'clear' : '']"
+              v-for="(unidade, y) in bl.unidades" :key="y" >
               {{unidade.nome}}
             </div>
+          </div>
         </div>
       </q-collapsible>
     </q-list>
@@ -34,8 +38,7 @@
       <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Excluir" @click="excluir()" color="negative"/></div>
       <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Cancelar" @click="cancelar()" color="faded"/></div>
     </div>
-    <adicionar-bloco ref="blocoModal">
-    </adicionar-bloco>
+    <adicionar-bloco ref="blocoModal"/>
   </q-page>
 </template>
 
@@ -78,12 +81,7 @@ export default {
     salvar () {
       this.$v.condominio.nome.$touch()
       if (this.$v.condominio.nome.$error) {
-        this.$q.notify({
-          color: 'negative',
-          position: 'top',
-          message: 'Informe o nome do Condomínio',
-          icon: 'report_problem'
-        })
+        this.alertaErro('Informe o nome do Condomínio')
       }
       if (!this.condominio.id) {
         axios.post('/api/condominio', this.condominio)
@@ -101,6 +99,7 @@ export default {
         axios.put(`/api/condominio/${this.condominio.id}`, this.condominio)
           .then((res) => {
             this.condominio = res.data
+            this.alertaSucesso('Condomínio salvo com sucesso')
           })
           .catch((err) => {
             throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
@@ -122,17 +121,14 @@ export default {
           })
       }).catch(() => {})
     },
-    detalharBloco (blocoId) {
-      this.$router.push(`${this.condominio.id}/bloco/${blocoId}`)
+    async prepararAlterarBloco (bloco) {
+      // this.bloco = bloco
+      let _bloco = await this.$refs.blocoModal.prepararAlteracao(bloco)
+      Object.assign(bloco, _bloco)
     },
-    adicionarBloco () {
-      this.$router.push(`${this.condominio.id}/bloco/novo`)
-    },
-    prepararAlterarBloco (bloco) {
-      console.log(bloco)
-    },
-    prepararAdicionarBloco () {
-      this.$refs.blocoModal.exibir()
+    async prepararAdicionarBloco () {
+      let _bloco = await this.$refs.blocoModal.prepararInclusao()
+      this.condominio.blocos.push(_bloco)
     }
   },
   mounted () {
@@ -150,14 +146,18 @@ export default {
     margin-bottom: 5px;
     margin-right: 5px;
     text-align: center;
+    float: left;
   }
-
+  .clear {
+    clear: left;
+  }
   @media (max-width: 575px) {
     .divUnidade {
       margin-bottom: 2px;
       margin-right: 2px;
       min-width: 60px!important;;
       max-width: 70px!important;;
+      float: left;
     }
   }
 </style>
