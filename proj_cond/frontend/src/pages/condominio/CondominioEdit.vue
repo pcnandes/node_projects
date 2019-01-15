@@ -1,5 +1,6 @@
 <template>
   <q-page class="justify-center pagina">
+    <botoes-crud></botoes-crud>
     <q-field :count="50">
       <q-input v-model="condominio.nome" float-label="Nome do Condomínio"
         @blur="$v.condominio.nome.$touch" :error="$v.condominio.nome.$error"/>
@@ -49,10 +50,11 @@ import { required } from 'vuelidate/lib/validators'
 import { getBlocoNew, getCondominioNew } from './mixin.js'
 import axios from 'axios'
 import AdicionarBloco from './AdicionarBloco.vue'
+import BotoesCrud from '../shared/BotoesCrud'
 
 export default {
   name: 'CadastroCondominio',
-  components: { QBtn, QField, QInput, QCollapsible, 'adicionar-bloco': AdicionarBloco },
+  components: { QBtn, QField, QInput, QCollapsible, 'adicionar-bloco': AdicionarBloco, 'botoes-crud': BotoesCrud },
   data () {
     return {
       condominioId: this.$route.params.id,
