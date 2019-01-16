@@ -1,6 +1,6 @@
 <template>
   <q-page class="justify-center pagina">
-    <botoes-crud></botoes-crud>
+    <botoes-crud @excluir="excluir()" @cancelar="cancelar()" @confirmar="salvar()"></botoes-crud>
     <q-field :count="50">
       <q-input v-model="condominio.nome" float-label="Nome do Condomínio"
         @blur="$v.condominio.nome.$touch" :error="$v.condominio.nome.$error"/>
@@ -34,11 +34,13 @@
     <div v-if="condominioId" class="row justify-center q-my-lg">
       <q-btn class="col-xs-12 col-md-auto" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
     </div>
+    <!--
     <div class="barra-botoes-principal row">
       <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Salvar" @click="salvar()" color="primary"/></div>
       <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Excluir" @click="excluir()" color="negative"/></div>
       <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Cancelar" @click="cancelar()" color="faded"/></div>
     </div>
+    -->
     <adicionar-bloco ref="blocoModal"/>
   </q-page>
 </template>
