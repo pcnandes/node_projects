@@ -62,8 +62,7 @@ export default {
     margin-left: -20px;
     margin-right: -20px;
     margin-bottom: 15px;
-    padding-bottom: 5px;
-    padding-top: 5px;
+    padding: 5px;
     /* flutuar
     position: absolute;
     bottom: 0;

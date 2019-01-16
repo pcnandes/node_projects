@@ -16,6 +16,7 @@
           <q-item-main :label="bl.nome" />
         </template>
         <div class="absolute" style="right: 0px; bottom: 0px" >
+          <q-btn class="col-xs-12 col-md-auto" label="Gerar contas de usuários" @click="prepararAdicionarBloco()" color="negative"/>
           <q-btn round flat fab-mini icon="edit" color="faded" title="Alterar Bloco" @click.native="prepararAlterarBloco(bl)"/>
           <q-btn round flat fab-mini icon="delete" color="faded" title="Excluir Bloco"/>
         </div>
