@@ -2,9 +2,10 @@ export default ({ Vue }) => {
   // Vue.prototype.$axios = axios
   Vue.mixin({
     methods: {
-      modalConfirmaExclusao (titulo = 'Confirma exclusão?') {
+      modalConfirmaAcao (titulo = 'Confirma exclusão?', msg = null) {
         return this.$q.dialog({
           title: titulo,
+          message: msg,
           ok: 'Confirmar',
           cancel: 'Cancelar'
         })

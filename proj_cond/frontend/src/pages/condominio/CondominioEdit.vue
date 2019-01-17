@@ -16,7 +16,6 @@
           <q-item-main :label="bl.nome" />
         </template>
         <div class="absolute" style="right: 0px; bottom: 0px" >
-          <q-btn class="col-xs-12 col-md-auto" label="Gerar contas de usuários" @click="prepararAdicionarBloco()" color="negative"/>
           <q-btn round flat fab-mini icon="edit" color="faded" title="Alterar Bloco" @click.native="prepararAlterarBloco(bl)"/>
           <q-btn round flat fab-mini icon="delete" color="faded" title="Excluir Bloco"/>
         </div>
@@ -32,8 +31,12 @@
       </q-collapsible>
     </q-list>
 
-    <div v-if="condominioId" class="row justify-center q-my-lg">
-      <q-btn class="col-xs-12 col-md-auto" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
+    <div v-if="condominioId" class="row justify-center">
+      <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="business" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
+      <q-btn v-if="condominio.blocos && condominio.blocos.length>0" class="col-xs-12 col-md-auto q-ma-sm" icon="supervisor_account" color="negative"
+            label="Gerar contas de usuários"
+            title="Gera as unidades e as contas de usuários"
+            @click="gerarUnidades()"/>
     </div>
     <!--
     <div class="barra-botoes-principal row">
@@ -115,7 +118,7 @@ export default {
       this.$router.push('/condominio')
     },
     excluir () {
-      this.modalConfirmaExclusao().then(() => {
+      this.modalConfirmaAcao().then(() => {
         axios.delete(`/api/condominio/${this.condominio.id}`)
           .then((res) => {
             this.$q.notify('Condomínio excluído com sucesso!')
@@ -134,6 +137,10 @@ export default {
     async prepararAdicionarBloco () {
       let _bloco = await this.$refs.blocoModal.prepararInclusao()
       this.condominio.blocos.push(_bloco)
+    },
+    gerarUnidades () {
+      this.modalConfirmaAcao('Atenção', 'Verique se todas as unidades estão corretas. Serão criadas todas as unidades e suas respectivas contas de usuario. ').then(() => {
+      }).catch(() => {})
     }
   },
   mounted () {
