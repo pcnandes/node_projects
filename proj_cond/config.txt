@@ -74,7 +74,6 @@ https://medium.com/@jgrisafe/custom-user-authentication-with-express-sequelize-a
 
 
 TODO
+- criar funcao de gerar moradores
 - terminar cadastro de condominio 
 - criar componentes para cada elemento da tela afim de refuzir codigo e embutir comportamento.
-- ver como funciona o this.$refs
-parece que no componente vc define o ref="nome" e no js vc chama this.$refs.nome.Method.

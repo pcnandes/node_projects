@@ -25,8 +25,10 @@ module.exports = (sequelize, type) => {
   }, { tableName: 'unidade' })
 
   // nao sei pq o delete cascade funciona de uma maneira entre Bloco e unidade do que Condominio Bloco
-  Unidade.associate = function ({ Bloco }) {
+  Unidade.associate = function ({ Bloco, Morador }) {
     Unidade.belongsTo(Bloco)
+    Unidade.hasMany(Morador, { as: 'moradores', foreignKey: { allowNull: true }, onDelete: 'CASCADE', hooks: true })
   }
+
   return Unidade
 }
