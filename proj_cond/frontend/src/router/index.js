@@ -51,6 +51,7 @@ function verificaPermissaoRota (to, next, store) {
   if (to.meta.perfis && to.meta.perfis.length > 0) {
     store.dispatch('auth/hasRole', to.meta.perfis)
       .then((res) => {
+        console.log('tem perfil?', res)
         if (res) next()
         else {
           // this.$q.notify('Usuário logado nao tem acesso ao cadastro de condominio')
