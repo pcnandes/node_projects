@@ -27,6 +27,11 @@ module.exports = (sequelize, type) => {
       allowNull: false,
       validate: {
         notEmpty: true
+      },
+      get () {
+        let perfis = this.getDataValue('perfis')
+        if (perfis) return perfis.split(',')
+        else return null
       }
     }
   }, { tableName: 'usuario' })
