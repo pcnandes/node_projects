@@ -13,6 +13,13 @@ module.exports = (sequelize, type) => {
         len: [1, 50]
       }
     },
+    tipo: {
+      type: type.ENUM('PROPRIETARIO', 'LOCADOR', 'LOCATARIO'),
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
+    },
     email: {
       type: type.STRING,
       allowNull: true,
@@ -63,9 +70,9 @@ module.exports = (sequelize, type) => {
     // Coloco os dados de usuário? Como fica o sindico que nao tem unidade, porteiro, etc?
   }, { tableName: 'morador' })
 
-  // nao sei pq o delete cascade funciona de uma maneira entre Bloco e unidade do que Condominio Bloco
   Morador.associate = function ({ Unidade }) {
     Morador.belongsTo(Unidade)
   }
+
   return Morador
 }

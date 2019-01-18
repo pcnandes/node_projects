@@ -21,8 +21,9 @@ module.exports = (sequelize, type) => {
         len: [3, 50]
       }
     },
-    perfil: {
-      type: type.ENUM('ADMIN', 'SINDICO'),
+    perfis: {
+      // type: type.ENUM('ADMIN', 'SINDICO'),
+      type: type.STRING,
       allowNull: false,
       validate: {
         notEmpty: true
@@ -30,11 +31,9 @@ module.exports = (sequelize, type) => {
     }
   }, { tableName: 'usuario' })
 
-  Usuario.associate = function () {
-    // associations can be defined here
+  Usuario.associate = function ({ Unidade }) {
+    Usuario.hasOne(Unidade, { onDelete: 'CASCADE' })
   }
 
   return Usuario
-  // TODO incluir dados unidade {bloco, unidade}
-  // incluir moradores {nome, email, telefone, celular, receberNotificacoes}
 }
