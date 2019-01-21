@@ -33,7 +33,7 @@
 
     <div v-if="condominioId" class="row justify-center">
       <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="business" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
-      <q-btn v-if="condominio.blocos && condominio.blocos.length>0" class="col-xs-12 col-md-auto q-ma-sm" icon="supervisor_account" color="negative"
+      <q-btn v-if="condominio.id && condominio.blocos && condominio.blocos.length>0 && condominio.blocos[0].id" class="col-xs-12 col-md-auto q-ma-sm" icon="supervisor_account" color="negative"
             label="Gerar contas de usuários"
             title="Gera as unidades e as contas de usuários"
             @click="gerarUnidades()"/>

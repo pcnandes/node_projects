@@ -71,3 +71,14 @@ exports.excluir = async function (req, res) {
     return onError(res, 'Erro ao carregar excluir o condomínio', err)
   }
 }
+
+exports.gerarContasUsuario = async function (req, res) {
+  try {
+    const retorno = await persist.gerarContasUsuario(req.body)
+    // return res.res.sendStatus(200).send(retorno)
+    return onSuccess(res, retorno)
+  } catch (err) {
+    // return res.status(400).send({ data: null, message: 'Erro ao cadastrar condominio', erro: err })
+    return onError(res, 'Erro ao cadastrar condominio', err)
+  }
+}

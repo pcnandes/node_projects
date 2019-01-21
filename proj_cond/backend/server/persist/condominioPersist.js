@@ -81,3 +81,15 @@ exports.excluir = function (id) {
     where: { id }
   })
 }
+
+exports.gerarContasUsuario = async function (condominio) {
+  condominio = util.parseJson(condominio)
+  // TODO verificar inclusao em lote
+  return Condominio.create(condominio, {
+    include: [{
+      model: Bloco,
+      as: 'blocos',
+      include: ['unidades']
+    }]
+  })
+}
