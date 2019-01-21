@@ -74,6 +74,6 @@ https://medium.com/@jgrisafe/custom-user-authentication-with-express-sequelize-a
 
 
 TODO
-- criar funcao de gerar moradores
+- testar exclusao de usuario quando unidade for excluida
 - terminar cadastro de condominio 
 - criar componentes para cada elemento da tela afim de refuzir codigo e embutir comportamento.

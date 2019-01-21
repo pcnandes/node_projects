@@ -24,10 +24,6 @@ module.exports = (sequelize, type) => {
     perfis: {
       // type: type.ENUM('ADMIN', 'SINDICO'),
       type: type.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      },
       get () {
         let perfis = this.getDataValue('perfis')
         if (perfis) return perfis.split(',')

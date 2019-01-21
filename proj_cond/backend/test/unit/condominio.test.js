@@ -42,7 +42,7 @@ beforeEach((done) => {
 })
 
 describe('Teste Unitario do CondominioController', () => {
-
+/*
   it('excluir condominio e blocos', async () => {
     let condominio = await Condominio.findOne()
     let excluido = await persist.excluir(condominio.id)
@@ -81,7 +81,7 @@ describe('Teste Unitario do CondominioController', () => {
             ['condominio_id', 'id', 'nome', 'unidades']
           )
           expect(data.blocos[0].unidades[0].dataValues).to.have.all.keys(
-            ['bloco_id', 'id', 'nome', 'andar']
+            ['bloco_id', 'id', 'nome', 'andar', 'usuario_id']
           )
         }))
   })
@@ -189,6 +189,17 @@ describe('Teste Unitario do CondominioController', () => {
       expect(data.blocos.map(i => i.nome)).to.deep.include('Bloco alteraddooooooo')
       expect(data.blocos.map(i => i.nome)).to.deep.include('Bloco Adicionado')
     })
+  }) */
+
+  it('Gerar contas de usuarios', async () => {
+    let condominio = await carregarUnidade()
+    return persist.gerarContasUsuario(condominio)
+      .then(data => {
+        // console.log(data)
+        expect(data.blocos[0].unidades[0].dataValues).to.have.all.keys(
+          ['bloco_id', 'id', 'nome', 'andar', 'usuario_id']
+        )
+      })
   })
 })
 

@@ -1,5 +1,6 @@
 const { Condominio, Bloco, sequelize } = require('./../models')
 const blocoPersist = require('./blocoPersist')
+const usuarioPersist = require('./usuarioPersist')
 const util = require('./util')
 
 exports.cadastrar = async function (condominio) {
@@ -83,13 +84,32 @@ exports.excluir = function (id) {
 }
 
 exports.gerarContasUsuario = async function (condominio) {
-  condominio = util.parseJson(condominio)
-  // TODO verificar inclusao em lote
-  return Condominio.create(condominio, {
-    include: [{
-      model: Bloco,
-      as: 'blocos',
-      include: ['unidades']
-    }]
+  let transaction = await sequelize.transaction()
+  let condominioBd = await Condominio.findByPk(condominio.id, { include: [{
+    model: Bloco,
+    as: 'blocos',
+    include: ['unidades']
+  }] })
+  return new Promise(async (resolve, reject) => {
+    try {
+      let promises = []
+      for (let bloco of condominioBd.blocos) {
+        for (let und of bloco.unidades) {
+          let usuario = await usuarioPersist.cadastrar({ login: und.nome, senha: und.nome }, transaction)
+          // adiciono a associoacao do usuario com a unidade em uma promise
+          promises.push(und.setUsuario(usuario, { transaction }))
+        }
+      }
+      // resolvo a promise da associoação e resolvo minha promese principal
+      Promise.all(promises).then(() => resolve())
+    } catch (error) {
+      reject(new Error('Erro ao gerar usuários'))
+    }
+  }).then(() => {
+    transaction.commit()
+    return this.carregar(condominio.id)
+  }).catch(err => {
+    transaction.rollback()
+    return Promise.reject(err)
   })
 }

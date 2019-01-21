@@ -1,9 +1,12 @@
-const { Usuario } = require('./../models')
+const { Usuario, sequelize } = require('./../models')
 const util = require('./util')
 
-exports.cadastrar = function (usuario) {
+exports.cadastrar = async function (usuario, transaction) {
   usuario = util.parseJson(usuario)
-  return Usuario.create(usuario)
+  transaction = !transaction ? await sequelize.transaction() : transaction
+  return Usuario.create(usuario, {
+    transaction: transaction
+  })
 }
 exports.listar = function (usuario) {
   return Usuario.findAll()
