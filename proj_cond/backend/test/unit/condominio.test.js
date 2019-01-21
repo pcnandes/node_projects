@@ -42,7 +42,7 @@ beforeEach((done) => {
 })
 
 describe('Teste Unitario do CondominioController', () => {
-/*
+
   it('excluir condominio e blocos', async () => {
     let condominio = await Condominio.findOne()
     let excluido = await persist.excluir(condominio.id)
@@ -189,7 +189,7 @@ describe('Teste Unitario do CondominioController', () => {
       expect(data.blocos.map(i => i.nome)).to.deep.include('Bloco alteraddooooooo')
       expect(data.blocos.map(i => i.nome)).to.deep.include('Bloco Adicionado')
     })
-  }) */
+  })
 
   it('Gerar contas de usuarios', async () => {
     let condominio = await carregarUnidade()

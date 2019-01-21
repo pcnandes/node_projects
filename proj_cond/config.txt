@@ -75,5 +75,6 @@ https://medium.com/@jgrisafe/custom-user-authentication-with-express-sequelize-a
 
 TODO
 - testar exclusao de usuario quando unidade for excluida
+- testar se usuarios estao cadastrados corretamente.. Verificar se nome da unidade é igual ao usuario e a senha
 - terminar cadastro de condominio 
 - criar componentes para cada elemento da tela afim de refuzir codigo e embutir comportamento.
