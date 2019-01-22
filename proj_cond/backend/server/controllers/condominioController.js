@@ -74,9 +74,12 @@ exports.excluir = async function (req, res) {
 
 exports.gerarContasUsuario = async function (req, res) {
   try {
-    const retorno = await persist.gerarContasUsuario(req.body)
-    return onSuccess(res, retorno)
+    let condominio = await persist.carregar(req.params.id)
+    if (condominio) {
+      const retorno = await persist.gerarContasUsuario(condominio)
+      return onSuccess(res, retorno)
+    } else return res.status(500).send({ data: null, message: `Condomínio ${req.params.id} não encontrado`, erro: null })
   } catch (err) {
-    return onError(res, 'Erro ao cadastrar condominio', err)
+    return onError(res, 'Erro ao gerar contas de usuário', err)
   }
 }

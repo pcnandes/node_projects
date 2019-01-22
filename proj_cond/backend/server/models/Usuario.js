@@ -33,7 +33,8 @@ module.exports = (sequelize, type) => {
   }, { tableName: 'usuario' })
 
   Usuario.associate = function ({ Unidade }) {
-    Usuario.hasOne(Unidade, { onDelete: 'CASCADE' })
+    // Usuario.hasOne(Unidade, { onDelete: 'cascade', hooks: true })
+    Usuario.belongsTo(Unidade)
   }
 
   return Usuario

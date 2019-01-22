@@ -1,6 +1,6 @@
-const { Condominio, Bloco, sequelize } = require('./../models')
+const { Condominio, Bloco, Usuario, sequelize } = require('./../models')
 const blocoPersist = require('./blocoPersist')
-const usuarioPersist = require('./usuarioPersist')
+// const usuarioPersist = require('./usuarioPersist')
 const util = require('./util')
 
 exports.cadastrar = async function (condominio) {
@@ -33,6 +33,7 @@ exports.carregar = async function (id) {
   })
 }
 
+// TODO refatorar esse bloco
 exports.alterar = async function (condominio, transaction) {
   // carrego o condominio do banco
   let condominioBd = await Condominio.findByPk(condominio.id, { include: ['blocos'] })
@@ -85,6 +86,7 @@ exports.excluir = function (id) {
 
 exports.gerarContasUsuario = async function (condominio) {
   let transaction = await sequelize.transaction()
+  // carrego o condominio
   let condominioBd = await Condominio.findByPk(condominio.id, { include: [{
     model: Bloco,
     as: 'blocos',
@@ -93,13 +95,13 @@ exports.gerarContasUsuario = async function (condominio) {
   return new Promise(async (resolve, reject) => {
     try {
       let promises = []
-      for (let bloco of condominioBd.blocos) {
-        for (let und of bloco.unidades) {
-          let usuario = await usuarioPersist.cadastrar({ login: und.nome, senha: und.nome }, transaction)
+      condominioBd.blocos.forEach(bloco => {
+        bloco.unidades.forEach(und => {
+          let usuario = Usuario.build({ login: und.nome, senha: und.nome })
           // adiciono a associoacao do usuario com a unidade em uma promise
           promises.push(und.setUsuario(usuario, { transaction }))
-        }
-      }
+        })
+      })
       // resolvo a promise da associoação e resolvo minha promese principal
       Promise.all(promises).then(() => resolve())
     } catch (error) {

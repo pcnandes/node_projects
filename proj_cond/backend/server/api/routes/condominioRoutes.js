@@ -8,12 +8,12 @@ router.route('/')
   .get(security.verifyJWT, condominio.listar)
   .post(security.verifyJWT, condominio.novo)
 
-router.route('/gerar_contas_usuario')
-  .put(security.verifyJWT, condominio.gerarContasUsuario)
-
 router.route('/:id')
   .get(security.verifyJWT, condominio.carregar)
   .put(security.verifyJWT, condominio.salvar)
   .delete(security.verifyJWT, condominio.excluir)
+
+router.route('/:id/gerar_contas_usuario')
+  .put(security.verifyJWT, condominio.gerarContasUsuario)
 
 module.exports = router

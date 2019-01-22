@@ -1,5 +1,5 @@
 const { expect, initdb, db, persist } = require('./config/helpers')
-const { Condominio, Bloco, Unidade } = db
+const { Condominio, Bloco, Unidade, Usuario } = db
 const novoCondominio = {
   nome: 'condominio test',
   blocos: [
@@ -81,7 +81,7 @@ describe('Teste Unitario do CondominioController', () => {
             ['condominio_id', 'id', 'nome', 'unidades']
           )
           expect(data.blocos[0].unidades[0].dataValues).to.have.all.keys(
-            ['bloco_id', 'id', 'nome', 'andar', 'usuario_id']
+            ['bloco_id', 'id', 'nome', 'andar']
           )
         }))
   })
@@ -189,16 +189,34 @@ describe('Teste Unitario do CondominioController', () => {
       expect(data.blocos.map(i => i.nome)).to.deep.include('Bloco alteraddooooooo')
       expect(data.blocos.map(i => i.nome)).to.deep.include('Bloco Adicionado')
     })
-  })
+  }) 
 
   it('Gerar contas de usuarios', async () => {
     let condominio = await carregarUnidade()
     return persist.gerarContasUsuario(condominio)
-      .then(data => {
-        // console.log(data)
+      .then(async data => {
+        // Usuario.findByPk(data.blocos[0].unidades[0])
+        let usuario = await data.blocos[0].unidades[0].getUsuario()
+        expect(usuario.login).to.deep.equal(data.blocos[0].unidades[0].nome)
+        expect(usuario.senha).to.deep.equal(data.blocos[0].unidades[0].nome)
         expect(data.blocos[0].unidades[0].dataValues).to.have.all.keys(
-          ['bloco_id', 'id', 'nome', 'andar', 'usuario_id']
+          ['bloco_id', 'id', 'nome', 'andar']
         )
+      })
+  })
+
+  it('Verifica exclusao do usuario quando unidade é excluida', async () => {
+    let condominio = await carregarUnidade()
+    condominio = JSON.parse(JSON.stringify(condominio))
+    return persist.gerarContasUsuario(condominio)
+      .then(async data => {
+        let usuarioExcluido = await data.blocos[1].unidades[0].getUsuario()
+        data.blocos.splice(1, 1)
+        data = JSON.parse(JSON.stringify(data))
+        return persist.alterar(data).then(async data => {
+          let usuario = await Usuario.findByPk(usuarioExcluido.id)
+          expect(usuario).to.be.a('null')
+        })
       })
   })
 })
