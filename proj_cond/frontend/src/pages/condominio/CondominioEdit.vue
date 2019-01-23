@@ -33,10 +33,11 @@
 
     <div v-if="condominioId" class="row justify-center">
       <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="business" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
-      <q-btn v-if="condominio.id && condominio.blocos && condominio.blocos.length>0 && condominio.blocos[0].id" class="col-xs-12 col-md-auto q-ma-sm" icon="supervisor_account" color="negative"
-            label="Gerar contas de usuários"
-            title="Gera as unidades e as contas de usuários"
-            @click="gerarUnidades()"/>
+      <q-btn v-if="condominio.id && condominio.blocos && condominio.blocos.length>0 && condominio.blocos[0].id" class="col-xs-12 col-md-auto q-ma-sm"
+        icon="done_all" color="negative"
+        label="Finalizar condominio"
+        title="Gera o(s) Bloco(s), as unidades e as respectivas contas de usuários"
+        @click="gerarUsuarios()"/>
     </div>
     <!--
     <div class="barra-botoes-principal row">
@@ -138,9 +139,19 @@ export default {
       let _bloco = await this.$refs.blocoModal.prepararInclusao()
       this.condominio.blocos.push(_bloco)
     },
-    gerarUnidades () {
-      this.modalConfirmaAcao('Atenção', 'Verique se todas as unidades estão corretas. Serão criadas todas as unidades e suas respectivas contas de usuario. ').then(() => {
-      }).catch(() => {})
+    gerarUsuarios () {
+      this.modalConfirmaAcao('Atenção', 'Verique se todos os blocos e unidades estão corretos. Não será possível realizar alterações futuramente! ')
+        .then(() => {
+          axios.put(`/api/condominio/${this.condominio.id}/gerar_contas_usuario`)
+            .then((res) => {
+              this.condominio = res.data
+              this.alertaSucesso('Unidades e contas de usuarios geradas com sucesso')
+            })
+            .catch((err) => {
+              throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+            })
+        })
+        .catch(() => {})
     }
   },
   mounted () {
