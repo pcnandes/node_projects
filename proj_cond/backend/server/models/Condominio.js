@@ -12,6 +12,15 @@ module.exports = (sequelize, type) => {
         notEmpty: true,
         len: [2, 50]
       }
+    },
+    situacao: {
+      type: type.ENUM,
+      values: ['RASCUNHO', 'ATIVO', 'INATIVO'],
+      defaultValue: 'RASCUNHO',
+      allowNull: false,
+      validate: {
+        notEmpty: true
+      }
     }
   }, { tableName: 'condominio', timestamps: false })
 

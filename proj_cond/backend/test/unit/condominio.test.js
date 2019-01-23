@@ -56,7 +56,7 @@ describe('Teste Unitario do CondominioController', () => {
     return persist.cadastrar(novoCondominio)
       .then(data => {
         expect(data.dataValues).to.have.all.keys(
-          ['id', 'nome', 'blocos']
+          ['id', 'nome', 'blocos', 'situacao']
         )
       })
   })
@@ -65,7 +65,7 @@ describe('Teste Unitario do CondominioController', () => {
     return persist.listar().then(data => {
       expect(data).to.be.an('array')
       expect(data[0].dataValues).to.have.all.keys(
-        ['id', 'nome', 'blocos']
+        ['id', 'nome', 'blocos', 'situacao']
       )
     })
   })
@@ -75,7 +75,7 @@ describe('Teste Unitario do CondominioController', () => {
       .then(condInc => persist.carregar(condInc.id)
         .then(data => {
           expect(data.dataValues).to.have.all.keys(
-            ['id', 'nome', 'blocos']
+            ['id', 'nome', 'blocos', 'situacao']
           )
           expect(data.blocos[0].dataValues).to.have.all.keys(
             ['condominio_id', 'id', 'nome', 'unidades']
@@ -219,6 +219,7 @@ describe('Teste Unitario do CondominioController', () => {
         })
       })
   })
+
 })
 
 function carregarUnidade () {

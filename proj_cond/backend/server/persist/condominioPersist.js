@@ -1,4 +1,4 @@
-const { Condominio, Bloco, Unidade, Usuario, sequelize } = require('./../models')
+const { Condominio, Bloco, Usuario, sequelize } = require('./../models')
 const blocoPersist = require('./blocoPersist')
 // const usuarioPersist = require('./usuarioPersist')
 const util = require('./util')
@@ -27,11 +27,7 @@ exports.carregar = async function (id) {
     include: [{
       model: Bloco,
       as: 'blocos',
-      include: [{
-        model: Unidade,
-        as: 'unidades',
-        include: [{ model: Usuario }]
-      }]
+      include: ['unidades']
     }]
   })
 }
@@ -97,7 +93,9 @@ exports.gerarContasUsuario = async function (condominio) {
   }] })
   return new Promise(async (resolve, reject) => {
     try {
+      condominioBd.set('situacao', 'ATIVO')
       let promises = []
+      promises.push(condominioBd.save({ transaction }))
       condominioBd.blocos.forEach(bloco => {
         bloco.unidades.forEach(und => {
           let usuario = Usuario.build({ login: und.nome, senha: und.nome })

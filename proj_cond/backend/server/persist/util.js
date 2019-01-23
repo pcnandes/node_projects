@@ -2,10 +2,10 @@
 exports.getItensExcluidos = function (originais, alterados) {
   let excluidos = []
   if (!!originais && !!alterados) {
-    excluidos = originais.filter(itemBd => alterados.find(itemAlt => itemAlt.id === itemBd.id) === undefined)
-    if (excluidos) {
-      excluidos = excluidos.map(item => item.id)
-    }
+    // some -> retorna true se encontrou algum item
+    // filter -> vai listar os itens nao encontrados
+    // map -> transforma os objetos em ids
+    excluidos = originais.filter(itemBd => !alterados.some(itemAlt => itemAlt.id === itemBd.id)).map(item => item.id)
   }
   return excluidos
 }

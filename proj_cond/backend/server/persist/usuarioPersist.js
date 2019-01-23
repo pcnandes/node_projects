@@ -17,7 +17,7 @@ exports.carregar = function (id) {
 }
 
 exports.findByLogin = function (login) {
-  return Usuario.findOne({ where: { login: login }, raw: true })
+  return Usuario.findOne({ where: { login: login } })
 }
 
 exports.alterar = async function (usuario) {

@@ -8,7 +8,6 @@ export const login = ({dispatch}, data) => {
   return axios.post('/api/public/login', data.credenciais)
     .then((res) => {
       let retorno = dispatch('setToken', res.data.token)
-      console.log('retorno login', retorno)
       return retorno
     })
     .catch((err) => {
@@ -86,14 +85,8 @@ export const setToken = ({commit, dispatch, state}, encodedToken) => {
 export const hasRole = ({getters}, holes) => {
   // verifico se existe exigencia de perfil
   if (!holes || holes.length === 0) return true
-  // verifico se o usuario possui o perfil
   let perfis = getters.getUsuario.perfis
-  if (perfis && perfis.length > 0) {
-    for (let i = 0; i < perfis.length; i++) {
-      if (holes.indexOf(perfis[i]) > -1) {
-        return true
-      }
-    }
-  }
-  return false
+  console.log(getters.getUsuario.perfis)
+  // verifico se o usuario possui o perfil
+  return holes.some(role => perfis.some(perfil => perfil === role))
 }

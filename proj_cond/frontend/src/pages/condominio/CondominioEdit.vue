@@ -1,10 +1,15 @@
 <template>
   <q-page class="justify-center pagina">
     <botoes-crud @excluir="excluir()" @cancelar="cancelar()" @confirmar="salvar()"></botoes-crud>
-    <q-field :count="50">
-      <q-input v-model="condominio.nome" float-label="Nome do Condomínio"
-        @blur="$v.condominio.nome.$touch" :error="$v.condominio.nome.$error"/>
-    </q-field>
+    <div class="row" v-bind:class="[$q.screen.lt.sm ? '' : 'gutter-sm']" >
+      <q-field :count="50" class="col-sm-10 col-xs-12">
+        <q-input v-model="condominio.nome" float-label="Nome do Condomínio"
+          @blur="$v.condominio.nome.$touch" :error="$v.condominio.nome.$error"/>
+      </q-field>
+      <q-field class="col-sm-2 col-xs-12">
+        <q-input v-model="condominio.situacao" float-label="Situação" disable/>
+      </q-field>
+    </div>
 
     <q-list v-if="condominioId && condominio.blocos && condominio.blocos.length>0" highlight class="col-12 q-my-lg">
       <q-collapsible
@@ -30,10 +35,9 @@
         </div>
       </q-collapsible>
     </q-list>
-
     <div v-if="condominioId" class="row justify-center">
       <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="business" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
-      <q-btn v-if="condominio.id && condominio.blocos && condominio.blocos.length>0 && condominio.blocos[0].id" class="col-xs-12 col-md-auto q-ma-sm"
+      <q-btn v-if="condominio.id && condominio.blocos && condominio.blocos.length>0 && condominio.situacao==='RASCUNHO'" class="col-xs-12 col-md-auto q-ma-sm"
         icon="done_all" color="negative"
         label="Finalizar condominio"
         title="Gera o(s) Bloco(s), as unidades e as respectivas contas de usuários"
