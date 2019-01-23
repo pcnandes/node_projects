@@ -1,4 +1,4 @@
-const { Condominio, Bloco, Usuario, sequelize } = require('./../models')
+const { Condominio, Bloco, Unidade, Usuario, sequelize } = require('./../models')
 const blocoPersist = require('./blocoPersist')
 // const usuarioPersist = require('./usuarioPersist')
 const util = require('./util')
@@ -17,8 +17,7 @@ exports.listar = async function (condominio) {
   return Condominio.findAll({
     include: [{
       model: Bloco,
-      as: 'blocos',
-      include: ['unidades']
+      as: 'blocos'
     }]
   })
 }
@@ -28,7 +27,11 @@ exports.carregar = async function (id) {
     include: [{
       model: Bloco,
       as: 'blocos',
-      include: ['unidades']
+      include: [{
+        model: Unidade,
+        as: 'unidades',
+        include: [{ model: Usuario }]
+      }]
     }]
   })
 }
