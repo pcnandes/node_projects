@@ -1,14 +1,17 @@
 <template>
   <div class="barra-botoes-crud row justify-between">
-    <div class="botao-voltar">
+    <div class="row items-center">
       <q-btn icon="keyboard_arrow_left"
         v-if="exibeCancelar"
         :fab-mini="$q.screen.lt.sm" flat
         :label="labelCancelar" color="primary"
         :title="titleCancelar"
         @click="voltar()"/>
+        <div class="titulo" v-if="!!titulo">
+          {{titulo}}
+        </div>
     </div>
-    <div class="botoes-acao">
+    <div>
       <q-btn class="q-ml-sm"
         v-if="exibeExcluir"
         :fab-mini="$q.screen.lt.sm" flat
@@ -42,7 +45,8 @@ export default {
     titleConfirmar: {type: String, default: 'Confirmar'},
     exibeExcluir: {type: Boolean, default: true},
     labelExcluir: {type: String, default: 'Excluir'},
-    titleExcluir: {type: String, default: 'Excluir'}
+    titleExcluir: {type: String, default: 'Excluir'},
+    titulo: {type: String}
   },
   data () {
     return {
@@ -62,6 +66,13 @@ export default {
 }
 </script>
 <style scoped>
+  .titulo {
+    color:hsl(212, 80%, 42%);
+    font-weight: bold;
+    border-left: solid;
+    border-width: 1px;
+    padding-left: 10px;
+  }
   .barra-botoes-crud {
     background-color: rgb(221, 221, 221);
     margin-top: -20px;

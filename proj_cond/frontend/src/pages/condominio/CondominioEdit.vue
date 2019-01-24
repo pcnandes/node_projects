@@ -2,7 +2,8 @@
   <q-page class="justify-center pagina">
     <botoes-crud @excluir="excluir()" @cancelar="cancelar()"
       :exibeExcluir="alteravel"
-      :exibeConfirmar="alteravel" @confirmar="salvar()"/>
+      :exibeConfirmar="alteravel" @confirmar="salvar()"
+      :titulo="condominio.nome" />
     <div class="row" v-bind:class="[$q.screen.lt.sm ? '' : 'gutter-sm']" v-if="alteravel">
       <q-field :count="50" v-bind:class="[!alteravel ? 'col-xs-12' : 'col-md-10 col-xs-12']">
         <q-input v-model="condominio.nome" float-label="Nome do Condomínio"
@@ -13,10 +14,6 @@
           {{condominio.situacao}}
         </div>
       </q-field>
-    </div>
-    <div v-if="!alteravel" >
-      <!-- TODO criar navegacao NomeCondominio -> Cadastro -> ...-->
-      Golden Residence
     </div>
 
     <q-list v-if="condominioId && condominio.blocos && condominio.blocos.length>0" highlight class="col-12 q-my-lg">
