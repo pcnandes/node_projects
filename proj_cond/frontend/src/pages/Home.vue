@@ -5,6 +5,7 @@
     <li>Downloads (regimento interno)</li>
     <li>Regras gerais (texto que o sindico pode editar)</li>
   </ul>
+  aquiii {{isMobile}}{{getPlataforma}}
   </q-page>
 </template>
 

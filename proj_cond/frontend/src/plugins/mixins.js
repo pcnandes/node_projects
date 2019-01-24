@@ -59,6 +59,12 @@ export default ({ Vue }) => {
       },
       alteravel: function () {
         return this.condominio.situacao !== 'ATIVO'
+      },
+      isMobile: function () {
+        return !!this.$q.platform.is.mobile
+      },
+      getPlataforma: function () {
+        return this.$q.platform.is.name
       }
     }
   })
