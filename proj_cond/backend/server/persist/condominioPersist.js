@@ -32,8 +32,17 @@ exports.carregar = async function (id) {
   })
 }
 
-// TODO refatorar esse bloco
 exports.alterar = async function (condominio, transaction) {
+  if (condominio.situacao === 'RASCUNHO') {
+    this.alterarCascade(condominio, transaction)
+  } else {
+    let _condominio = Condominio.build({ ...condominio })
+    _condominio.save(transaction)
+  }
+}
+
+// TODO refatorar esse bloco
+exports.alterarCascade = async function (condominio, transaction) {
   // carrego o condominio do banco
   let condominioBd = await Condominio.findByPk(condominio.id, { include: ['blocos'] })
   // verifico se existe o registro no banco
@@ -42,8 +51,10 @@ exports.alterar = async function (condominio, transaction) {
   }
 
   let excluidos = util.getItensExcluidos(condominioBd.blocos, condominio.blocos)
-
-  transaction = !transaction ? await sequelize.transaction() : transaction
+  let executaCommit = true
+  if (transaction) {
+    executaCommit = false
+  } else transaction = await sequelize.transaction()
 
   let promises = []
   // adiciono as promises para dicionar os blocos alterados
@@ -67,9 +78,11 @@ exports.alterar = async function (condominio, transaction) {
 
   return Promise.all(promises)
     .then(() => {
-      transaction.commit()
-      // return condominio.id
-      return this.carregar(condominio.id)
+      if (executaCommit) {
+        transaction.commit()
+        // return condominio.id
+        return this.carregar(condominio.id)
+      } else return true
     })
     .catch(err => {
       transaction.rollback()
@@ -93,9 +106,10 @@ exports.gerarContasUsuario = async function (condominio) {
   }] })
   return new Promise(async (resolve, reject) => {
     try {
-      condominioBd.set('situacao', 'ATIVO')
+      condominio.situacao = 'ATIVO'
+      await this.alterar(condominio, transaction)
       let promises = []
-      promises.push(condominioBd.save({ transaction }))
+      // promises.push(condominioBd.save({ condominio }))
       condominioBd.blocos.forEach(bloco => {
         bloco.unidades.forEach(und => {
           let usuario = Usuario.build({ login: und.nome, senha: und.nome })

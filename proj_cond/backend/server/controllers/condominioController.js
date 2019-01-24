@@ -14,6 +14,7 @@ exports.novo = async function (req, res) {
     const retorno = await Condominio.create({
       nome: condominio.nome
     }) */
+    req.body.situacao = 'RASCUNHO'
     const retorno = await persist.cadastrar(req.body)
     // return res.status(200).send(retorno)
     return onSuccess(res, retorno)
@@ -74,7 +75,8 @@ exports.excluir = async function (req, res) {
 
 exports.gerarContasUsuario = async function (req, res) {
   try {
-    let condominio = await persist.carregar(req.params.id)
+    let condominio = req.body
+    console.log('condominiooooo', condominio)
     if (condominio) {
       const retorno = await persist.gerarContasUsuario(condominio)
       return onSuccess(res, retorno)

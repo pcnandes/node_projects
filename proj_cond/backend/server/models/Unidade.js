@@ -26,7 +26,7 @@ module.exports = (sequelize, type) => {
 
   Unidade.associate = function ({ Bloco, Morador, Usuario }) {
     Unidade.belongsTo(Bloco)
-    Unidade.hasOne(Usuario, { as: 'usuario', foreignKey: { name: 'id', allowNull: true }, targetKey: 'id', onDelete: 'CASCADE', hooks: true })
+    Unidade.hasOne(Usuario, { as: 'usuario', foreignKey: 'unidade_id', onDelete: 'CASCADE', hooks: true })
     Unidade.hasMany(Morador, { as: 'moradores', foreignKey: { allowNull: true }, onDelete: 'CASCADE', hooks: true })
   }
 

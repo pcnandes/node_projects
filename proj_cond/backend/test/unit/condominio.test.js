@@ -193,6 +193,7 @@ describe('Teste Unitario do CondominioController', () => {
 
   it('Gerar contas de usuarios', async () => {
     let condominio = await carregarUnidade()
+    condominio = JSON.parse(JSON.stringify(condominio))
     return persist.gerarContasUsuario(condominio)
       .then(async data => {
         // Usuario.findByPk(data.blocos[0].unidades[0])
@@ -219,7 +220,6 @@ describe('Teste Unitario do CondominioController', () => {
         })
       })
   })
-
 })
 
 function carregarUnidade () {

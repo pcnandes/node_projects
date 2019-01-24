@@ -74,5 +74,7 @@ https://medium.com/@jgrisafe/custom-user-authentication-with-express-sequelize-a
 
 
 TODO
-- terminar cadastro de condominio 
+- terminar cadastro de condominio
+- criar navegacao
+- testar https://www.npmjs.com/package/vuex-persist
 - criar componentes para cada elemento da tela afim de refuzir codigo e embutir comportamento.

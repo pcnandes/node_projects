@@ -6,3 +6,14 @@ export function getUsuario (state) {
 export function getExpiracaoToken (state) {
   return state.expiracaoToken
 }
+
+export function isPossuiPerfil (state) {
+  return (perfis) => {
+    // verifico se existe exigencia de perfil
+    if (!perfis || perfis.length === 0) return true
+    let _perfis = state.usuario.perfis
+    console.log(state.usuario)
+    // verifico se o usuario possui o perfil
+    return perfis.some(_perfil => _perfis.some(perfil => perfil === _perfil))
+  }
+}

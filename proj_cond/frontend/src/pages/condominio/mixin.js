@@ -3,7 +3,7 @@ function getBlocoNew () {
 }
 
 function getCondominioNew () {
-  return {id: '', nome: '', blocos: []}
+  return {id: '', nome: '', blocos: [], situacao: 'NÃO SALVO'}
 }
 
 export { getBlocoNew, getCondominioNew }

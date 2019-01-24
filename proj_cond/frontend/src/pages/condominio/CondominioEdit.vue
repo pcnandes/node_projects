@@ -1,14 +1,22 @@
 <template>
   <q-page class="justify-center pagina">
-    <botoes-crud @excluir="excluir()" @cancelar="cancelar()" @confirmar="salvar()"></botoes-crud>
-    <div class="row" v-bind:class="[$q.screen.lt.sm ? '' : 'gutter-sm']" >
-      <q-field :count="50" class="col-sm-10 col-xs-12">
+    <botoes-crud @excluir="excluir()" @cancelar="cancelar()"
+      :exibeExcluir="alteravel"
+      :exibeConfirmar="alteravel" @confirmar="salvar()"/>
+    <div class="row" v-bind:class="[$q.screen.lt.sm ? '' : 'gutter-sm']" v-if="alteravel">
+      <q-field :count="50" v-bind:class="[!alteravel ? 'col-xs-12' : 'col-md-10 col-xs-12']">
         <q-input v-model="condominio.nome" float-label="Nome do Condomínio"
           @blur="$v.condominio.nome.$touch" :error="$v.condominio.nome.$error"/>
       </q-field>
-      <q-field class="col-sm-2 col-xs-12">
-        <q-input v-model="condominio.situacao" float-label="Situação" disable/>
+      <q-field class="col-md-2 col-xs-12" label="Situação" orientation="vertical">
+        <div v-bind:class="'text-'+classSituacao[1]">
+          {{condominio.situacao}}
+        </div>
       </q-field>
+    </div>
+    <div v-if="!alteravel" >
+      <!-- TODO criar navegacao NomeCondominio -> Cadastro -> ...-->
+      Golden Residence
     </div>
 
     <q-list v-if="condominioId && condominio.blocos && condominio.blocos.length>0" highlight class="col-12 q-my-lg">
@@ -20,7 +28,7 @@
           </q-item-side>
           <q-item-main :label="bl.nome" />
         </template>
-        <div class="absolute" style="right: 0px; bottom: 0px" >
+        <div class="absolute" v-if="alteravel" style="right: 0px; bottom: 0px" >
           <q-btn round flat fab-mini icon="edit" color="faded" title="Alterar Bloco" @click.native="prepararAlterarBloco(bl)"/>
           <q-btn round flat fab-mini icon="delete" color="faded" title="Excluir Bloco"/>
         </div>
@@ -35,7 +43,7 @@
         </div>
       </q-collapsible>
     </q-list>
-    <div v-if="condominioId" class="row justify-center">
+    <div v-if="condominioId && alteravel" class="row justify-center">
       <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="business" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
       <q-btn v-if="condominio.id && condominio.blocos && condominio.blocos.length>0 && condominio.situacao==='RASCUNHO'" class="col-xs-12 col-md-auto q-ma-sm"
         icon="done_all" color="negative"
@@ -43,21 +51,13 @@
         title="Gera o(s) Bloco(s), as unidades e as respectivas contas de usuários"
         @click="gerarUsuarios()"/>
     </div>
-    <!--
-    <div class="barra-botoes-principal row">
-      <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Salvar" @click="salvar()" color="primary"/></div>
-      <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Excluir" @click="excluir()" color="negative"/></div>
-      <div class="row col-xs-12 col-md-auto"><q-btn class="full-width" label="Cancelar" @click="cancelar()" color="faded"/></div>
-    </div>
-    -->
     <adicionar-bloco ref="blocoModal"/>
   </q-page>
 </template>
 
 <script>
-import { QBtn, QField, QInput, QCollapsible } from 'quasar'
+import { QBtn, QField, QInput, QCollapsible, QTooltip } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
-// import Vue from 'vue'
 import { getBlocoNew, getCondominioNew } from './mixin.js'
 import axios from 'axios'
 import AdicionarBloco from './AdicionarBloco.vue'
@@ -65,7 +65,7 @@ import BotoesCrud from '../shared/BotoesCrud'
 
 export default {
   name: 'CadastroCondominio',
-  components: { QBtn, QField, QInput, QCollapsible, 'adicionar-bloco': AdicionarBloco, 'botoes-crud': BotoesCrud },
+  components: { QBtn, QField, QInput, QCollapsible, QTooltip, 'adicionar-bloco': AdicionarBloco, 'botoes-crud': BotoesCrud },
   data () {
     return {
       condominioId: this.$route.params.id,
@@ -146,7 +146,7 @@ export default {
     gerarUsuarios () {
       this.modalConfirmaAcao('Atenção', 'Verique se todos os blocos e unidades estão corretos. Não será possível realizar alterações futuramente! ')
         .then(() => {
-          axios.put(`/api/condominio/${this.condominio.id}/gerar_contas_usuario`)
+          axios.put(`/api/condominio/${this.condominio.id}/gerar_contas_usuario`, this.condominio)
             .then((res) => {
               this.condominio = res.data
               this.alertaSucesso('Unidades e contas de usuarios geradas com sucesso')
@@ -160,6 +160,26 @@ export default {
   },
   mounted () {
     this.carregarPagina()
+  },
+  computed: {
+    classSituacao: function () {
+      let classe = [null, '']
+      switch (this.condominio.situacao) {
+        case 'NÃO SALVO':
+          classe = ['Informe um nome para o condomínio e clique em "Confirmar"', 'negative']
+          break
+        case 'RASCUNHO':
+          classe = ['Adicione blocos e unidades e depois clique em "Finalizar condominio"', 'warning']
+          break
+        case 'INATIVO':
+          classe = ['Condominio desativado no sistema', 'dark']
+          break
+      }
+      return classe
+    },
+    alteravel: function () {
+      return this.condominio.situacao !== 'ATIVO'
+    }
   }
 }
 </script>
