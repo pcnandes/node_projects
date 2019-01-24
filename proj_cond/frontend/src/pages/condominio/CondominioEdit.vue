@@ -123,7 +123,7 @@ export default {
       this.modalConfirmaAcao().then(() => {
         axios.delete(`/api/condominio/${this.condominio.id}`)
           .then((res) => {
-            this.$q.notify('Condomínio excluído com sucesso!')
+            this.alertaSucesso('Condomínio excluído com sucesso!')
             this.cancelar()
           })
           .catch((err) => {

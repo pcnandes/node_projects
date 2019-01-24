@@ -58,9 +58,6 @@ export default {
   components: {
     QBtn, QField, QInput, QModal
   },
-  props: {
-    // value: {required: true, type: Object, default: () => getBlocoNew()}
-  },
   data () {
     return {
       bloco: getBlocoNew(),

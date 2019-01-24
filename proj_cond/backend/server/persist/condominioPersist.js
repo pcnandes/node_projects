@@ -32,6 +32,7 @@ exports.carregar = async function (id) {
   })
 }
 
+/*
 exports.alterar = async function (condominio, transaction) {
   if (condominio.situacao === 'RASCUNHO') {
     this.alterarCascade(condominio, transaction)
@@ -39,10 +40,10 @@ exports.alterar = async function (condominio, transaction) {
     let _condominio = Condominio.build({ ...condominio })
     _condominio.save(transaction)
   }
-}
+} */
 
 // TODO refatorar esse bloco
-exports.alterarCascade = async function (condominio, transaction) {
+exports.alterar = async function (condominio, transaction) {
   // carrego o condominio do banco
   let condominioBd = await Condominio.findByPk(condominio.id, { include: ['blocos'] })
   // verifico se existe o registro no banco
