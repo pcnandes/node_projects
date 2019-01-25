@@ -71,7 +71,7 @@ module.exports = (sequelize, type) => {
   }, { tableName: 'morador' })
 
   Morador.associate = function ({ Unidade }) {
-    Morador.belongsTo(Unidade)
+    Morador.belongsTo(Unidade, { as: 'unidade' })
   }
 
   return Morador

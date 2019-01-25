@@ -1,5 +1,6 @@
 const express = require('express')
 const security = require('../../controllers/usuarioController')
+const condominioController = require('../../controllers/condominioController')
 const router = express.Router()
 
 router.route('/login')
@@ -13,5 +14,8 @@ router.route('/retoken')
 
 router.route('/logout')
   .get(security.logout)
+
+router.route('/condominios')
+  .get(condominioController.listarAtivos)
 
 module.exports = router

@@ -7,6 +7,10 @@ export function getExpiracaoToken (state) {
   return state.expiracaoToken
 }
 
+export function getCondominios (state) {
+  return state.condominios
+}
+
 export function isPossuiPerfil (state) {
   return (perfis) => {
     // verifico se existe exigencia de perfil

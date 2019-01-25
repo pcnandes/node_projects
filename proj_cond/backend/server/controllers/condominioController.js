@@ -37,12 +37,20 @@ exports.salvar = async function (req, res) {
 
 exports.listar = async function (req, res) {
   try {
-    // TODO INCLUIR WHERE PEGANDO OS CONDOMINIOS DO SINDICO OU TDS PARA O ADMINISTRADOR
     let retorno = await persist.listar()
     // return res.status(200).send(retorno)
     return onSuccess(res, retorno)
   } catch (err) {
     // res.status(500).send({ data: null, message: 'Erro ao listar os condomínios', erro: err })
+    return onError(res, 'Erro ao listar os condomínios', err)
+  }
+}
+
+exports.listarAtivos = async function (req, res) {
+  try {
+    let retorno = await persist.listarAtivos()
+    return onSuccess(res, retorno)
+  } catch (err) {
     return onError(res, 'Erro ao listar os condomínios', err)
   }
 }

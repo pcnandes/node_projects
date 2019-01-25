@@ -1,7 +1,7 @@
 <template>
   <q-page class="justify-center pagina">
     <botoes-crud @cancelar="cancelar()"
-      :titulo="`${unidade.Bloco.Condominio.nome} -> ${unidade.Bloco.nome} -> ${unidade.nome}`" />
+      :titulo="`${unidade.bloco.condominio.nome} -> ${unidade.bloco.nome} -> ${unidade.nome}`" />
       unidade: {{unidade}}
   </q-page>
 </template>

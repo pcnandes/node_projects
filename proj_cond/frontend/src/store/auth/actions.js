@@ -87,5 +87,5 @@ export const hasRole = ({getters}, holes) => {
   if (!holes || holes.length === 0) return true
   let perfis = getters.getUsuario.perfis
   // verifico se o usuario possui o perfil
-  return holes.some(role => perfis.some(perfil => perfil === role))
+  return holes.some(role => perfis && perfis.some(perfil => perfil === role))
 }

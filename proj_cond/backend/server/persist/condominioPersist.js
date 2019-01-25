@@ -18,7 +18,21 @@ exports.listar = async function (condominio) {
     include: [{
       model: Bloco,
       as: 'blocos'
-    }]
+    }],
+    order: [['nome', 'ASC']]
+  })
+}
+
+exports.listarAtivos = async function (condominio) {
+  return Condominio.findAll({
+    where: {
+      situacao: 'ATIVO'
+    },
+    include: [{
+      model: Bloco,
+      as: 'blocos'
+    }],
+    order: [['nome', 'ASC']]
   })
 }
 

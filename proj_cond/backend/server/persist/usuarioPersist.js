@@ -1,4 +1,4 @@
-const { Usuario, sequelize } = require('./../models')
+const { Usuario, Unidade, Bloco, Condominio, sequelize } = require('./../models')
 const util = require('./util')
 
 exports.cadastrar = async function (usuario, transaction) {
@@ -15,9 +15,25 @@ exports.listar = function (usuario) {
 exports.carregar = function (id) {
   return Usuario.findByPk(id)
 }
-
+// WHERE (bloco.id is null and usuario.login = 'paulo') or (bloco.id=1 and usuario.login = 'paulo')
 exports.findByLogin = function (login) {
-  return Usuario.findOne({ where: { login: login } })
+  return new Promise(async (resolve, reject) => {
+    sequelize.query(
+      `SELECT usuario.* FROM usuario
+        left join unidade on usuario.unidade_id = unidade.id
+        left join bloco on unidade.bloco_id = bloco.id
+      WHERE (bloco.id is null and usuario.login = '${login.login}') 
+        or (bloco.id=${login.bloco} and usuario.login = '${login.login}') limit 1`,
+      { model: Usuario }
+    )
+      .then(usuario => {
+        if (usuario) resolve(usuario)
+        else reject(new Error('Usuario não encontrado'))
+      })
+      .cath(err => {
+        reject(err)
+      })
+  })
 }
 
 exports.alterar = async function (usuario) {

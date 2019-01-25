@@ -78,3 +78,8 @@ TODO
 - criar navegacao
 - testar https://www.npmjs.com/package/vuex-persist
 - criar componentes para cada elemento da tela afim de refuzir codigo e embutir comportamento.
+
+Regra para cadastrar usuario
+- administrador nao pode estar vinculado a codominio ou unidade
+- sindico tem q estar vinculado a um condominio e também pode estar a uma unidade
+

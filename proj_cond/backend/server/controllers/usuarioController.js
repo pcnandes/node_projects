@@ -5,11 +5,12 @@ const { onSuccess } = require('./../api/responses/successHandler')
 const { onError, onErrorNaoAutorizado } = require('./../api/responses/errorHandler')
 
 exports.login = async function (req, res, next) {
+  console.log('logiiiiin', req.body)
   let credenciais = req.body
   try {
     if (credenciais.login && credenciais.senha) {
       // quando nao se pretende manipular ou alterar o  objeto user raw para retotnar objetos simples (plain)
-      let usuarioLogado = await persist.findByLogin(credenciais.login)
+      let usuarioLogado = await persist.findByLogin(credenciais)
       // TODO validar usando bcrypt
       if (usuarioLogado && usuarioLogado.senha === credenciais.senha) {
         const token = gerarToken(usuarioLogado)

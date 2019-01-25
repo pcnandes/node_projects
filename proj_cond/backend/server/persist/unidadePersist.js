@@ -8,8 +8,10 @@ exports.carregar = function (id) {
   return Unidade.findByPk(id, {
     include: [{
       model: Bloco,
+      as: 'bloco',
       include: [{
-        model: Condominio
+        model: Condominio,
+        as: 'condominio'
       }]
     }]
   })

@@ -17,3 +17,7 @@ export const apagarToken = (state) => {
   localStorage.removeItem(ID_TOKEN)
   state.expiracaoToken = null
 }
+
+export const setCondominios = (state, usuario) => {
+  state.usuario = usuario
+}

@@ -11,15 +11,24 @@
       </div>
       <form v-on:submit.prevent="onSubmit()" class="login_bloco column">
         <q-field>
-          <q-select v-model="form.condominio" :options="condominios" placeholder="Condomínio"
+          <q-select v-model="form.condominio" :options="condominios" placeholder="selecione seu condomínio"
             inverted-light color="white"
+            @input="id => {carregarBlocos(id)}"
             @blur="$v.form.condominio.$touch"
-            :error="$v.form.condominio.$error"/>
+            :error="$v.form.condominio.$error">
+          </q-select>
+        </q-field>
+        <q-field v-if="form.condominio">
+          <q-select v-model="form.bloco" :options="blocos" placeholder="selecione seu bloco"
+            inverted-light color="white"
+            @blur="$v.form.bloco.$touch"
+            :error="$v.form.bloco.$error"/>
         </q-field>
         <q-field>
           <q-input v-model.trim="form.login" placeholder="Usuário"
             inverted-light color="white" autofocus
-            @blur="$v.form.login.$touch" :error="$v.form.login.$error"/>
+            @blur="$v.form.login.$touch"
+            :error="$v.form.login.$error"/>
         </q-field>
         <q-field>
           <q-input v-model="form.senha" type="password" placeholder="Senha"
@@ -38,33 +47,32 @@
 <script>
 import { QBtn, QToolbar, QIcon, QToolbarTitle, QField, QInput, QSelect, QCheckbox } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
+import axios from 'axios'
 
 export default {
   name: 'PageIndex',
   components: { QBtn, QToolbar, QIcon, QToolbarTitle, QField, QInput, QSelect, QCheckbox },
   data () {
     return {
-      lista: [],
+      condominios: [],
+      blocos: [],
       form: {
-        condominio: 'golden_residence',
+        condominio: '',
+        bloco: '',
         login: '',
         senha: ''
       },
-      lembreDeMim: false,
-      condominios: [{label: 'Golden Residence', value: 'golden_residence'}, {label: 'Alpha Ville', value: 'alpha_ville'}]
+      lembreDeMim: false
     }
   },
   validations: {
     form: {
       condominio: { required },
+      bloco: { required },
       login: { required },
       senha: { required }
     }
   },
-  mounted () {
-
-  },
-  created () { },
   methods: {
     onSubmit () {
       this.$v.form.$touch()
@@ -80,14 +88,35 @@ export default {
         })
         .catch((err) => {
           console.log('deu erro ', err)
-          this.$q.notify(err.message)
+          this.alertaErro(err.message)
         })
+    },
+    listarCondominios () {
+      axios.get('/api/public/condominios')
+        .then((res) => {
+          // this.condominios = res.data.map(c => ({label: c.nome, value: c.id}))
+          this.condominios = res.data.map(c => {
+            let retorno = { label: c.nome, value: c.id, blocos: [] }
+            retorno.blocos = c.blocos.map(bloco => ({ label: bloco.nome, value: bloco.id }))
+            return retorno
+          })
+        })
+        .catch((err) => {
+          console.error('ERRO: ', err.response.erro, err.erro)
+          this.alertaErro(err.message)
+        })
+    },
+    carregarBlocos (condominioId) {
+      if (condominioId) {
+        this.blocos = this.condominios.find(c => c.value === this.form.condominio).blocos
+        if (this.blocos && this.blocos.length === 1) {
+          this.form.bloco = this.blocos[0].value
+        }
+      }
     }
   },
-  computed: {
-    login () {
-      return this.$store.state.auth.usuario.nome
-    }
+  mounted () {
+    this.listarCondominios()
   }
 }
 </script>
