@@ -3,7 +3,8 @@
     <botoes-crud @excluir="excluir()" @cancelar="cancelar()"
       :exibeExcluir="alteravel"
       :exibeConfirmar="alteravel" @confirmar="salvar()"
-      :titulo="condominio.nome" />
+      labelConfirmar="Salvar"
+      :titulo="!alteravel ? condominio.nome : null" />
     <div class="row" v-bind:class="[$q.screen.lt.sm ? '' : 'gutter-sm']" v-if="alteravel">
       <q-field :count="50" v-bind:class="[!alteravel ? 'col-xs-12' : 'col-md-10 col-xs-12']">
         <q-input v-model="condominio.nome" float-label="Nome do Condomínio"
@@ -34,7 +35,7 @@
             <div class="divUnidade"
               v-bind:class="[unidade.andar !== bl.unidades[Math.max(y - 1,0)].andar ? 'clear' : '']"
               v-for="(unidade, y) in bl.unidades" :key="y" >
-              {{unidade.nome}}
+              <a v-on:click="detalharUnidade(bl.id,unidade.id)">{{unidade.nome}}</a>
             </div>
           </div>
         </div>
@@ -42,7 +43,7 @@
     </q-list>
     <div v-if="condominioId && alteravel" class="row justify-center">
       <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="business" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
-      <q-btn v-if="condominio.id && condominio.blocos && condominio.blocos.length>0 && condominio.situacao==='RASCUNHO'" class="col-xs-12 col-md-auto q-ma-sm"
+      <q-btn v-if="condominioPronto && condominio.situacao==='RASCUNHO'" class="col-xs-12 col-md-auto q-ma-sm"
         icon="done_all" color="negative"
         label="Finalizar condominio"
         title="Gera o(s) Bloco(s), as unidades e as respectivas contas de usuários"
@@ -153,6 +154,9 @@ export default {
             })
         })
         .catch(() => {})
+    },
+    detalharUnidade (blocoId, unidadeId) {
+      this.$router.push(`/condominio/${this.condominio.id}/${blocoId}/${unidadeId}`)
     }
   },
   mounted () {
@@ -176,6 +180,9 @@ export default {
     },
     alteravel: function () {
       return this.condominio.situacao !== 'ATIVO'
+    },
+    condominioPronto: function () {
+      return this.condominio.blocos.some(bloco => !!bloco.id && bloco.unidades.some(unidade => !!unidade.id))
     }
   }
 }

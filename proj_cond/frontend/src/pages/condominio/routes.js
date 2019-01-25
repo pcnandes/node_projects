@@ -10,5 +10,8 @@ export default [
   { path: ':id',
     component: () => import(`./CondominioEdit.vue`),
     meta: {perfis: ['ADMIN', 'SINDICO']}
+  },
+  { path: ':id/:blocoId/:unidadeId',
+    component: () => import(`./UnidadeEdit.vue`)
   }
 ]

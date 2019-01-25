@@ -10,6 +10,7 @@ const errorHandlerApi = require('./responses/errorHandlerApi')
 // const indexRoutes = require('./routes/indexRoutes')
 const publicRoutes = require('./routes/publicRoutes')
 const condominioRoutes = require('./routes/condominioRoutes')
+const unidadeRoutes = require('./routes/unidadeRoutes')
 
 const app = express()
 
@@ -33,5 +34,6 @@ app.use(errorHandlerApi)
 
 app.use('/api/public', publicRoutes)
 app.use('/api/condominio', condominioRoutes)
+app.use('/api/unidade', unidadeRoutes)
 
 module.exports = app
