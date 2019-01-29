@@ -4,6 +4,10 @@ export const setUsuario = (state, usuario) => {
   state.usuario = usuario
 }
 
+export const setUnidade = (state, unidade) => {
+  state.unidade = unidade
+}
+
 export const setExpiracaoToken = (state, expiracaoToken) => {
   state.expiracaoToken = expiracaoToken
 }
@@ -16,8 +20,4 @@ export const apagarToken = (state) => {
   state.usuario = {}
   localStorage.removeItem(ID_TOKEN)
   state.expiracaoToken = null
-}
-
-export const setCondominios = (state, usuario) => {
-  state.usuario = usuario
 }

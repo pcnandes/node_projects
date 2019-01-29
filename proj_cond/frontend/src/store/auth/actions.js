@@ -39,7 +39,7 @@ export const retoken = ({commit, dispatch, getters}, force) => {
           return dispatch('setToken', res.data.token)
         })
         .catch(() => {
-          commit('clearToken')
+          commit('apagarToken')
           return false
         })
     }
@@ -61,6 +61,7 @@ export const setToken = ({commit, dispatch, state}, encodedToken) => {
       if (dataExpiracao.getTime() > now.getTime()) {
         // constroi o objeto usuário a partir do token
         const usuario = decodedToken.usuario
+        const unidade = decodedToken.unidade
         // configura o cabeçalho padrão das requisições HTTP para conter o token
         // axios.defaults.headers['x-access-token'] = encodedToken
         axios.defaults.headers['authorization'] = encodedToken
@@ -73,6 +74,7 @@ export const setToken = ({commit, dispatch, state}, encodedToken) => {
         // gravo usuario no localStorage
         localStorage.setItem(ID_TOKEN, JSON.stringify(encodedToken))
         commit('setUsuario', usuario)
+        commit('setUnidade', unidade)
         commit('setExpiracaoToken', dataExpiracao)
       }
     }

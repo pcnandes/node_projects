@@ -202,6 +202,11 @@ export default {
   .clear {
     clear: left;
   }
+  .divUnidade > a {
+    color: #1565c0;
+    text-decoration: underline;
+    cursor: pointer;
+  }
   @media (max-width: 575px) {
     .divUnidade {
       margin-bottom: 2px;

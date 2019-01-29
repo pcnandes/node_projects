@@ -9,10 +9,11 @@ exports.login = async function (req, res, next) {
   let credenciais = req.body
   try {
     if (credenciais.login && credenciais.senha) {
-      // quando nao se pretende manipular ou alterar o  objeto user raw para retotnar objetos simples (plain)
-      let usuarioLogado = await persist.findByLogin(credenciais)
+      let login = credenciais.login
+      let bloco = credenciais.bloco
+      let usuarioLogado = await persist.findByLogin({ login, bloco })
       // TODO validar usando bcrypt
-      if (usuarioLogado && usuarioLogado.senha === credenciais.senha) {
+      if (usuarioLogado && usuarioLogado.usuario && usuarioLogado.usuario.senha === credenciais.senha) {
         const token = gerarToken(usuarioLogado)
         return onSuccess(res, { 'token': token })
       }
@@ -30,20 +31,27 @@ exports.registrar = function (req, res, next) {
 
 exports.retoken = function (req, res, next) {
   // let token = req.headers['x-access-token']
-  let token = req.headers['authorization']
-  if (token) {
-    jwt.verify(token, process.env.SECRET, async function (err, decoded) {
-      if (!err) {
-        const usuario = await persist.carregar(decoded.usuario.id)
-        token = await gerarToken(usuario)
-        return onSuccess(res, { 'token': token })
-      } else {
-        return onErrorNaoAutorizado(res, 'Erro ao reautenticar!')
-      }
-    })
-  }
-  if (!token) {
-    return onErrorNaoAutorizado(res, 'Token inválido!')
+  try {
+    let token = req.headers['authorization']
+    if (token) {
+      jwt.verify(token, process.env.SECRET, async function (err, decoded) {
+        if (!err) {
+          // const usuario = await persist.carregar(decoded.usuario.id)
+          let login = decoded.usuario.login
+          let bloco = decoded.unidade ? decoded.unidade.bloco.id : null
+          const usuario = await persist.findByLogin({ login, bloco })
+          token = await gerarToken(usuario)
+          return onSuccess(res, { 'token': token })
+        } else {
+          return onErrorNaoAutorizado(res, 'Erro ao reautenticar!')
+        }
+      })
+    }
+    if (!token) {
+      return onErrorNaoAutorizado(res, 'Token inválido!')
+    }
+  } catch (err) {
+    return onError(res, 'Erro ao acessar dados de usuario', err)
   }
 }
 
@@ -67,7 +75,7 @@ exports.verifyJWT = function (req, res, next) {
 }
 
 function gerarToken (usuario) {
-  return jwt.sign({ usuario: usuario }, process.env.SECRET, {
+  return jwt.sign(usuario, process.env.SECRET, {
     expiresIn: tempoExpiracao // '1h'
   })
 }

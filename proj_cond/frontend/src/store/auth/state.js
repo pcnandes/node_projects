@@ -1,6 +1,6 @@
 export default {
   usuario: {},
-  condominios: [],
+  unidade: [],
   expiracaoToken: null,
   timerToken: null
 }
