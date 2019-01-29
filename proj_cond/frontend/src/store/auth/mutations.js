@@ -4,10 +4,6 @@ export const setUsuario = (state, usuario) => {
   state.usuario = usuario
 }
 
-export const setUnidade = (state, unidade) => {
-  state.unidade = unidade
-}
-
 export const setExpiracaoToken = (state, expiracaoToken) => {
   state.expiracaoToken = expiracaoToken
 }

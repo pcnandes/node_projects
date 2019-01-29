@@ -9,11 +9,9 @@ exports.login = async function (req, res, next) {
   let credenciais = req.body
   try {
     if (credenciais.login && credenciais.senha) {
-      let login = credenciais.login
-      let bloco = credenciais.bloco
-      let usuarioLogado = await persist.findByLogin({ login, bloco })
+      let usuarioLogado = await persist.findByLogin(credenciais)
       // TODO validar usando bcrypt
-      if (usuarioLogado && usuarioLogado.usuario && usuarioLogado.usuario.senha === credenciais.senha) {
+      if (usuarioLogado && usuarioLogado.senha === credenciais.senha) {
         const token = gerarToken(usuarioLogado)
         return onSuccess(res, { 'token': token })
       }
@@ -75,7 +73,8 @@ exports.verifyJWT = function (req, res, next) {
 }
 
 function gerarToken (usuario) {
-  return jwt.sign(usuario, process.env.SECRET, {
+  usuario = JSON.parse(JSON.stringify(usuario))
+  return jwt.sign({ usuario }, process.env.SECRET, {
     expiresIn: tempoExpiracao // '1h'
   })
 }
