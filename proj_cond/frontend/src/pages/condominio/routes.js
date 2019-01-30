@@ -12,6 +12,6 @@ export default [
     meta: {perfis: ['ADMIN', 'SINDICO']}
   },
   { path: ':id/:blocoId/:unidadeId',
-    component: () => import(`./UnidadeEdit.vue`)
+    component: () => import(`./unidade/UnidadeEdit.vue`)
   }
 ]

@@ -64,7 +64,7 @@ export default {
       andares: null,
       unidadesPorAndar: null,
       numeroPrimeiraUnidade: null,
-      romiseResolve: null,
+      promiseResolve: null,
       promiseReject: null,
       modo: 'INCLUSAO'
     }
