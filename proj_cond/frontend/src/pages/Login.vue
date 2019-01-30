@@ -54,6 +54,7 @@ export default {
   components: { QBtn, QToolbar, QIcon, QToolbarTitle, QField, QInput, QSelect, QCheckbox },
   data () {
     return {
+      logarDireto: false,
       condominios: [],
       blocos: [],
       form: {
@@ -76,7 +77,7 @@ export default {
   methods: {
     onSubmit () {
       this.$v.form.$touch()
-      if (this.$v.form.$error) {
+      if (this.$v.form.$error && !this.logarDireto) {
         this.$q.notify('Preencha as informaçoes de login.')
         return
       }
@@ -94,12 +95,16 @@ export default {
     listarCondominios () {
       axios.get('/api/public/condominios')
         .then((res) => {
-          // this.condominios = res.data.map(c => ({label: c.nome, value: c.id}))
-          this.condominios = res.data.map(c => {
-            let retorno = { label: c.nome, value: c.id, blocos: [] }
-            retorno.blocos = c.blocos.map(bloco => ({ label: bloco.nome, value: bloco.id }))
-            return retorno
-          })
+          console.log(res)
+          if (!res.data || res.data.length === 0) {
+            this.logarDireto = true
+          } else {
+            this.condominios = res.data.map(c => {
+              let retorno = { label: c.nome, value: c.id, blocos: [] }
+              retorno.blocos = c.blocos.map(bloco => ({ label: bloco.nome, value: bloco.id }))
+              return retorno
+            })
+          }
         })
         .catch((err) => {
           console.error('ERRO: ', err.response.erro, err.erro)
