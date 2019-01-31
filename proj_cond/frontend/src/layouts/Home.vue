@@ -10,7 +10,7 @@
           <router-link to="/home" class="logo_nome">SINDCON</router-link>
           <span slot="subtitle">Sistema de gestão de condomínio</span>
         </q-toolbar-title>
-        <q-btn flat round dense icon="notification_important" title="Mensagens"/>
+        <q-btn flat round dense icon="mdi-message-text" title="Mensagens"/>
         <q-btn-dropdown flat dense :label="$store.state.auth.usuario.login">
           <!-- dropdown content -->
           <q-list link>
@@ -21,13 +21,13 @@
               </q-item-main>
             </q-item> -->
             <q-item title="Cadastro" @click.native="logout">
-              <q-item-side icon="people" />
+              <q-item-side icon="mdi-account" />
               <q-item-main>
                 <q-item-tile label>Cadastro</q-item-tile>
               </q-item-main>
             </q-item>
             <q-item title="Efetua logout do sistema" @click.native="logout">
-              <q-item-side icon="power_settings_new" />
+              <q-item-side icon="mdi-exit-to-app" />
               <q-item-main>
                 <q-item-tile label>Sair</q-item-tile>
               </q-item-main>
@@ -82,16 +82,23 @@
       </q-list> -->
     </q-layout-drawer>
     <q-page-container class="bg-faded">
+      <div class="pagina" v-if="getNavItens.length>0">
+        <q-breadcrumbs>
+          <q-breadcrumbs-el v-for="i in getNavItens" :key="i"
+            :label="i.label" :to="i.uri" />
+        </q-breadcrumbs>
+      </div>
       <router-view/>
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import { QBtnDropdown, colors } from 'quasar'
+import { QBtnDropdown, colors, QBreadcrumbs, QBreadcrumbsEl } from 'quasar'
+
 import routes from '../router/routes'
 export default {
-  components: { QBtnDropdown, colors },
+  components: { QBtnDropdown, colors, QBreadcrumbs, QBreadcrumbsEl },
   name: 'Home',
   data () {
     return {

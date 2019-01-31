@@ -82,6 +82,9 @@ export default {
         axios.get(`/api/condominio/${this.condominioId}`)
           .then((res) => {
             this.condominio = res.data
+            let navItens = [{label: this.condominio.nome, uri: this.$router.currentRoute}]
+            console.log('aquii', navItens)
+            this.setNavItens(navItens)
           })
           .catch((err) => {
             console.error('ERRO: ', err.response.erro, err.erro)

@@ -14,9 +14,9 @@ module.exports = function (ctx) {
     ],
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
-      'material-icons' // optional, you are not bound to it
+      // 'material-icons', // optional, you are not bound to it
       // 'ionicons',
-      // 'mdi',
+      'mdi'
       // 'fontawesome'
     ],
     supportIE: true,
@@ -77,6 +77,7 @@ module.exports = function (ctx) {
         'Screen'
       ],
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
+      iconSet: 'mdi',
       i18n: 'pt-br' // Quasar language
     },
     // animations: 'all' --- includes all animations

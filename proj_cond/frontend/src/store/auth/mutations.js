@@ -8,6 +8,11 @@ export const setExpiracaoToken = (state, expiracaoToken) => {
   state.expiracaoToken = expiracaoToken
 }
 
+export function setNavItens (state, navItens) {
+  console.log('setando nav itens', navItens)
+  state.navItens = navItens
+}
+
 export const apagarToken = (state) => {
   if (state.timerToken) {
     clearTimeout(state.timer)

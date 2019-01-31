@@ -39,32 +39,20 @@ export default ({ Vue }) => {
           .then((res) => {
             return res
           })
+      },
+      setNavItens (navItens) {
+        return this.$store.commit('auth/setNavItens', navItens)
       }
     },
     computed: {
-      classSituacao: function () {
-        let classe = [null, '']
-        switch (this.condominio.situacao) {
-          case 'NÃO SALVO':
-            classe = ['Informe um nome para o condomínio e clique em "Confirmar"', 'negative']
-            break
-          case 'RASCUNHO':
-            classe = ['Adicione blocos e unidades e depois clique em "Finalizar condominio"', 'warning']
-            break
-          case 'INATIVO':
-            classe = ['Condominio desativado no sistema', 'dark']
-            break
-        }
-        return classe
-      },
-      alteravel: function () {
-        return this.condominio.situacao !== 'ATIVO'
-      },
       isMobile: function () {
         return !!this.$q.platform.is.mobile
       },
       getPlataforma: function () {
         return this.$q.platform.is.name
+      },
+      getNavItens () {
+        return this.$store.getters['auth/getNavItens']
       }
     }
   })

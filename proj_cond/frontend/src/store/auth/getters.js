@@ -11,6 +11,10 @@ export function getCondominios (state) {
   return state.condominios
 }
 
+export function getNavItens (state) {
+  return state.navItens
+}
+
 export function isPossuiPerfil (state) {
   return (perfis) => {
     // verifico se existe exigencia de perfil

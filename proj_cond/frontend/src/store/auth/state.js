@@ -1,5 +1,6 @@
 export default {
   usuario: {},
   expiracaoToken: null,
-  timerToken: null
+  timerToken: null,
+  navItens: [] // {label, uri}
 }
