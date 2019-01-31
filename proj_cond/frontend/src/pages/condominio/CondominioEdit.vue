@@ -22,7 +22,7 @@
         v-for="(bl, i) in condominio.blocos" :key="i">
         <template slot="header">
           <q-item-side>
-            <q-item-tile icon="business" color="primary" />
+            <q-item-tile icon="mdi-office-building" color="primary" />
           </q-item-side>
           <q-item-main :label="bl.nome" />
         </template>

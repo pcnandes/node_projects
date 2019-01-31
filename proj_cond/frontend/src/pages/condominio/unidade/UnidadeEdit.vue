@@ -7,36 +7,36 @@
       <q-collapsible class="col-12 q-my-lg">
         <template slot="header">
           <q-item-side>
-            <q-item-tile icon="people" color="positive" />
+            <q-item-tile icon="mdi-human-male-boy" color="positive" />
           </q-item-side>
           <q-item-main label="Moradores" />
         </template>
         <div class="row justify-center">
-          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="add" label="Adicionar Morador" @click="prepararAdicionarMorador()" color="secondary"/>
+          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-add" label="Adicionar Morador" @click="prepararAdicionarMorador()" color="secondary"/>
         </div>
       </q-collapsible>
 
       <q-collapsible class="col-12 q-my-lg">
         <template slot="header">
           <q-item-side>
-            <q-item-tile icon="work" color="warning" />
+            <q-item-tile icon="mdi-worker" color="warning" />
           </q-item-side>
           <q-item-main label="Colaboradores" />
         </template>
         <div class="row justify-center">
-          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="add" label="Adicionar Colaborador" @click="prepararAdicionarColaborador()" color="secondary"/>
+          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-add" label="Adicionar Colaborador" @click="prepararAdicionarColaborador()" color="secondary"/>
         </div>
       </q-collapsible>
 
       <q-collapsible class="col-12 q-my-lg">
         <template slot="header">
           <q-item-side>
-            <q-item-tile icon="directions_car" color="info" />
+            <q-item-tile icon="mdi-car-side" color="info" />
           </q-item-side>
           <q-item-main label="Veículos" />
         </template>
         <div class="row justify-center">
-          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="add" label="Adicionar veículo" @click="prepararAdicionarVeiculo()" color="secondary"/>
+          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-add" label="Adicionar veículo" @click="prepararAdicionarVeiculo()" color="secondary"/>
         </div>
       </q-collapsible>
     </q-list>

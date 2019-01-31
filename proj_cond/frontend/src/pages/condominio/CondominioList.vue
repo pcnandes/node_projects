@@ -4,7 +4,7 @@
         <q-list-header>Condomínios cadastrados</q-list-header>
         <q-item v-for="c in condominios" :key="c.id" @click.native="detalhar(c)">
           <q-item-side>
-            <q-item-tile icon="business" color="primary" />
+            <q-item-tile icon="mdi-domain" color="primary" />
           </q-item-side>
           <q-item-main :label="c.nome" />
         </q-item>

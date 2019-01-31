@@ -18,45 +18,45 @@ const routes = [
         children: condominio,
         itemMenu: true,
         tituloMenu: 'Cadastro de condomínio',
-        icone: 'business'
+        icone: 'mdi-domain'
       },
       { path: '/cadastro_usuario',
         component: () => import('pages/CadastroUsuario.vue'),
         itemMenu: true,
         tituloMenu: 'Cadastro de usuário',
-        icone: 'today'
+        icone: 'mdi-account'
       },
       { path: '/cadastro_colaborador',
         component: () => import('pages/CadastroColaborador.vue'),
         itemMenu: true,
         tituloMenu: 'Cadastro de colaborador',
-        icone: 'perm_contact_calendar'
+        icone: 'mdi-worker'
       },
       { path: '/agenda_condominio',
         component: () => import('pages/AgendaCondominio.vue'),
         itemMenu: true,
         tituloMenu: 'Agenda do condomínio',
-        icone: 'today'
+        icone: 'mdi-calendar'
       },
       { path: '/pre_assembleia',
         component: () => import('pages/PreAssembleia.vue'),
         itemMenu: true,
         tituloMenu: 'Pré-assembléia',
-        icone: 'question_answer'
+        icone: 'mdi-forum'
       },
       { path: '/assembleia',
         component: () => import('pages/Assembleia.vue'),
         itemMenu: true,
         tituloMenu: 'Assembléia',
-        icone: 'gavel'
+        icone: 'mdi-gavel'
       },
       { path: '/livro_ocorrencia',
         component: () => import('pages/LivroOcorrencia.vue'),
         itemMenu: true,
         tituloMenu: 'Livro de ocorrência',
-        icone: 'assignment'
+        icone: 'mdi-clipboard-account'
       },
-      { path: '/chat_sindico', component: () => import('pages/ChatSindico.vue'), icone: 'chat' }
+      { path: '/chat_sindico', component: () => import('pages/ChatSindico.vue'), icone: 'mdi-chat' }
     ]
   }
 ]

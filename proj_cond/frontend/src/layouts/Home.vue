@@ -4,7 +4,7 @@
     <q-layout-header>
       <q-toolbar color="blue-9">
         <q-btn flat dense round @click="leftDrawerOpen = !leftDrawerOpen" aria-label="Menu">
-          <q-icon name="menu" />
+          <q-icon name="mdi-menu" />
         </q-btn>
         <q-toolbar-title>
           <router-link to="/home" class="logo_nome">SINDCON</router-link>
