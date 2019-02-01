@@ -70,9 +70,19 @@ export default {
         axios.get(`/api/unidade/${this.unidadeId}`)
           .then((res) => {
             this.unidade = res.data
+            let path = this.$router.currentRoute.path
+            path = path.substring(0, path.lastIndexOf('/'))
+            path = path.substring(0, path.lastIndexOf('/'))
+            let navItens = [
+              {label: this.unidade.bloco.condominio.nome, uri: path},
+              {label: this.unidade.bloco.nome, uri: ''},
+              {label: this.unidade.nome, uri: this.$router.currentRoute}
+            ]
+            this.setNavItens(navItens)
           })
           .catch((err) => {
-            throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+            if (err.response) throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+            else throw new Error(`Erro(${err})`)
           })
       }
     },
