@@ -12,7 +12,7 @@
           <q-item-main label="Moradores" />
         </template>
         <div class="row justify-center">
-          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-add" label="Adicionar Morador" @click="prepararAdicionarMorador()" color="secondary"/>
+          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar Morador" @click="prepararAdicionarMorador()" color="secondary"/>
         </div>
       </q-collapsible>
 
@@ -24,7 +24,7 @@
           <q-item-main label="Colaboradores" />
         </template>
         <div class="row justify-center">
-          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-add" label="Adicionar Colaborador" @click="prepararAdicionarColaborador()" color="secondary"/>
+          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar Colaborador" @click="prepararAdicionarColaborador()" color="secondary"/>
         </div>
       </q-collapsible>
 
@@ -36,7 +36,7 @@
           <q-item-main label="Veículos" />
         </template>
         <div class="row justify-center">
-          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-add" label="Adicionar veículo" @click="prepararAdicionarVeiculo()" color="secondary"/>
+          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar veículo" @click="prepararAdicionarVeiculo()" color="secondary"/>
         </div>
       </q-collapsible>
     </q-list>

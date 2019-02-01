@@ -1,7 +1,7 @@
 <template>
   <div class="barra-botoes-crud row justify-between">
     <div class="row items-center">
-      <q-btn icon="keyboard_arrow_left"
+      <q-btn icon="mdi-arrow-left"
         v-if="exibeCancelar"
         :fab-mini="$q.screen.lt.sm" flat
         :label="labelCancelar" color="primary"
@@ -15,13 +15,13 @@
       <q-btn class="q-ml-sm"
         v-if="exibeExcluir"
         :fab-mini="$q.screen.lt.sm" flat
-        icon="delete" :label="labelExcluir" color="negative"
+        icon="mdi-close" :label="labelExcluir" color="negative"
         :title="titleExcluir"
         @click="excluir()"/>
       <q-btn class="q-ml-sm"
         v-if="exibeConfirmar"
         :fab-mini="$q.screen.lt.sm" flat
-        :icon="$q.screen.lt.sm ? 'keyboard_arrow_right' : ''" icon-right="keyboard_arrow_right"
+        icon="mdi-check"
         :label="labelConfirmar" color="primary"
         :title="labelConfirmar"
         @click="confirmar()"/>
