@@ -7,7 +7,8 @@ module.exports = function (ctx) {
       'i18n',
       'axios',
       'vuelidate',
-      'mixins'
+      'mixins',
+      'mask'
     ],
     css: [
       'app.styl'

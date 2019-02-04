@@ -10,10 +10,8 @@
         </q-item>
       </q-list>
       <p v-else>Nenhum condomínio cadastrado</p>
-      <div class="row justify-center q-my-lg">
-        <div class="row col-xs-12 col-md-auto">
-          <q-btn class="full-width" icon="mdi-plus" label="Cadastrar Condomínio" @click="novo()" color="secondary"/>
-        </div>
+      <div class="barra-botoes">
+        <q-btn icon="mdi-plus" label="Cadastrar Condomínio" @click="novo()" color="secondary"/>
       </div>
   </q-page>
 </template>

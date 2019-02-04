@@ -7,4 +7,8 @@ const ITENS_MENU = {
   'UNIDADE': 'unidade'
 }
 
-export { ID_TOKEN, ITENS_MENU }
+const PERFIS = {ADMINISTRADOR: 'ADMIN', SINDICO: 'SINDICO'}
+
+const TIPO_MORADOR = {MORADOR: 'Morador', LOCADOR: 'Locador', LOCATARIO: 'Locatário'}
+
+export { ID_TOKEN, ITENS_MENU, PERFIS, TIPO_MORADOR }

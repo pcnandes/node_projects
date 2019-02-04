@@ -1,7 +1,7 @@
 <template>
   <q-page class="justify-center pagina">
     <botoes-crud @cancelar="cancelar()" :exibeExcluir="false" labelConfirmar="Salvar"
-      :titulo="`${unidade.bloco.condominio.nome} -> ${unidade.bloco.nome} -> ${unidade.nome}`" />
+      :titulo="getTitulo" />
 
     <q-list inset-separator no-border>
       <q-collapsible class="col-12 q-my-lg">
@@ -44,6 +44,11 @@
     <adicionar-morador ref="moradorModal"/>
     <adicionar-colaborador ref="colaboradorModal"/>
     <adicionar-veiculo ref="veiculoModal"/>
+    <!-- botoes -->
+    <div class="barra-botoes">
+      <q-btn label="Alterar Senha" color="secondary"/>
+      <q-btn label="Zerar Senha" color="secondary"/>
+    </div>
   </q-page>
 </template>
 
@@ -54,13 +59,15 @@ import BotoesCrud from '../../shared/BotoesCrud'
 import AdicionarMorador from './AdicionarMorador.vue'
 import AdicionarColaborador from './AdicionarColaborador.vue'
 import AdicionarVeiculo from './AdicionarVeiculo.vue'
+// import { PERFIS } from './../../../const'
+import { getUnidadeNew } from './../mixin.js'
 
 export default {
   name: 'Editar_Unidade',
   components: { QBtn, QField, QInput, QCollapsible, 'botoes-crud': BotoesCrud, 'adicionar-morador': AdicionarMorador, 'adicionar-colaborador': AdicionarColaborador, 'adicionar-veiculo': AdicionarVeiculo },
   data () {
     return {
-      unidade: { nome: 'unidadeee' },
+      unidade: getUnidadeNew(),
       unidadeId: this.$route.params.unidadeId
     }
   },
@@ -70,15 +77,6 @@ export default {
         axios.get(`/api/unidade/${this.unidadeId}`)
           .then((res) => {
             this.unidade = res.data
-            let path = this.$router.currentRoute.path
-            path = path.substring(0, path.lastIndexOf('/'))
-            path = path.substring(0, path.lastIndexOf('/'))
-            let navItens = [
-              {label: this.unidade.bloco.condominio.nome, uri: path},
-              {label: this.unidade.bloco.nome, uri: ''},
-              {label: this.unidade.nome, uri: this.$router.currentRoute}
-            ]
-            this.setNavItens(navItens)
           })
           .catch((err) => {
             if (err.response) throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
@@ -118,6 +116,13 @@ export default {
   },
   mounted () {
     this.carregarPagina()
+  },
+  computed: {
+    getTitulo: function () {
+      return this.unidade.bloco && !this.isMobile
+        ? `${this.unidade.bloco.condominio.nome} | ${this.unidade.bloco.nome} | ${this.unidade.nome}`
+        : this.unidade.nome
+    }
   }
 }
 </script>

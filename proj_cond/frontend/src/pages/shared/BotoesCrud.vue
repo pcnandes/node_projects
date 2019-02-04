@@ -71,7 +71,7 @@ export default {
     font-weight: bold;
     border-left: solid;
     border-width: 1px;
-    padding-left: 10px;
+    padding-left: 20px;
   }
   .barra-botoes-crud {
     background-color: rgb(221, 221, 221);
@@ -84,5 +84,11 @@ export default {
     position: absolute;
     bottom: 0;
     width: 100%;*/
+  }
+
+  @media (max-width: 575px) {
+    .titulo {
+      border:none;
+    }
   }
 </style>

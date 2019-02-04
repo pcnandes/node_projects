@@ -8,9 +8,8 @@ export const setExpiracaoToken = (state, expiracaoToken) => {
   state.expiracaoToken = expiracaoToken
 }
 
-export function setNavItens (state, navItens) {
-  console.log('setando nav itens', navItens)
-  state.navItens = navItens
+export function setTitulo (state, titulo) {
+  state.titulo = titulo
 }
 
 export const apagarToken = (state) => {
@@ -21,4 +20,5 @@ export const apagarToken = (state) => {
   state.usuario = {}
   localStorage.removeItem(ID_TOKEN)
   state.expiracaoToken = null
+  state.titulo = ''
 }

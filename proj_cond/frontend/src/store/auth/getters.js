@@ -11,8 +11,8 @@ export function getCondominios (state) {
   return state.condominios
 }
 
-export function getNavItens (state) {
-  return state.navItens
+export function getTitulo (state) {
+  return state.titulo
 }
 
 export function isPossuiPerfil (state) {
@@ -20,7 +20,7 @@ export function isPossuiPerfil (state) {
     // verifico se existe exigencia de perfil
     if (!perfis || perfis.length === 0) return true
     let _perfis = state.usuario.perfis
-    console.log(state.usuario)
+    if (!_perfis) return false
     // verifico se o usuario possui o perfil
     return perfis.some(_perfil => _perfis.some(perfil => perfil === _perfil))
   }

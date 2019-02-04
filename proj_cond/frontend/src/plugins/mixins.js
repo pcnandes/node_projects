@@ -18,7 +18,7 @@ export default ({ Vue }) => {
           color: 'positive',
           position: 'bottom',
           message: msg,
-          icon: 'done'
+          icon: 'mdi-check'
         })
       },
       alertaErro (msg) {
@@ -34,7 +34,7 @@ export default ({ Vue }) => {
         perfis.push(perfil)
         return this.$store.getters['auth/isPossuiPerfil'](perfis)
       },
-      possuiPerfils (perfis) {
+      possuiPerfis (perfis) {
         this.$store.dispatch('auth/hasRole', perfis)
           .then((res) => {
             return res
@@ -46,13 +46,16 @@ export default ({ Vue }) => {
     },
     computed: {
       isMobile: function () {
-        return !!this.$q.platform.is.mobile
+        return !!this.$q.platform.is.mobile || this.$q.screen.lt.md
       },
       getPlataforma: function () {
         return this.$q.platform.is.name
       },
-      getNavItens () {
+      getNavItens: function () {
         return this.$store.getters['auth/getNavItens']
+      },
+      getUsuarioLogado: function () {
+        return this.$store.getters['auth/getUsuario']
       }
     }
   })

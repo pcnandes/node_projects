@@ -8,10 +8,11 @@
         </q-btn>
         <q-toolbar-title>
           <router-link to="/home" class="logo_nome">SINDCON</router-link>
+          <span v-if="nomeCondominio"> - {{nomeCondominio}}</span>
           <span slot="subtitle">Sistema de gestão de condomínio</span>
         </q-toolbar-title>
         <q-btn flat round dense icon="mdi-message-text" title="Mensagens"/>
-        <q-btn-dropdown flat dense :label="$store.state.auth.usuario.login">
+        <q-btn-dropdown flat dense :label="getUsuarioLogado.login">
           <!-- dropdown content -->
           <q-list link>
             <!-- <q-item>
@@ -20,7 +21,7 @@
                 <q-item-tile label>{{$store.state.auth.usuario.login}}</q-item-tile>
               </q-item-main>
             </q-item> -->
-            <q-item title="Cadastro" @click.native="logout">
+            <q-item title="Cadastro" @click.native="abrirCadastroUsuario">
               <q-item-side icon="mdi-account" />
               <q-item-main>
                 <q-item-tile label>Cadastro</q-item-tile>
@@ -46,48 +47,15 @@
           <q-item-main :label="item.tituloMenu"/>
         </q-item>
       </q-list>
-        <!--
-        <q-item to="cadastro_condominio" @click.native="closeMenu()">
-          <q-item-side icon="business" />
-          <q-item-main label="Cadastro condomínio"/>
-        </q-item>
-        <q-item to="agenda_condominio" @click.native="closeMenu()">
-          <q-item-side icon="today" />
-          <q-item-main label="Agenda Condomínio"/>
-        </q-item>
-        <q-item to="cadastro_morador" @click.native="closeMenu()">
-          <q-item-side icon="person" />
-          <q-item-main label="Cadastro morador"/>
-        </q-item>
-        <q-item to="cadastro_colaborador" @click.native="closeMenu()">
-          <q-item-side icon="perm_contact_calendar" />
-          <q-item-main label="Cadastro colaboradores"/>
-        </q-item>
-        <q-item to="pre_assembleia" @click.native="closeMenu()">
-          <q-item-side icon="question_answer" />
-          <q-item-main label="Pré-assembleia"/>
-        </q-item>
-        <q-item to="assembleia" @click.native="closeMenu()">
-          <q-item-side icon="gavel" />
-          <q-item-main label="Assembléia"/>
-        </q-item>
-        <q-item to="livro_ocorrencia" @click.native="closeMenu()">
-          <q-item-side icon="assignment" />
-          <q-item-main label="Livro de Ocorrência"/>
-        </q-item>
-        <q-item to="chat_sindico" @click.native="closeMenu()">
-          <q-item-side icon="chat"/>
-          <q-item-main label="Fale com o Síndico"/>
-        </q-item>
-      </q-list> -->
     </q-layout-drawer>
     <q-page-container class="bg-faded">
-      <div class="pagina" v-if="getNavItens.length>0">
-        <q-breadcrumbs>
-          <q-breadcrumbs-el v-for="i in getNavItens" :key="i"
-            :label="i.label" :to="i.uri" />
+      <!-- <div class="pagina">
+      <div class="barra-navegacao">
+        <q-breadcrumbs class="barra-navegacao" color="grey-8">
+          <q-breadcrumbs-el v-for="(item, i) in getNavItens" :key="i"
+            :label="item.label" :to="item.uri" />
         </q-breadcrumbs>
-      </div>
+      </div> -->
       <router-view/>
     </q-page-container>
   </q-layout>
@@ -122,9 +90,17 @@ export default {
         }
       })
       return retorno
+    },
+    nomeCondominio () {
+      if (this.getUsuarioLogado.unidade) return this.getUsuarioLogado.unidade.bloco.condominio.nome
+      else return null
     }
   },
   methods: {
+    abrirCadastroUsuario () {
+      let u = this.getUsuarioLogado.unidade
+      this.$router.push(`/condominio/${u.bloco.condominio.id}/${u.bloco.id}/${u.id}`)
+    },
     logout () {
       this.$store.dispatch('auth/logout')
         .then(this.$router.push('/'))
@@ -154,6 +130,27 @@ export default {
   .formulario {
     min-height: calc(100vh - 450px);
   }
+  .barra-botoes {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: space-between;
+      margin-top: 20px;
+    }
+    .barra-botoes > button {
+      margin-right: 20px;
+      min-width: 200px;
+    }
+/*
+  .barra-navegacao {
+    background-color: rgb(221, 221, 221);
+    margin-top: -20px;
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-bottom: 15px;
+    padding: 10px;
+    height: 45px;
+  }
 
   .barra-botoes-principal {
     display: flex;
@@ -171,14 +168,27 @@ export default {
   }
   .barra-botoes-principal > div {
     padding-right: 20px;
-  }
+  } */
 
   .material-icons.primary { color: #5a5a5a; }
   .material-icons.light_gray { color: #9c9b9b; }
+
   @media (max-width: 575px) {
     .pagina {
       max-width: 100%;
     }
+    .barra-botoes {
+      flex-direction: column;
+      margin-right: 0px;
+      margin-left: 0px;
+    }
+    .barra-botoes > button {
+      padding-right: 0px;
+      padding-left: 0px;
+      margin-right: 0px;
+      margin-bottom: 10px;
+    }
+    /*
     .barra-botoes-principal {
       flex-direction: column;
       padding: 0px;
@@ -192,6 +202,6 @@ export default {
     .barra-botoes > div {
       padding-right: 10px;
       padding-left: 10px;
-    }
+    } */
   }
 </style>

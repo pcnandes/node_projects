@@ -1,7 +1,7 @@
 <template>
   <q-page class="justify-center pagina">
     <botoes-crud @excluir="excluir()" @cancelar="cancelar()"
-      :exibeExcluir="alteravel"
+      :exibeExcluir="alteravel && condominio.id"
       :exibeConfirmar="alteravel" @confirmar="salvar()"
       labelConfirmar="Salvar"
       :titulo="!alteravel ? condominio.nome : null" />
@@ -41,10 +41,10 @@
         </div>
       </q-collapsible>
     </q-list>
-    <div v-if="condominioId && alteravel" class="row justify-center">
-      <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="business" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
-      <q-btn v-if="condominioPronto && condominio.situacao==='RASCUNHO'" class="col-xs-12 col-md-auto q-ma-sm"
-        icon="done_all" color="negative"
+    <div v-if="condominioId && alteravel" class="barra-botoes">
+      <q-btn icon="mdi-plus" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
+      <q-btn v-if="condominioPronto && condominio.situacao==='RASCUNHO'"
+        icon="mdi-check-all" color="negative"
         label="Finalizar condominio"
         title="Gera o(s) Bloco(s), as unidades e as respectivas contas de usuários"
         @click="gerarUsuarios()"/>
@@ -82,9 +82,6 @@ export default {
         axios.get(`/api/condominio/${this.condominioId}`)
           .then((res) => {
             this.condominio = res.data
-            let navItens = [{label: this.condominio.nome, uri: this.$router.currentRoute}]
-            console.log('aquii', navItens)
-            this.setNavItens(navItens)
           })
           .catch((err) => {
             console.error('ERRO: ', err.response.erro, err.erro)

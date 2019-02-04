@@ -37,13 +37,13 @@
               <q-input :value="unidade.nome"
                 @input="val => {bloco.unidades[i].nome = val}"/>
               <q-btn flat dense round class="botaoExcluirUnidade material-icons primary"
-                @click="deletarUnidade(i)" title="Deletar unidade" icon="delete"/>
+                @click="deletarUnidade(i)" title="Deletar unidade" icon="mdi-delete"/>
             </div>
           </div>
         </div>
-        <div class="row justify-center gutter-sm">
-          <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" color="faded" @click="cancelar()" label="Cancelar" /></div>
-          <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" /></div>
+        <div class="barra-botoes">
+          <q-btn color="faded" @click="cancelar()" label="Cancelar" />
+          <q-btn color="primary" @click="confirmar()" label="Confirmar" />
         </div>
     </div>
   </q-modal>

@@ -36,7 +36,7 @@ exports.retoken = function (req, res, next) {
         if (!err) {
           // const usuario = await persist.carregar(decoded.usuario.id)
           let login = decoded.usuario.login
-          let bloco = decoded.unidade ? decoded.unidade.bloco.id : null
+          let bloco = decoded.usuario.unidade ? decoded.usuario.unidade.bloco.id : null
           const usuario = await persist.findByLogin({ login, bloco })
           token = await gerarToken(usuario)
           return onSuccess(res, { 'token': token })
