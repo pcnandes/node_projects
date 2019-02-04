@@ -14,7 +14,7 @@ module.exports = (sequelize, type) => {
       }
     },
     tipo: {
-      type: type.ENUM('PROPRIETARIO', 'LOCADOR', 'LOCATARIO'),
+      type: type.ENUM('MORADOR', 'LOCADOR', 'LOCATARIO'),
       allowNull: false,
       validate: {
         notEmpty: true
@@ -59,7 +59,8 @@ module.exports = (sequelize, type) => {
     dataCriacao: {
       field: 'data_criacao',
       type: type.DATE,
-      defaultValue: sequelize.NOW
+      defaultValue: sequelize.NOW,
+      allowNull: false
     },
     dataDesativacao: {
       field: 'data_desativacao',
@@ -67,7 +68,7 @@ module.exports = (sequelize, type) => {
       allowNull: true,
       defaultValue: null
     }
-    // Coloco os dados de usuário? Como fica o sindico que nao tem unidade, porteiro, etc?
+
   }, { tableName: 'morador' })
 
   Morador.associate = function ({ Unidade }) {

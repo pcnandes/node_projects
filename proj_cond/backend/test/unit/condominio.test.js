@@ -1,5 +1,7 @@
-const { expect, initdb, db, persist } = require('./config/helpers')
+const { expect, initdb, db } = require('./config/helpers')
 const { Condominio, Bloco, Unidade, Usuario } = db
+const persist = require('./../../server/persist/condominioPersist')
+
 const novoCondominio = {
   nome: 'condominio test',
   blocos: [
