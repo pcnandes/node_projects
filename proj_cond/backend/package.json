@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./app",
     "unit-test": "cross-env NODE_ENV=test mocha --opts ./test/unit/config/mocha.opts ./test/unit/*.test.js",
-    "unit-test-morador": "cross-env NODE_ENV=test mocha --opts ./test/unit/config/mocha.opts ./test/unit/morador.test.js",
+    "unit-test-unidade": "cross-env NODE_ENV=test mocha --opts ./test/unit/config/mocha.opts ./test/unit/unidade.test.js",
     "integ-test": "cross-env NODE_ENV=test mocha --opts ./test/integration/config/mocha.opts ./test/integration/*.test.js"
   },
   "dependencies": {
