@@ -35,7 +35,8 @@ it('Cadastra um morador', async () => {
   let moradores = [{ nome: 'Morador A', tipo: 'MORADOR', unidade_id: unidade.id }, { nome: 'Locatário A', tipo: 'LOCATARIO', unidade_id: unidade.id }]
 
   return persist.altIncDelList(moradores, unidade.id).then(data => {
-    console.log('aquiiiiiiiii', data)
+    expect(data).to.have.lengthOf(2)
+    expect(data.some(i => i.unidade_id !== unidade.id)).to.equal(false)
   })
 })
 

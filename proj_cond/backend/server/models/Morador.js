@@ -59,7 +59,7 @@ module.exports = (sequelize, type) => {
     dataCriacao: {
       field: 'data_criacao',
       type: type.DATE,
-      defaultValue: sequelize.NOW,
+      defaultValue: type.NOW,
       allowNull: false
     },
     dataDesativacao: {
@@ -72,7 +72,7 @@ module.exports = (sequelize, type) => {
   }, { tableName: 'morador' })
 
   Morador.associate = function ({ Unidade }) {
-    Morador.belongsTo(Unidade, { as: 'unidade' })
+    Morador.belongsTo(Unidade, { as: 'unidade', allowNull: false, onDelete: 'CASCADE' })
   }
 
   return Morador
