@@ -25,7 +25,7 @@
 			// Automatically stop program after launch.
 			"stopOnEntry": false,
 			// Command line arguments passed to the program.
-			"args": ["test/unit/condominio.test.js"],
+			"args": ["test/unit/unidade.test.js"],
 			// Workspace relative or absolute path to the working directory of the program being debugged. Default is the current workspace.
 			"cwd": "${workspaceFolder}/backend",
 			// Workspace relative or absolute path to the runtime executable to be used. Default is the runtime executable on the PATH.

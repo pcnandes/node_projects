@@ -23,27 +23,28 @@ before((done) => {
   })
 })
 
-// executa antes de cada caso de testes
-beforeEach((done) => {
-  console.log('---populando tabelas', Condominio.Bloco)
-  // deleto todos os registros
-  Condominio.destroy({
-    where: {}
+describe('Teste Unitario do CondominioPersist', () => {
+  // se essa chamada ficar antes do describe ela será executada antes de cada teste, 
+  // independente do arquivo, isso é chamado de ROOT-LEVEL HOOKS (gancho nivel raiz)
+  // executa antes de cada caso de testes
+  beforeEach((done) => {
+    console.log('---populando tabelas', Condominio.Bloco)
+    // deleto todos os registros
+    Condominio.destroy({
+      where: {}
+    })
+      // no retorno da deleção crio um condominio
+      .then(() => {
+        return Condominio.create(novoCondominio, {
+          // inclusao em cascata do bloco e das unidades
+          include: [{
+            model: Bloco,
+            as: 'blocos',
+            include: [{ model: Unidade, as: 'unidades' }]
+          }]
+        })
+      }).then(() => done())
   })
-    // no retorno da deleção crio um condominio
-    .then(() => {
-      return Condominio.create(novoCondominio, {
-        // inclusao em cascata do bloco e das unidades
-        include: [{
-          model: Bloco,
-          as: 'blocos',
-          include: [{ model: Unidade, as: 'unidades' }]
-        }]
-      })
-    }).then(() => done())
-})
-
-describe('Teste Unitario do CondominioController', () => {
 
   it('excluir condominio e blocos', async () => {
     let condominio = await Condominio.findOne()
