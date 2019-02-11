@@ -114,6 +114,10 @@ export default {
     },
     confirmar () {
       this.$v.morador.$touch()
+      console.log('erros', this.$v.morador.email.$invalid)
+      if (this.$v.morador.email.$invalid) {
+        this.$q.notify('Informe um email vádido!')
+      }
       if (this.$v.morador.$error) {
         this.$q.notify('Preencha as informações do obrigatórias e clique em confirmar.')
       } else {
