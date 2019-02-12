@@ -16,6 +16,7 @@
         </q-field>
         <q-field class="col-12" icon="mdi-calendar">
           <q-datetime v-model="morador.nascimento" type="date" float-label="Nascimento"
+            min="1900-12-31" :max="Date.now()" default-view="year"
             @blur="$v.morador.nascimento.$touch" :error="$v.morador.nascimento.$error"/>
         </q-field>
         <q-field class="col-12" icon="mdi-email">
@@ -33,14 +34,14 @@
             @blur="$v.morador.celular1.$touch" :error="$v.morador.celular1.$error"/>
         </q-field>
         <q-field class="col-12" icon="mdi-cellphone">
-          <q-input v-model="morador.celular2" type="tel" float-label="Celular 2"
-            :mask="'(##) #####-####'" placeholder="(99) 99999-9999"
+          <q-input type="tel" float-label="Celular 2" v-model="morador.celular2"
+            v-mask="'(##) #####-####'" placeholder="(99) 99999-9999"
             @blur="$v.morador.celular2.$touch" :error="$v.morador.celular2.$error"/>
         </q-field>
         <q-field class="col-12">
           <q-checkbox v-model="morador.responsavel" label="Este morador é responsável pela unidade." />
         </q-field>
-        <q-field class="col-12">
+        <q-field class="col-12" v-if="!$v.morador.email.$invalid && this.morador.email">
           <q-checkbox v-model="morador.enviarNotificacaoEmail" label="Enviar notificações por email para esse usuário." />
         </q-field>
         <div class="barra-botoes">
@@ -53,15 +54,18 @@
 
 <script>
 import { QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox } from 'quasar'
-import { required, email, numeric } from 'vuelidate/lib/validators'
+import { required, email, helpers } from 'vuelidate/lib/validators'
 import { mask } from 'vue-the-mask'
 import { TIPO_MORADOR } from '../../../const'
 import { getMoradorNew } from '../mixin.js'
 
+const telefone = helpers.regex('alpha', /^\([1-9]{2}\) [2-9][0-9]{3,4}-[0-9]{4}$/)
+
 export default {
   components: {
-    QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox, mask
+    QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox
   },
+  directives: {mask},
   data () {
     return {
       morador: getMoradorNew(),
@@ -80,9 +84,9 @@ export default {
       nome: { required },
       nascimento: { required },
       email: {email},
-      telefone: {numeric},
-      celular1: {numeric},
-      celular2: {numeric}
+      telefone: {telefone},
+      celular1: {telefone},
+      celular2: {telefone}
     }
   },
   methods: {
@@ -117,6 +121,9 @@ export default {
       console.log('erros', this.$v.morador.email.$invalid)
       if (this.$v.morador.email.$invalid) {
         this.$q.notify('Informe um email vádido!')
+      }
+      if (this.morador.enviarNotificacaoEmail && (this.$v.morador.email.$invalid || !this.morador.email)) {
+        this.$q.notify('Informe um email vádido para que o empregado possa receber notificações por email!')
       }
       if (this.$v.morador.$error) {
         this.$q.notify('Preencha as informações do obrigatórias e clique em confirmar.')

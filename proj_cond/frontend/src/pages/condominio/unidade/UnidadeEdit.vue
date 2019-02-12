@@ -1,6 +1,6 @@
 <template>
   <q-page class="justify-center pagina">
-    <botoes-crud @cancelar="cancelar()" :exibeExcluir="false" labelConfirmar="Salvar"
+    <botoes-crud @cancelar="cancelar()" :exibeExcluir="false" labelConfirmar="Salvar" @confirmar="salvar()"
       :titulo="getTitulo" />
 
     <!-- moradores -->
@@ -10,10 +10,10 @@
           <q-item-side><q-item-tile icon="mdi-human-male-boy" color="positive" /></q-item-side><q-item-main label="Moradores" />
         </template>
         <q-list inset-separator no-border highlight v-if="unidade.moradores && unidade.moradores.length>0">
-          <q-item v-for="m in unidade.moradores" :key="m.id" @click.native="detalharMorador(m)">
+          <q-item v-for="m in unidade.moradores" :key="m.id" @click.native="prepararAlterarMorador(m)">
             <q-item-side :letter="m.tipo.substring(0,1)" :title="m.tipo" color="secondary" />
             <q-item-main :label="m.nome"
-              :sublabel="`email:${m.email} tel:${m.telefone} cel1:${m.celular1} cel2:${m.celular2}`"
+              :sublabel="`email: ${m.email} tel: ${m.telefone} cel1: ${m.celular1} cel2: ${m.celular2}`"
             />
             <q-item-side right v-if="!m.dataDesativacao && m.responsavel" title="Responsável pela unidade" icon="mdi-human-greeting" color="primary" />
             <q-item-side right  v-if="!m.dataDesativacao && m.enviarNotificacaoEmail" title="Recebe notificações por email" icon="mdi-contact-mail" color="secondary" />
@@ -94,6 +94,15 @@ export default {
       }
     },
     salvar () {
+      axios.put(`/api/unidade/${this.unidade.id}`, this.unidade)
+        .then((res) => {
+          this.unidade = res.data
+          this.alertaSucesso('Unidade salva com sucesso')
+        })
+        .catch((err) => {
+          console.error('ERRO: ', err.response.erro)
+          throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+        })
     },
     cancelar () {
       this.$router.push('/condominio')

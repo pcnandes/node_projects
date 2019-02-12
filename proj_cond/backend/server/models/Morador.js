@@ -29,17 +29,11 @@ module.exports = (sequelize, type) => {
     },
     telefone: {
       type: type.STRING,
-      allowNull: true,
-      validate: {
-        isNumeric: true
-      }
+      allowNull: true
     },
     celular: {
       type: type.STRING,
-      allowNull: true,
-      validate: {
-        isNumeric: true
-      }
+      allowNull: true
     },
     enviarNotificacaoEmail: {
       field: 'enviar_notificacao_email',

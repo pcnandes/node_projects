@@ -42,6 +42,9 @@ export default ({ Vue }) => {
       },
       setNavItens (navItens) {
         return this.$store.commit('auth/setNavItens', navItens)
+      },
+      retiraMascara (text) {
+        return text.replace(/\D/g, '')
       }
     },
     computed: {
