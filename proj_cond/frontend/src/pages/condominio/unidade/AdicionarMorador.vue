@@ -38,10 +38,10 @@
             @blur="$v.morador.celular2.$touch" :error="$v.morador.celular2.$error"/>
         </q-field>
         <q-field class="col-12">
-          <q-checkbox v-model="morador.ehResponsavelUnidade" label="Este morador é responsável pela unidade." />
+          <q-checkbox v-model="morador.responsavel" label="Este morador é responsável pela unidade." />
         </q-field>
         <q-field class="col-12">
-          <q-checkbox v-model="morador.recebeNotificacaoEmail" label="Enviar notificações por email para esse usuário." />
+          <q-checkbox v-model="morador.enviarNotificacaoEmail" label="Enviar notificações por email para esse usuário." />
         </q-field>
         <div class="barra-botoes">
           <q-btn class="col-xs-12" color="faded" @click="cancelar()" label="Cancelar" />
@@ -56,7 +56,7 @@ import { QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox } from 'qua
 import { required, email, numeric } from 'vuelidate/lib/validators'
 import { mask } from 'vue-the-mask'
 import { TIPO_MORADOR } from '../../../const'
-import { getUnidadeNew } from '../mixin.js'
+import { getMoradorNew } from '../mixin.js'
 
 export default {
   components: {
@@ -64,11 +64,11 @@ export default {
   },
   data () {
     return {
-      morador: getUnidadeNew(),
+      morador: getMoradorNew(),
       tiposMorador: [
-        {label: TIPO_MORADOR.MORADOR, value: [TIPO_MORADOR.MORADOR]},
-        {label: TIPO_MORADOR.LOCADOR, value: [TIPO_MORADOR.LOCADOR]},
-        {label: TIPO_MORADOR.LOCATARIO, value: [TIPO_MORADOR.LOCATARIO]}],
+        {label: TIPO_MORADOR.MORADOR, value: TIPO_MORADOR.MORADOR},
+        {label: TIPO_MORADOR.LOCADOR, value: TIPO_MORADOR.LOCADOR},
+        {label: TIPO_MORADOR.LOCATARIO, value: TIPO_MORADOR.LOCATARIO}],
       promiseResolve: null,
       promiseReject: null,
       modo: 'INCLUSAO'

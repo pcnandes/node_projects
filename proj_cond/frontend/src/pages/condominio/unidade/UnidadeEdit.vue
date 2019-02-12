@@ -3,14 +3,23 @@
     <botoes-crud @cancelar="cancelar()" :exibeExcluir="false" labelConfirmar="Salvar"
       :titulo="getTitulo" />
 
+    <!-- moradores -->
     <q-list inset-separator no-border>
       <q-collapsible class="col-12 q-my-lg">
         <template slot="header">
-          <q-item-side>
-            <q-item-tile icon="mdi-human-male-boy" color="positive" />
-          </q-item-side>
-          <q-item-main label="Moradores" />
+          <q-item-side><q-item-tile icon="mdi-human-male-boy" color="positive" /></q-item-side><q-item-main label="Moradores" />
         </template>
+        <q-list inset-separator no-border highlight v-if="unidade.moradores && unidade.moradores.length>0">
+          <q-item v-for="m in unidade.moradores" :key="m.id" @click.native="detalharMorador(m)">
+            <q-item-side :letter="m.tipo.substring(0,1)" :title="m.tipo" color="secondary" />
+            <q-item-main :label="m.nome"
+              :sublabel="`email:${m.email} tel:${m.telefone} cel1:${m.celular1} cel2:${m.celular2}`"
+            />
+            <q-item-side right v-if="!m.dataDesativacao && m.responsavel" title="Responsável pela unidade" icon="mdi-human-greeting" color="primary" />
+            <q-item-side right  v-if="!m.dataDesativacao && m.enviarNotificacaoEmail" title="Recebe notificações por email" icon="mdi-contact-mail" color="secondary" />
+            <q-item-side right  v-if="m.dataDesativacao" icon="mdi-account-off" color="secondary" />
+          </q-item>
+        </q-list>
         <div class="row justify-center">
           <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar Morador" @click="prepararAdicionarMorador()" color="secondary"/>
         </div>
@@ -60,14 +69,14 @@ import AdicionarMorador from './AdicionarMorador.vue'
 import AdicionarColaborador from './AdicionarColaborador.vue'
 import AdicionarVeiculo from './AdicionarVeiculo.vue'
 // import { PERFIS } from './../../../const'
-import { getUnidadeNew } from './../mixin.js'
+// import { getUnidadeNew } from './../mixin.js'
 
 export default {
   name: 'Editar_Unidade',
   components: { QBtn, QField, QInput, QCollapsible, 'botoes-crud': BotoesCrud, 'adicionar-morador': AdicionarMorador, 'adicionar-colaborador': AdicionarColaborador, 'adicionar-veiculo': AdicionarVeiculo },
   data () {
     return {
-      unidade: getUnidadeNew(),
+      unidade: {},
       unidadeId: this.$route.params.unidadeId
     }
   },

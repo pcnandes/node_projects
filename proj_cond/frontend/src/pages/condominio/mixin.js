@@ -8,8 +8,8 @@ function getCondominioNew () {
   return {id: null, nome: '', blocos: [], situacao: 'NÃO SALVO'}
 }
 
-function getUnidadeNew () {
-  return {id: null, nome: '', tipo: TIPO_MORADOR.MORADOR, email: '', telefone: '', celular1: '', celular2: '', ehResponsavelUnidade: false, recebeNotificacaoEmail: false}
+function getMoradorNew () {
+  return {id: null, nome: '', tipo: TIPO_MORADOR.MORADOR, email: '', telefone: '', celular1: '', celular2: '', responsavel: false, enviarNotificacaoEmail: false, dataDesativacao: null, dataCriacao: null}
 }
 
-export { getBlocoNew, getCondominioNew, getUnidadeNew }
+export { getBlocoNew, getCondominioNew, getMoradorNew }
