@@ -1,7 +1,7 @@
 <template>
   <q-page class="justify-center pagina">
     <botoes-crud @excluir="excluir()" @cancelar="cancelar()"
-      :exibeExcluir="alteravel && condominio.id"
+      :exibeExcluir="alteravel && !!condominio.id"
       :exibeConfirmar="alteravel" @confirmar="salvar()"
       labelConfirmar="Salvar"
       :titulo="!alteravel ? condominio.nome : null" />
@@ -27,15 +27,16 @@
           <q-item-main :label="bl.nome" />
         </template>
         <div class="absolute" v-if="alteravel" style="right: 0px; bottom: 0px" >
-          <q-btn round flat fab-mini icon="edit" color="faded" title="Alterar Bloco" @click.native="prepararAlterarBloco(bl)"/>
-          <q-btn round flat fab-mini icon="delete" color="faded" title="Excluir Bloco"/>
+          <q-btn round flat fab-mini icon="mdi-pencil" color="faded" title="Alterar Bloco" @click.native="prepararAlterarBloco(bl)"/>
+          <q-btn round flat fab-mini icon="mdi-delete" color="faded" title="Excluir Bloco"/>
         </div>
         <div class="row col-12 justify-center">
           <div style="display: table;">
             <div class="divUnidade"
               v-bind:class="[unidade.andar !== bl.unidades[Math.max(y - 1,0)].andar ? 'clear' : '']"
               v-for="(unidade, y) in bl.unidades" :key="y" >
-              <a v-on:click="detalharUnidade(bl.id,unidade.id)">{{unidade.nome}}</a>
+              <a v-if="condominio.situacao!=='RASCUNHO'" v-on:click="detalharUnidade(bl.id,unidade.id)">{{unidade.nome}}</a>
+              <span v-if="condominio.situacao==='RASCUNHO'">{{unidade.nome}}</span>
             </div>
           </div>
         </div>

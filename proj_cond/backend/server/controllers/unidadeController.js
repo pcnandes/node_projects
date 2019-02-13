@@ -4,6 +4,7 @@ const { onError } = require('./../api/responses/errorHandler')
 
 exports.salvar = async function (req, res) {
   try {
+    console.log('unidadeeee', req.body)
     const retorno = await persist.alterar(req.body)
     return onSuccess(res, retorno)
   } catch (err) {

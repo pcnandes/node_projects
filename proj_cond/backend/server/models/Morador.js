@@ -23,6 +23,7 @@ module.exports = (sequelize, type) => {
     email: {
       type: type.STRING,
       allowNull: true,
+      lowercase: true,
       validate: {
         isEmail: true
       }
@@ -37,11 +38,6 @@ module.exports = (sequelize, type) => {
     },
     enviarNotificacaoEmail: {
       field: 'enviar_notificacao_email',
-      type: type.BOOLEAN,
-      defaultValue: true
-    },
-    enviarNotificacaoPush: {
-      field: 'enviar_notificacao_push',
       type: type.BOOLEAN,
       defaultValue: true
     },

@@ -70,9 +70,9 @@ export default {
     return {
       morador: getMoradorNew(),
       tiposMorador: [
-        {label: TIPO_MORADOR.MORADOR, value: TIPO_MORADOR.MORADOR},
-        {label: TIPO_MORADOR.LOCADOR, value: TIPO_MORADOR.LOCADOR},
-        {label: TIPO_MORADOR.LOCATARIO, value: TIPO_MORADOR.LOCATARIO}],
+        {label: TIPO_MORADOR.MORADOR, value: 'MORADOR'},
+        {label: TIPO_MORADOR.LOCADOR, value: 'LOCADOR'},
+        {label: TIPO_MORADOR.LOCATARIO, value: 'LOCATARIO'}],
       promiseResolve: null,
       promiseReject: null,
       modo: 'INCLUSAO'

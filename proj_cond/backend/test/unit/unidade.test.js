@@ -6,8 +6,7 @@ const novaUnidade = { nome: 'unidade teste', andar: 1 }
 
 const novoMorador = {
   nome: 'Morador test',
-  tipo: 'MORADOR',
-  dataCriacao: new Date()
+  tipo: 'MORADOR'
 }
 // gambiarra para iniciar o banco antes de iniciar os testes
 before((done) => {

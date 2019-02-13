@@ -34,6 +34,8 @@ exports.alterar = async function (unidade) {
     promises.push(...unidade.moradores.filter(morador => !excluidos || excluidos.indexOf(morador.id) < 0)
       .map(morador => {
         morador.unidade_id = unidade.id
+        // removo a data de criacao
+        if (morador.dataCriacao) delete morador['dataCriacao']
         return Morador.upsert(morador, { transaction })
       }))
     // adiciono as exclusoes de blocos
