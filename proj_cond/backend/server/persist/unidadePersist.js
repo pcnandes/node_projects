@@ -35,7 +35,7 @@ exports.alterar = async function (unidade) {
       .map(morador => {
         morador.unidade_id = unidade.id
         // removo a data de criacao
-        if (morador.dataCriacao) delete morador['dataCriacao']
+        if (!morador.dataCriacao) delete morador['dataCriacao']
         return Morador.upsert(morador, { transaction })
       }))
     // adiciono as exclusoes de blocos

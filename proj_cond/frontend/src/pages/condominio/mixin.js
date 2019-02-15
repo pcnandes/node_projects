@@ -9,7 +9,7 @@ function getCondominioNew () {
 }
 
 function getMoradorNew () {
-  return {id: null, nome: '', tipo: TIPO_MORADOR.MORADOR, email: '', telefone: '', celular1: '', celular2: '', responsavel: false, enviarNotificacaoEmail: false, dataDesativacao: null, dataCriacao: null}
+  return {id: null, nome: '', tipo: TIPO_MORADOR.MORADOR, email: null, telefone: null, celular1: null, celular2: null, responsavel: false, enviarNotificacaoEmail: false, dataDesativacao: null, dataCriacao: null}
 }
 
 export { getBlocoNew, getCondominioNew, getMoradorNew }

@@ -14,7 +14,8 @@ module.exports = (sequelize, type) => {
       }
     },
     tipo: {
-      type: type.ENUM('MORADOR', 'LOCADOR', 'LOCATARIO'),
+      type: type.ENUM,
+      values: ['MORADOR', 'LOCADOR', 'LOCATARIO'],
       allowNull: false,
       validate: {
         notEmpty: true
