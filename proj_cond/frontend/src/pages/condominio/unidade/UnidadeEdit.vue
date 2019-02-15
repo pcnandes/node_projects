@@ -13,7 +13,7 @@
           <q-item v-for="m in unidade.moradores" :key="m.id" @click.native="prepararAlterarMorador(m)">
             <q-item-side :letter="m.tipo.substring(0,1)" :title="m.tipo" color="secondary" />
             <q-item-main :label="m.nome"
-              :sublabel="`email: ${m.email} tel: ${m.telefone} cel1: ${m.celular1} cel2: ${m.celular2}`"
+              :sublabel="`${m.email ? 'email: ' + m.email + '; ' : ''}` + `${m.telefone ? ' Telefone: ' + m.telefone + '; ' : ''}` + `${m.celular1 ? ' Celular1: ' + m.celular1 + '; ' : ''}` + `${m.celular2 ? ' Celular2: ' + m.celular2 + '; ' : ''}`"
             />
             <q-item-side right v-if="!m.dataDesativacao && m.responsavel" title="Responsável pela unidade" icon="mdi-human-greeting" color="primary" />
             <q-item-side right  v-if="!m.dataDesativacao && m.enviarNotificacaoEmail" title="Recebe notificações por email" icon="mdi-contact-mail" color="secondary" />

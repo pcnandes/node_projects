@@ -16,8 +16,7 @@
         </q-field>
         <q-field class="col-12" icon="mdi-calendar">
           <q-datetime v-model="morador.nascimento" type="date" float-label="Nascimento"
-            min="1900-12-31" :max="Date.now()" default-view="year"
-            @blur="$v.morador.nascimento.$touch" :error="$v.morador.nascimento.$error"/>
+            min="1900-12-31" :max="Date.now()" default-view="year"/>
         </q-field>
         <q-field class="col-12" icon="mdi-email">
           <q-input v-model="morador.email" type="email" float-label="email"
@@ -82,7 +81,6 @@ export default {
     morador: {
       tipo: { required },
       nome: { required },
-      nascimento: { required },
       email: {email},
       telefone: {telefone},
       celular1: {telefone},

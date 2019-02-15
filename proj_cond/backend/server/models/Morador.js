@@ -21,6 +21,11 @@ module.exports = (sequelize, type) => {
         notEmpty: true
       }
     },
+    nascimento: {
+      field: 'data_nascimento',
+      type: type.DATE,
+      allowNull: true
+    },
     email: {
       type: type.STRING,
       allowNull: true,
@@ -33,7 +38,11 @@ module.exports = (sequelize, type) => {
       type: type.STRING,
       allowNull: true
     },
-    celular: {
+    celular1: {
+      type: type.STRING,
+      allowNull: true
+    },
+    celular2: {
       type: type.STRING,
       allowNull: true
     },
