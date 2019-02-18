@@ -3,3 +3,4 @@
 --watch-extensions js
 --slow 5000
 --exit
+--timeout 5000

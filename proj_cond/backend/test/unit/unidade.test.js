@@ -8,6 +8,20 @@ const novoMorador = {
   nome: 'Morador test',
   tipo: 'MORADOR'
 }
+
+const novoVeiculo = {
+  tipo: 'CARRO',
+  marca: 'Ford TEST',
+  modelo: 'Fista TEST',
+  cor: 'VERMELHO',
+  placa: 'LLL-0000'
+}
+
+const novocolaborador = {
+  nome: 'Colaborador test',
+  tipoDoc: 'RG'
+}
+
 // gambiarra para iniciar o banco antes de iniciar os testes
 before((done) => {
   initdb().then(() => {
@@ -27,6 +41,8 @@ describe('Teste Unitario do UnidadePersist', () => {
         let unidade = await Unidade.create(novaUnidade)
         unidade = JSON.parse(JSON.stringify(unidade))
         unidade.moradores = new Array(novoMorador)
+        unidade.veiculos = new Array(novoVeiculo)
+        unidade.colaboradores = new Array(novocolaborador)
         return persist.alterar(unidade)
       }).then(() => done())
   })
@@ -40,6 +56,7 @@ describe('Teste Unitario do UnidadePersist', () => {
     })
   })
 
+  // testa morador
   it('Cadastra um morador', async () => {
     let unidade = await carregarUnidade()
     unidade = JSON.parse(JSON.stringify(unidade))
@@ -79,8 +96,55 @@ describe('Teste Unitario do UnidadePersist', () => {
       expect(data.moradores.some(i => i.id === moradorExcluido.id)).to.equal(false)
     })
   })
+
+  // testa veiculo
+  it('Cadastra um veiculo', async () => {
+    let unidade = await carregarUnidade()
+    unidade = JSON.parse(JSON.stringify(unidade))
+    let veiculo = novoVeiculo
+    veiculo.modelo = 'Fusca'
+    unidade.veiculos.push(new Array(veiculo))
+    return persist.alterar(unidade).then(data => {
+      console.log('unidadeeeeee', data)
+      expect(data.veiculos).to.have.lengthOf(2)
+      expect(data.veiculos.some(i => i.unidade_id !== unidade.id)).to.equal(false)
+      expect(data.veiculos.some(i => i.model !== veiculo.modelo)).to.equal(true)
+    })
+  }) 
+/*
+  it('Alterar um veiculo', async () => {
+    let unidade = await carregarUnidade()
+    unidade = JSON.parse(JSON.stringify(unidade))
+    unidade.veiculos[0].modelo = 'alterado'
+    return persist.alterar(unidade).then(data => {
+      expect(data.veiculos).to.have.lengthOf(1)
+      expect(data.veiculos[0].nome).to.deep.equal('alterado')
+    })
+  })
+
+  it('Excluir um veiculo', async () => {
+    let unidade = await carregarUnidade()
+    unidade = JSON.parse(JSON.stringify(unidade))
+    // cadastro dois moradores
+    let veiculos = [
+      { tipo: 'CARRO', marca: 'Volkswagen', modelo: 'Fusca', cor: 'BRANCO', placa: 'iii-9999' },
+      { tipo: 'MOTO', marca: 'HONDA', modelo: 'CB500', cor: 'PRETO', placa: 'KKK-1111' }
+    ]
+    unidade.veiculos = veiculos
+    let unidadeAlt = await persist.alterar(unidade)
+    unidadeAlt = JSON.parse(JSON.stringify(unidadeAlt))
+    // apos salvar no banco, excluo o ultimo veiculo
+    let tamanho = unidadeAlt.veiculos.length
+    let excluido = unidadeAlt.veiculos[tamanho - 1]
+    unidadeAlt.veiculos = unidadeAlt.veiculos.splice(tamanho - 2, tamanho - 1)
+    return persist.alterar(unidadeAlt).then(data => {
+      // verifico se o morador foi excluido
+      expect(data.veiculos).to.have.lengthOf(tamanho - 1)
+      expect(data.veiculos.some(i => i.id === excluido.id)).to.equal(false)
+    })
+  }) */
 })
 
 function carregarUnidade () {
-  return Unidade.findOne({ include: ['moradores'] })
+  return Unidade.findOne({ include: ['moradores', 'veiculos', 'colaboradores'] })
 }

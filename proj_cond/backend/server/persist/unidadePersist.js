@@ -1,4 +1,4 @@
-const { Condominio, Bloco, Unidade, Morador, sequelize } = require('./../models')
+const { Condominio, Bloco, Unidade, Morador, UnidadeVeiculo, UnidadeColaborador, sequelize } = require('./../models')
 const util = require('./util')
 
 exports.listar = function (usuario) {
@@ -17,6 +17,12 @@ exports.carregar = function (id) {
     }, {
       model: Morador,
       as: 'moradores'
+    }, {
+      model: UnidadeVeiculo,
+      as: 'veiculos'
+    }, {
+      model: UnidadeColaborador,
+      as: 'colaboradores'
     }]
   })
 }
@@ -28,6 +34,7 @@ exports.alterar = async function (unidade) {
 
   let transaction = await sequelize.transaction()
   let promises = []
+  // trata moradores
   if (unidadeBd.moradores && unidade.moradores) {
     let excluidos = util.getItensExcluidos(unidadeBd.moradores, unidade.moradores)
     // adiciono as inclusoes e alteracoes
@@ -43,6 +50,39 @@ exports.alterar = async function (unidade) {
       promises.push(Morador.destroy({ where: { id: excluidos }, transaction }))
     }
   }
+
+  // trata veiculos
+  if (unidadeBd.veiculos && unidade.veiculos) {
+    let excluidos = util.getItensExcluidos(unidadeBd.veiculos, unidade.veiculos)
+    // adiciono as inclusoes e alteracoes
+    promises.push(...unidade.veiculos.filter(item => !excluidos || excluidos.indexOf(item.id) < 0)
+      .map(veiculo => {
+        // adiciono o id filho
+        veiculo.unidade_id = unidade.id
+        return UnidadeVeiculo.upsert(veiculo, { transaction })
+      }))
+    // adiciono as exclusoes de blocos
+    if (excluidos && excluidos.length > 0) {
+      promises.push(UnidadeVeiculo.destroy({ where: { id: excluidos }, transaction }))
+    }
+  }
+
+  // trata colaboradores
+  if (unidadeBd.colaboradores && unidade.colaboradores) {
+    let excluidos = util.getItensExcluidos(unidadeBd.colaboradores, unidade.colaboradores)
+    // adiciono as inclusoes e alteracoes
+    promises.push(...unidade.colaboradores.filter(item => !excluidos || excluidos.indexOf(item.id) < 0)
+      .map(item => {
+        // adiciono o id filho
+        item.unidade_id = unidade.id
+        return UnidadeColaborador.upsert(item, { transaction })
+      }))
+    // adiciono as exclusoes de blocos
+    if (excluidos && excluidos.length > 0) {
+      promises.push(UnidadeColaborador.destroy({ where: { id: excluidos }, transaction }))
+    }
+  }
+
   // adiciono o update do condominio
   promises.push(Unidade.update(unidade, { where: { id: unidade.id }, transaction }))
   return Promise.all(promises)

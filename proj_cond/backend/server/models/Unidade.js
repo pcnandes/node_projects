@@ -24,11 +24,13 @@ module.exports = (sequelize, type) => {
     // Coloco os dados de usuário? Como fica o sindico que nao tem unidade, porteiro, etc?
   }, { tableName: 'unidade' })
 
-  Unidade.associate = function ({ Bloco, Morador, Usuario }) {
+  Unidade.associate = function ({ Bloco, Morador, UnidadeVeiculo, UnidadeColaborador, Usuario }) {
     Unidade.belongsTo(Bloco, { as: 'bloco' })
     // Unidade.hasOne(Usuario, { as: 'usuario', allowNull: true, onDelete: 'CASCADE', hooks: true })
     Unidade.hasOne(Usuario, { allowNull: true, onDelete: 'CASCADE', hooks: true })
     Unidade.hasMany(Morador, { as: 'moradores', allowNull: true, onDelete: 'CASCADE', hooks: true })
+    Unidade.hasMany(UnidadeVeiculo, { as: 'veiculos', allowNull: true, onDelete: 'CASCADE', hooks: true })
+    Unidade.hasMany(UnidadeColaborador, { as: 'colaboradores', allowNull: true, onDelete: 'CASCADE', hooks: true })
   }
 
   return Unidade

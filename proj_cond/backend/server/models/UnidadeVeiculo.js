@@ -1,5 +1,5 @@
 module.exports = (sequelize, type) => {
-  const Veiculo = sequelize.define('Veiculo', {
+  const UnidadeVeiculo = sequelize.define('UnidadeVeiculo', {
 
     id: {
       type: type.INTEGER,
@@ -8,7 +8,7 @@ module.exports = (sequelize, type) => {
     },
     tipo: {
       type: type.ENUM,
-      values: ['CARRO', 'MOTO'],
+      values: ['CARRO', 'MOTO', 'PICKUP', 'VAN'],
       allowNull: false,
       validate: {
         notEmpty: true
@@ -53,11 +53,11 @@ module.exports = (sequelize, type) => {
       }
     }
 
-  }, { tableName: 'morador' })
+  }, { tableName: 'unidade_veiculo' })
 
-  Veiculo.associate = function ({ Unidade }) {
-    Veiculo.belongsTo(Unidade, { as: 'unidade', allowNull: false, onDelete: 'CASCADE' })
+  UnidadeVeiculo.associate = function ({ Unidade }) {
+    UnidadeVeiculo.belongsTo(Unidade, { as: 'unidade', allowNull: false, onDelete: 'CASCADE' })
   }
 
-  return Veiculo
+  return UnidadeVeiculo
 }

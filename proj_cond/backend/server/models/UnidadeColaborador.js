@@ -1,5 +1,5 @@
 module.exports = (sequelize, type) => {
-  const ColaboradorUnidade = sequelize.define('ColaboradorUnidade', {
+  const UnidadeColaborador = sequelize.define('UnidadeColaborador', {
 
     id: {
       type: type.INTEGER,
@@ -16,9 +16,9 @@ module.exports = (sequelize, type) => {
     },
     observacao: {
       type: type.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
-        notEmpty: true,
+        notEmpty: false,
         len: [1, 50]
       }
     },
@@ -43,11 +43,11 @@ module.exports = (sequelize, type) => {
       defaultValue: null
     }
 
-  }, { tableName: 'colaborador_unidade' })
+  }, { tableName: 'unidade_colaborador' })
 
-  ColaboradorUnidade.associate = function ({ Unidade }) {
-    ColaboradorUnidade.belongsTo(Unidade, { as: 'unidade', allowNull: false, onDelete: 'CASCADE' })
+  UnidadeColaborador.associate = function ({ Unidade }) {
+    UnidadeColaborador.belongsTo(Unidade, { as: 'unidade', allowNull: false, onDelete: 'CASCADE' })
   }
 
-  return ColaboradorUnidade
+  return UnidadeColaborador
 }
