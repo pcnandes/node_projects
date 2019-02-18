@@ -11,13 +11,21 @@
         </template>
         <q-list inset-separator no-border highlight v-if="unidade.moradores && unidade.moradores.length>0">
           <q-item v-for="m in unidade.moradores" :key="m.id" @click.native="prepararAlterarMorador(m)">
-            <q-item-side :letter="m.tipo.substring(0,1)" :title="m.tipo" color="secondary" />
+            <q-item-side :letter="m.tipo.substring(0,1)" color="secondary">
+              <q-tooltip>{{m.tipo}}</q-tooltip>
+            </q-item-side>
             <q-item-main :label="m.nome"
-              :sublabel="`${m.email ? 'email: ' + m.email + '; ' : ''}` + `${m.telefone ? ' Telefone: ' + m.telefone + '; ' : ''}` + `${m.celular1 ? ' Celular1: ' + m.celular1 + '; ' : ''}` + `${m.celular2 ? ' Celular2: ' + m.celular2 + '; ' : ''}`"
+              :sublabel="`${m.email ? 'email: ' + m.email : ''}` + `${m.telefone ? ' Telefone: ' + m.telefone : ''}` + `${m.celular1 ? ' Celular1: ' + m.celular1 : ''}` + `${m.celular2 ? ' Celular2: ' + m.celular2 : ''}`"
             />
-            <q-item-side right v-if="!m.dataDesativacao && m.responsavel" title="Responsável pela unidade" icon="mdi-human-greeting" color="primary" />
-            <q-item-side right  v-if="!m.dataDesativacao && m.enviarNotificacaoEmail" title="Recebe notificações por email" icon="mdi-contact-mail" color="secondary" />
-            <q-item-side right  v-if="m.dataDesativacao" icon="mdi-account-off" color="secondary" />
+            <q-item-side right v-if="!m.dataDesativacao && m.responsavel" icon="mdi-human-greeting" color="primary">
+              <q-tooltip>Responsável pela unidade</q-tooltip>
+            </q-item-side>
+            <q-item-side right  v-if="!m.dataDesativacao && m.enviarNotificacaoEmail" icon="mdi-contact-mail" color="secondary">
+              <q-tooltip>Recebe notificações por email</q-tooltip>
+            </q-item-side>
+            <q-item-side right  v-if="m.dataDesativacao" icon="mdi-account-off" color="secondary">
+              <q-tooltip>Morador desativado</q-tooltip>
+            </q-item-side>
           </q-item>
         </q-list>
         <div class="row justify-center">
@@ -25,6 +33,7 @@
         </div>
       </q-collapsible>
 
+      <!-- Colaboradores -->
       <q-collapsible class="col-12 q-my-lg">
         <template slot="header">
           <q-item-side>
@@ -37,6 +46,7 @@
         </div>
       </q-collapsible>
 
+      <!-- Veículos -->
       <q-collapsible class="col-12 q-my-lg">
         <template slot="header">
           <q-item-side>
@@ -62,7 +72,7 @@
 </template>
 
 <script>
-import { QBtn, QField, QInput, QCollapsible } from 'quasar'
+import { QBtn, QField, QInput, QCollapsible, QTooltip } from 'quasar'
 import axios from 'axios'
 import BotoesCrud from '../../shared/BotoesCrud'
 import AdicionarMorador from './AdicionarMorador.vue'
@@ -73,7 +83,7 @@ import AdicionarVeiculo from './AdicionarVeiculo.vue'
 
 export default {
   name: 'Editar_Unidade',
-  components: { QBtn, QField, QInput, QCollapsible, 'botoes-crud': BotoesCrud, 'adicionar-morador': AdicionarMorador, 'adicionar-colaborador': AdicionarColaborador, 'adicionar-veiculo': AdicionarVeiculo },
+  components: { QBtn, QField, QInput, QCollapsible, QTooltip, 'botoes-crud': BotoesCrud, 'adicionar-morador': AdicionarMorador, 'adicionar-colaborador': AdicionarColaborador, 'adicionar-veiculo': AdicionarVeiculo },
   data () {
     return {
       unidade: {},

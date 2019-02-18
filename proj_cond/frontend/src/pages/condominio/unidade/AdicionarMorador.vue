@@ -90,6 +90,7 @@ export default {
   methods: {
     async prepararInclusao () {
       this.$v.morador.$reset()
+      this.morador = getMoradorNew()
       this.modo = 'INCLUSAO'
       await this.$refs.modalRef.show()
       return new Promise((resolve, reject) => {

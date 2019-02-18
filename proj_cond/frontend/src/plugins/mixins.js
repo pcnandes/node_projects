@@ -26,7 +26,7 @@ export default ({ Vue }) => {
           color: 'negative',
           position: 'bottom',
           message: msg,
-          icon: 'report_problem'
+          icon: 'msi-alert'
         })
       },
       possuiPerfil (perfil) {
