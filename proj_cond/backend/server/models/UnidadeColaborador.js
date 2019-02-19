@@ -30,6 +30,15 @@ module.exports = (sequelize, type) => {
         notEmpty: true
       }
     },
+    // todo Validar
+    numeroDoc: {
+      type: type.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [1, 20]
+      }
+    },
     dataInicio: {
       field: 'data_criacao',
       type: type.DATE,
