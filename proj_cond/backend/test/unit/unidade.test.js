@@ -41,8 +41,8 @@ describe('Teste Unitario do UnidadePersist', () => {
         let unidade = await Unidade.create(novaUnidade)
         unidade = JSON.parse(JSON.stringify(unidade))
         unidade.moradores = new Array(novoMorador)
-        unidade.veiculos = new Array(novoVeiculo)
-        unidade.colaboradores = new Array(novocolaborador)
+        // unidade.veiculos = new Array(novoVeiculo)
+        // unidade.colaboradores = new Array(novocolaborador)
         return persist.alterar(unidade)
       }).then(() => done())
   })
@@ -96,7 +96,7 @@ describe('Teste Unitario do UnidadePersist', () => {
       expect(data.moradores.some(i => i.id === moradorExcluido.id)).to.equal(false)
     })
   })
-
+/*
   // testa veiculo
   it('Cadastra um veiculo', async () => {
     let unidade = await carregarUnidade()
@@ -110,8 +110,8 @@ describe('Teste Unitario do UnidadePersist', () => {
       expect(data.veiculos.some(i => i.unidade_id !== unidade.id)).to.equal(false)
       expect(data.veiculos.some(i => i.model !== veiculo.modelo)).to.equal(true)
     })
-  }) 
-/*
+  })
+
   it('Alterar um veiculo', async () => {
     let unidade = await carregarUnidade()
     unidade = JSON.parse(JSON.stringify(unidade))

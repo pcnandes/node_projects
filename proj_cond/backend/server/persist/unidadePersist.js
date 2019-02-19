@@ -34,6 +34,16 @@ exports.alterar = async function (unidade) {
 
   let transaction = await sequelize.transaction()
   let promises = []
+
+  unidade.moradores = unidade.moradores.map(m => {
+    m.unidade_id = unidade.id
+    // removo a data de criacao
+    if (!m.dataCriacao) delete m['dataCriacao']
+    return m
+  })
+
+  promises = util.gravarListaPromises({ listaBd: unidadeBd.moradores, lista: unidade.moradores, obj: Morador, transaction })
+  /*
   // trata moradores
   if (unidadeBd.moradores && unidade.moradores) {
     let excluidos = util.getItensExcluidos(unidadeBd.moradores, unidade.moradores)
@@ -50,7 +60,8 @@ exports.alterar = async function (unidade) {
       promises.push(Morador.destroy({ where: { id: excluidos }, transaction }))
     }
   }
-
+  */
+  /*
   // trata veiculos
   if (unidadeBd.veiculos && unidade.veiculos) {
     let excluidos = util.getItensExcluidos(unidadeBd.veiculos, unidade.veiculos)
@@ -81,13 +92,13 @@ exports.alterar = async function (unidade) {
     if (excluidos && excluidos.length > 0) {
       promises.push(UnidadeColaborador.destroy({ where: { id: excluidos }, transaction }))
     }
-  }
+  } */
 
   // adiciono o update do condominio
   promises.push(Unidade.update(unidade, { where: { id: unidade.id }, transaction }))
   return Promise.all(promises)
-    .then(() => {
-      transaction.commit()
+    .then(async () => {
+      await transaction.commit()
       return this.carregar(unidade.id)
     })
     .catch(err => {
