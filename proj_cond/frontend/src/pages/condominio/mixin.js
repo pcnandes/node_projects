@@ -13,7 +13,7 @@ function getMoradorNew () {
 }
 
 function getColaboradorNew () {
-  return {id: null, tipoDoc: 'RG', nome: null, observacao: null, dataInicio: null, dataFim: null}
+  return {id: null, nome: null, observacao: null, tipoDoc: 'RG', numeroDoc: null, dataInicio: null, dataFim: null}
 }
 
 function getVeiculoNew () {

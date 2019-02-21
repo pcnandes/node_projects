@@ -1,30 +1,55 @@
 <template>
   <q-modal no-backdrop-dismiss no-esc-dismiss ref="modalRef"
-    :content-css="{minWidth: '50vw', maxWidth: '80vw'}">
+    :content-css="{minWidth: isMobile?'100vw':'650px', maxWidth: isMobile?'100vw':'60vw'}" :maximized="isMobile">
     <div class="doc-container justify-center gutter-y-sm" style="padding: 20px;">
         <div class="row justify-center q-display-1">
           Cadastro de Veículo
         </div>
-          adicionar veiculo {tipo [carro, moto], placa, marca, modelo, cor}
-        <div class="row justify-center gutter-sm">
-          <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" color="faded" @click="cancelar()" label="Cancelar" /></div>
-          <div class="row col-xs-12 col-md-auto"><q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" /></div>
+        <q-field class="col-12" icon="mdi-motorbike">
+          <q-select v-model="veiculo.tipo" float-label="Tipo" :options="tiposVeiculo"
+            @blur="$v.veiculo.tipo.$touch" :error="$v.veiculo.tipo.$error"
+          />
+        </q-field>
+        <q-field class="col-12" icon="mdi-watermark">
+          <q-input v-model="veiculo.marca" float-label="Marca"
+            @blur="$v.veiculo.marca.$touch" :error="$v.veiculo.marca.$error"/>
+        </q-field>
+        <q-field class="col-12" icon="mdi-car">
+          <q-input v-model="veiculo.modelo" float-label="Modelo"
+            @blur="$v.veiculo.modelo.$touch" :error="$v.veiculo.modelo.$error"/>
+        </q-field>
+        <q-field class="col-12" icon="mdi-palette">
+          <q-select v-model="veiculo.cor" float-label="Cor" :options="cores"
+            @blur="$v.veiculo.cor.$touch" :error="$v.veiculo.cor.$error"
+          />
+        </q-field>
+        <q-field class="col-12" icon="mdi-card-text">
+          <q-input v-model="veiculo.placa" float-label="Placa"
+            @blur="$v.veiculo.placa.$touch" :error="$v.veiculo.placa.$error"/>
+        </q-field>
+        <div class="barra-botoes">
+          <q-btn class="col-xs-12" color="faded" @click="cancelar()" label="Cancelar" />
+          <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" />
         </div>
     </div>
   </q-modal>
 </template>
 
 <script>
-import { QBtn, QField, QInput, QModal } from 'quasar'
+import { QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox } from 'quasar'
 import { required } from 'vuelidate/lib/validators'
+import { CORES, TIPO_VEICULO } from '../../../const'
+import { getVeiculoNew } from '../mixin.js'
 
 export default {
   components: {
-    QBtn, QField, QInput, QModal
+    QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox
   },
   data () {
     return {
-      veiculo: {},
+      veiculo: getVeiculoNew(),
+      cores: this.carregarValoresCombo(CORES),
+      tiposVeiculo: this.carregarValoresCombo(TIPO_VEICULO),
       promiseResolve: null,
       promiseReject: null,
       modo: 'INCLUSAO'
@@ -32,12 +57,17 @@ export default {
   },
   validations: {
     veiculo: {
-      nome: { required }
+      tipo: { required },
+      marca: { required },
+      modelo: {required},
+      cor: {required},
+      placa: {required}
     }
   },
   methods: {
     async prepararInclusao () {
       this.$v.veiculo.$reset()
+      this.veiculo = getVeiculoNew()
       this.modo = 'INCLUSAO'
       await this.$refs.modalRef.show()
       return new Promise((resolve, reject) => {

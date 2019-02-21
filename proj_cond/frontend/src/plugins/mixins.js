@@ -45,6 +45,9 @@ export default ({ Vue }) => {
       },
       retiraMascara (text) {
         return text.replace(/\D/g, '')
+      },
+      carregarValoresCombo (obj) {
+        return Object.keys(obj).map(key => ({label: key, value: obj[key]}))
       }
     },
     computed: {
