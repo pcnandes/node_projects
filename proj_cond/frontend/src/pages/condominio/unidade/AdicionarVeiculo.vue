@@ -24,7 +24,7 @@
           />
         </q-field>
         <q-field class="col-12" icon="mdi-card-text">
-          <q-input v-model="veiculo.placa" float-label="Placa"
+          <q-input v-model="veiculo.placa" float-label="Placa ( AAA9999 / AAA9Z99 )"
             @blur="$v.veiculo.placa.$touch" :error="$v.veiculo.placa.$error"/>
         </q-field>
         <div class="barra-botoes">
@@ -37,9 +37,11 @@
 
 <script>
 import { QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox } from 'quasar'
-import { required } from 'vuelidate/lib/validators'
+import { required, helpers } from 'vuelidate/lib/validators'
 import { CORES, TIPO_VEICULO } from '../../../const'
 import { getVeiculoNew } from '../mixin.js'
+
+const placa = helpers.regex('alpha', /^[A-Z]{3}[0-9][A-Z,0-9][0-9]{2}$/)
 
 export default {
   components: {
@@ -62,7 +64,7 @@ export default {
       marca: { required },
       modelo: {required},
       cor: {required},
-      placa: {required}
+      placa: {required, placa}
     }
   },
   methods: {
