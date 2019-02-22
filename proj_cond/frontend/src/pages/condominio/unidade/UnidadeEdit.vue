@@ -54,6 +54,19 @@
           </q-item-side>
           <q-item-main label="Veículos" />
         </template>
+        <q-list inset-separator no-border highlight v-if="unidade.veiculos && unidade.veiculos.length>0">
+          <q-item v-for="v in unidade.veiculos" :key="v.id" @click.native="prepararAlterarVeiculo(v)">
+            <q-item-side :letter="v.tipo.substring(0,1)" color="secondary">
+              <q-tooltip>{{v.tipo}}</q-tooltip>
+            </q-item-side>
+            <q-item-main :label="`${v.marca} - ${v.modelo}`"
+              :sublabel="`Placa: ${v.placa} Cor: ${v.cor}`"
+            />
+            <q-item-side right  v-if="v.dataExclusao" icon="mdi-account-off" color="secondary">
+              <q-tooltip>Veículo excluído</q-tooltip>
+            </q-item-side>
+          </q-item>
+        </q-list>
         <div class="row justify-center">
           <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar veículo" @click="prepararAdicionarVeiculo()" color="secondary"/>
         </div>

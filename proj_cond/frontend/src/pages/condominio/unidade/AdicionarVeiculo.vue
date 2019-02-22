@@ -56,6 +56,7 @@ export default {
     }
   },
   validations: {
+    // https://medium.com/@albertomarianno/placa-mercosul-67151bebc00c
     veiculo: {
       tipo: { required },
       marca: { required },
@@ -97,11 +98,11 @@ export default {
       if (this.$v.veiculo.$error) {
         this.$q.notify('Preencha as informações do obrigatórias e clique em confirmar.')
       } else {
-        if (this.modo === 'ALTERACAO') {
-          this.promiseResolve(this.veiculo)
-        } else if (this.modo === 'INCLUSAO') {
-          this.promiseResolve(this.veiculo)
-        }
+        // if (this.modo === 'ALTERACAO') {
+        this.promiseResolve(this.veiculo)
+        // } else if (this.modo === 'INCLUSAO') {
+        //  this.promiseResolve(this.veiculo)
+        // }
         this.$refs.modalRef.hide()
       }
     }

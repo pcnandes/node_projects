@@ -47,7 +47,7 @@ export default ({ Vue }) => {
         return text.replace(/\D/g, '')
       },
       carregarValoresCombo (obj) {
-        return Object.keys(obj).map(key => ({label: key, value: obj[key]}))
+        return Object.keys(obj).map(key => ({value: key, label: obj[key]}))
       }
     },
     computed: {

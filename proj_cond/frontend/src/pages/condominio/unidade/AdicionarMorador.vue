@@ -127,11 +127,11 @@ export default {
       if (this.$v.morador.$error) {
         this.$q.notify('Preencha as informações do obrigatórias e clique em confirmar.')
       } else {
-        if (this.modo === 'ALTERACAO') {
-          this.promiseResolve(this.morador)
-        } else if (this.modo === 'INCLUSAO') {
-          this.promiseResolve(this.morador)
-        }
+        // if (this.modo === 'ALTERACAO') {
+        this.promiseResolve(this.morador)
+        // } else if (this.modo === 'INCLUSAO') {
+        //  this.promiseResolve(this.morador)
+        // }
         this.$refs.modalRef.hide()
       }
     }
