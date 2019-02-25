@@ -24,7 +24,7 @@ module.exports = (sequelize, type) => {
     },
     tipoDoc: {
       type: type.ENUM,
-      values: ['RG', 'CPF', 'CNPJ', 'HABILITACAO'],
+      values: ['RG', 'CPF', 'CNPJ'],
       allowNull: false,
       validate: {
         notEmpty: true

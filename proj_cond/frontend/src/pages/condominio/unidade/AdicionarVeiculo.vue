@@ -24,7 +24,8 @@
           />
         </q-field>
         <q-field class="col-12" icon="mdi-card-text">
-          <q-input v-model="veiculo.placa" float-label="Placa ( AAA9999 / AAA9Z99 )"
+          <q-input v-model="veiculo.placa" upper-case v-mask="['SSS ####', 'SSS #X##']"
+            float-label="Placa ( AAA 9999 / AAA 9Z99 )"
             @blur="$v.veiculo.placa.$touch" :error="$v.veiculo.placa.$error"/>
         </q-field>
         <div class="barra-botoes">
@@ -40,13 +41,15 @@ import { QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox } from 'qua
 import { required, helpers } from 'vuelidate/lib/validators'
 import { CORES, TIPO_VEICULO } from '../../../const'
 import { getVeiculoNew } from '../mixin.js'
+import { mask } from 'vue-the-mask'
 
-const placa = helpers.regex('alpha', /^[A-Z]{3}[0-9][A-Z,0-9][0-9]{2}$/)
+const placa = helpers.regex('alpha', /^[A-Z]{3} [0-9][A-Z,0-9][0-9]{2}$/)
 
 export default {
   components: {
     QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox
   },
+  directives: {mask},
   data () {
     return {
       veiculo: getVeiculoNew(),

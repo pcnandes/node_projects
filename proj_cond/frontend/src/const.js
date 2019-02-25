@@ -15,4 +15,6 @@ const TIPO_VEICULO = {CARRO: 'Carro', MOTO: 'Moto', PICKUP: 'Pickup', VAN: 'Van'
 
 const CORES = {AZUL: 'Azul', AMARELO: 'Amarelo', BEGE: 'Bege', BRANCO: 'Branco', CINZA: 'Cinza', GRAFITE: 'Grafite', LARANJA: 'Laranja', MARROM: 'Marrom', PRETO: 'Preto', ROSA: 'Rosa', VERMELHO: 'Vermelho', VERDE: 'Verde', VINHO: 'Vinho'}
 
-export { ID_TOKEN, ITENS_MENU, PERFIS, TIPO_MORADOR, TIPO_VEICULO, CORES }
+const TIPO_DOCUMENTO_COLABORADOR = {RG: 'RG', CPF: 'CPF', CNPJ: 'CNPJ'}
+
+export { ID_TOKEN, ITENS_MENU, PERFIS, TIPO_MORADOR, TIPO_VEICULO, CORES, TIPO_DOCUMENTO_COLABORADOR }

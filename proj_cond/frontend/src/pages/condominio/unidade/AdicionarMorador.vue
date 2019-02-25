@@ -68,10 +68,7 @@ export default {
   data () {
     return {
       morador: getMoradorNew(),
-      tiposMorador: [
-        {label: TIPO_MORADOR.MORADOR, value: 'MORADOR'},
-        {label: TIPO_MORADOR.LOCADOR, value: 'LOCADOR'},
-        {label: TIPO_MORADOR.LOCATARIO, value: 'LOCATARIO'}],
+      tiposMorador: this.carregarValoresCombo(TIPO_MORADOR),
       promiseResolve: null,
       promiseReject: null,
       modo: 'INCLUSAO'
@@ -117,7 +114,6 @@ export default {
     },
     confirmar () {
       this.$v.morador.$touch()
-      console.log('erros', this.$v.morador.email.$invalid)
       if (this.$v.morador.email.$invalid) {
         this.$q.notify('Informe um email vádido!')
       }
@@ -127,11 +123,7 @@ export default {
       if (this.$v.morador.$error) {
         this.$q.notify('Preencha as informações do obrigatórias e clique em confirmar.')
       } else {
-        // if (this.modo === 'ALTERACAO') {
         this.promiseResolve(this.morador)
-        // } else if (this.modo === 'INCLUSAO') {
-        //  this.promiseResolve(this.morador)
-        // }
         this.$refs.modalRef.hide()
       }
     }
