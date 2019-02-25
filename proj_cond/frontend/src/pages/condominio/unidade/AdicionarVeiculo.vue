@@ -61,7 +61,6 @@ export default {
     }
   },
   validations: {
-    // https://medium.com/@albertomarianno/placa-mercosul-67151bebc00c
     veiculo: {
       tipo: { required },
       marca: { required },
