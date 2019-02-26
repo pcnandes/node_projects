@@ -7,28 +7,29 @@
         </div>
         <q-field class="col-12" icon="mdi-account">
           <q-input v-model="colaborador.nome" float-label="Nome"
-            @blur="$v.nome.$touch" :error="$v.nome.$error"/>
+            @blur="$v.colaborador.nome.$touch" :error="$v.colaborador.nome.$error"/>
         </q-field>
         <q-field class="col-12" icon="mdi-arrow-decision">
           <q-select v-model="colaborador.tipoDoc" float-label="Tipo de documento" :options="tiposDoc"
-            @blur="$v.tipoDoc.$touch" :error="$v.tipoDoc.$error"
+            @blur="$v.colaborador.tipoDoc.$touch" :error="$v.colaborador.tipoDoc.$error"
           />
         </q-field>
         <q-field class="col-12" icon="mdi-account-card-details">
           <q-input v-if="tipoDocumentoSelecionado==='CPF'" float-label="Número CPF" v-model="colaborador.numeroDoc"
             v-mask="'###.###.###-##'" :placeholder="`Número ${tipoDocumentoSelecionado}`"
-            @blur="$v.numeroDoc.$touch" :error="$v.numeroDoc.$error"/>
+            @blur="$v.colaborador.numeroDoc.$touch" :error="$v.colaborador.numeroDoc.$error"/>
           <q-input v-if="tipoDocumentoSelecionado==='CNPJ'" float-label="Número CNPJ" v-model="colaborador.numeroDoc"
             v-mask="'##.###.###/####-##'" placeholder="Número CNPJ"
-            @blur="$v.numeroDoc.$touch" :error="$v.numeroDoc.$error"/>
-          <q-input v-if="tipoDocumentoSelecionado==='RG'" type="number" float-label="Número RG" v-model="colaborador.numeroDoc"
+            @blur="$v.colaborador.numeroDoc.$touch" :error="$v.colaborador.numeroDoc.$error"/>
+          <q-input v-if="tipoDocumentoSelecionado==='RG'" float-label="Número RG" v-model="colaborador.numeroDoc"
             placeholder="Número RG"
-            @blur="$v.numeroDoc.$touch" :error="$v.numeroDoc.$error"/>
+            v-mask="'##############'"
+            @blur="$v.colaborador.numeroDoc.$touch" :error="$v.colaborador.numeroDoc.$error"/>
         </q-field>
         <q-field class="col-12" icon="mdi-calendar">
           <q-datetime v-model="colaborador.dataInicio" type="date" float-label="Inicio Atividade"
             min="2012-12-31" default-view="year"
-            @blur="$v.dataInicio.$touch" :error="$v.dataInicio.$error"/>
+            @blur="$v.colaborador.dataInicio.$touch" :error="$v.colaborador.dataInicio.$error"/>
         </q-field>
         <q-field class="col-12" icon="mdi-calendar">
           <q-datetime v-model="colaborador.dataFim" type="date" float-label="Fim Atividade"
@@ -70,15 +71,17 @@ export default {
   },
   validations () {
     return {
-      tipoDoc: { required },
-      nome: { required },
-      numeroDoc: this.colaborador.tipoDoc !== TIPO_DOCUMENTO_COLABORADOR.RG ? { required, cpfCnpj } : { required },
-      dataInicio: { required }
+      colaborador: {
+        tipoDoc: { required },
+        nome: { required },
+        numeroDoc: this.colaborador.tipoDoc !== TIPO_DOCUMENTO_COLABORADOR.RG ? { required, cpfCnpj } : { required },
+        dataInicio: { required }
+      }
     }
   },
   methods: {
     async prepararInclusao () {
-      this.$v.$reset()
+      this.$v.colaborador.$reset()
       this.colaborador = getColaboradorNew()
       this.modo = 'INCLUSAO'
       await this.$refs.modalRef.show()
@@ -106,11 +109,10 @@ export default {
     },
     confirmar () {
       this.$v.$touch()
-      // falta validar documentos
-      if (this.$v.$error) {
+      if (this.$v.colaborador.$error) {
         this.$q.notify('Preencha as informações do obrigatórias e clique em confirmar.')
       } else {
-        this.promiseResolve(this.morador)
+        this.promiseResolve(this.colaborador)
         this.$refs.modalRef.hide()
       }
     }

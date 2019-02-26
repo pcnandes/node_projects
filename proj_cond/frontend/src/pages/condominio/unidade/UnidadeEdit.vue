@@ -41,6 +41,16 @@
           </q-item-side>
           <q-item-main label="Colaboradores" />
         </template>
+        <q-list inset-separator no-border highlight v-if="unidade.colaboradores && unidade.colaboradores.length>0">
+          <q-item v-for="c in unidade.colaboradores" :key="c.id" @click.native="prepararAlterarColaborador(c)">
+            <q-item-main :label="`${c.nome}`"
+              :sublabel="`Identificação: ${c.tipoDoc} - ${c.numeroDoc} Início Atividade: ${date.formatDate(c.dataInicio, 'DD/MM/YYYY')} ${c.dataFim ? 'Fim Atividade: ' + date.formatDate(c.dataFim, 'DD/MM/YYYY') : ''}`"
+            />
+            <q-item-side right  v-if="c.dataFim" icon="mdi-account-off" color="secondary">
+              <q-tooltip>Não presta mais serviço</q-tooltip>
+            </q-item-side>
+          </q-item>
+        </q-list>
         <div class="row justify-center">
           <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar Colaborador" @click="prepararAdicionarColaborador()" color="secondary"/>
         </div>
@@ -85,7 +95,7 @@
 </template>
 
 <script>
-import { QBtn, QField, QInput, QCollapsible, QTooltip } from 'quasar'
+import { QBtn, QField, QInput, QCollapsible, QTooltip, date } from 'quasar'
 import axios from 'axios'
 import BotoesCrud from '../../shared/BotoesCrud'
 import AdicionarMorador from './AdicionarMorador.vue'
@@ -96,7 +106,7 @@ import AdicionarVeiculo from './AdicionarVeiculo.vue'
 
 export default {
   name: 'Editar_Unidade',
-  components: { QBtn, QField, QInput, QCollapsible, QTooltip, 'botoes-crud': BotoesCrud, 'adicionar-morador': AdicionarMorador, 'adicionar-colaborador': AdicionarColaborador, 'adicionar-veiculo': AdicionarVeiculo },
+  components: { QBtn, QField, QInput, QCollapsible, QTooltip, date, 'botoes-crud': BotoesCrud, 'adicionar-morador': AdicionarMorador, 'adicionar-colaborador': AdicionarColaborador, 'adicionar-veiculo': AdicionarVeiculo },
   data () {
     return {
       unidade: {},
