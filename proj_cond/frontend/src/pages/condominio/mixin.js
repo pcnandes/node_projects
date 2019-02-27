@@ -1,21 +1,21 @@
 function getBlocoNew () {
-  return {id: null, nome: '', unidades: [], condominio: {}}
+  return {id: undefined, nome: '', unidades: [], condominio: {}}
 }
 
 function getCondominioNew () {
-  return {id: null, nome: '', blocos: [], situacao: 'NÃO SALVO'}
+  return {id: undefined, nome: '', blocos: [], situacao: 'NÃO SALVO'}
 }
 
 function getMoradorNew () {
-  return {id: null, nome: '', tipo: 'MORADOR', email: null, telefone: null, celular1: null, celular2: null, responsavel: false, enviarNotificacaoEmail: false, dataDesativacao: null, dataCriacao: null}
+  return {id: undefined, nome: '', tipo: 'MORADOR', email: undefined, telefone: undefined, celular1: undefined, celular2: undefined, responsavel: false, enviarNotificacaoEmail: false, dataCriacao: undefined, dataExclusao: undefined}
 }
 
 function getColaboradorNew () {
-  return {id: null, nome: null, observacao: null, tipoDoc: 'RG', numeroDoc: null, dataInicio: null, dataFim: null}
+  return {id: undefined, nome: undefined, observacao: undefined, tipoDoc: 'RG', numeroDoc: undefined, dataInicio: undefined, dataFim: undefined}
 }
 
 function getVeiculoNew () {
-  return {id: null, tipo: 'CARRO', marca: null, modelo: null, cor: null, placa: null, dataExclusao: null}
+  return {id: undefined, tipo: 'CARRO', marca: undefined, modelo: undefined, cor: undefined, placa: undefined, dataCriacao: undefined, dataExclusao: undefined}
 }
 
 export { getBlocoNew, getCondominioNew, getMoradorNew, getColaboradorNew, getVeiculoNew }

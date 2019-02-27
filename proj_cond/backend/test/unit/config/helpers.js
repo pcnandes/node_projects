@@ -7,8 +7,10 @@ const expect = Chai.expect
 
 const db = require('./../../../server/models')
 
+const moment = require('moment')
+
 const initdb = function () {
   return db.sequelize.sync({ force: true })
 }
 
-module.exports = { should, expect, request, mocha, initdb, db }
+module.exports = { should, expect, request, mocha, initdb, db, moment }

@@ -44,17 +44,24 @@ module.exports = (sequelize, type) => {
       validate: {
         notEmpty: true,
         len: [1, 50]
-      },
-      dataExclusao: {
-        field: 'data_exclusao',
-        type: type.DATE,
-        allowNull: true,
-        defaultValue: null
       }
+    },
+    dataCriacao: {
+      field: 'data_criacao',
+      type: type.DATE,
+      defaultValue: type.NOW,
+      allowNull: false
+    },
+    dataExclusao: {
+      field: 'data_exclusao',
+      type: type.DATE,
+      allowNull: true,
+      defaultValue: null
     }
 
   }, { tableName: 'unidade_veiculo' })
 
+  // permite apenas exclusao logica
   UnidadeVeiculo.associate = function ({ Unidade }) {
     UnidadeVeiculo.belongsTo(Unidade, { as: 'unidade', allowNull: false, onDelete: 'CASCADE' })
   }

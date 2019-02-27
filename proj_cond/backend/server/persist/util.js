@@ -14,7 +14,7 @@ exports.parseJson = function (obj) {
   return JSON.parse(JSON.stringify(obj))
 }
 
-exports.gravarListaPromises = function ({ listaBd, lista, obj, transaction }) {
+exports.gravarListaExclusaoLogicaPromises = function ({ listaBd, lista, obj, transaction }) {
   let promises = []
   if (listaBd && lista) {
     let excluidos = this.getItensExcluidos(listaBd, lista)
@@ -23,8 +23,22 @@ exports.gravarListaPromises = function ({ listaBd, lista, obj, transaction }) {
       .map(item => obj.upsert(item, { transaction })))
     // adiciono as exclusoes de blocos
     if (excluidos && excluidos.length > 0) {
-      promises.push(obj.destroy({ where: { id: excluidos }, transaction }))
+      promises.push(...lista.filter(item => excluidos && excluidos.indexOf(item.id) < 0)
+        .map(item => {
+          item.dataExclusao = new Date()
+          return obj.upsert(item, { transaction })
+        }))
+      // promises.push(obj.destroy({ where: { id: excluidos }, transaction }))
     }
+  }
+  return promises
+}
+
+exports.gravarListaPromises = function ({ lista, obj, transaction }) {
+  let promises = []
+  if (lista) {
+    // adiciono as inclusoes e alteracoes
+    promises.push(...lista.map(item => obj.upsert(item, { transaction })))
   }
   return promises
 }

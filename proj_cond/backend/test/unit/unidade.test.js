@@ -1,4 +1,4 @@
-const { expect, initdb, db } = require('./config/helpers')
+const { expect, initdb, db, moment } = require('./config/helpers')
 const persist = require('./../../server/persist/unidadePersist')
 const { Unidade } = db
 
@@ -62,9 +62,10 @@ describe('Teste Unitario do UnidadePersist', () => {
     let unidade = await carregarUnidade()
     unidade = JSON.parse(JSON.stringify(unidade))
     let moradores = [{ nome: 'Morador A', tipo: 'MORADOR', unidade_id: unidade.id }, { nome: 'Locatário A', tipo: 'LOCATARIO', unidade_id: unidade.id }]
-    unidade.moradores = moradores
+    unidade.moradores = unidade.moradores.concat(moradores)
+    const qtdMoradores = unidade.moradores.length
     return persist.alterar(unidade).then(data => {
-      expect(data.moradores).to.have.lengthOf(2)
+      expect(data.moradores).to.have.lengthOf(qtdMoradores)
       expect(data.moradores.some(i => i.unidade_id !== unidade.id)).to.equal(false)
     })
   }) 
@@ -93,8 +94,8 @@ describe('Teste Unitario do UnidadePersist', () => {
     unidadeAlt.moradores = unidadeAlt.moradores.splice(tamanho - 2, tamanho - 1)
     return persist.alterar(unidadeAlt).then(data => {
       // verifico se o morador foi excluido
-      expect(data.moradores).to.have.lengthOf(tamanho - 1)
-      expect(data.moradores.some(i => i.id === moradorExcluido.id)).to.equal(false)
+      expect(data.moradores).to.have.lengthOf(tamanho)
+      expect(diferencaEmDias(data.moradores.filter(i => i.id === moradorExcluido.id).dataExclusao, new Date())).to.equal(0)
     })
   })
 
@@ -139,8 +140,8 @@ describe('Teste Unitario do UnidadePersist', () => {
     unidadeAlt.veiculos = unidadeAlt.veiculos.splice(tamanho - 2, tamanho - 1)
     return persist.alterar(unidadeAlt).then(data => {
       // verifico se o morador foi excluido
-      expect(data.veiculos).to.have.lengthOf(tamanho - 1)
-      expect(data.veiculos.some(i => i.id === excluido.id)).to.equal(false)
+      expect(data.veiculos).to.have.lengthOf(tamanho)
+      expect(diferencaEmDias(data.veiculos.filter(i => i.id === excluido.id).dataExclusao, new Date())).to.equal(0)
     })
   })
 
@@ -167,30 +168,14 @@ describe('Teste Unitario do UnidadePersist', () => {
       expect(data.colaboradores[0].nome).to.deep.equal('alterado')
     })
   })
-
-  it('Excluir um colaborador', async () => {
-    let unidade = await carregarUnidade()
-    unidade = JSON.parse(JSON.stringify(unidade))
-    // cadastro dois moradores
-    let colaboradores = [
-      { nome: 'Colaborador test 1', tipoDoc: 'RG', numeroDoc: '1111' },
-      { nome: 'Colaborador test 2', tipoDoc: 'CPF', numeroDoc: '5555' }
-    ]
-    unidade.colaboradores = colaboradores
-    let unidadeAlt = await persist.alterar(unidade)
-    unidadeAlt = JSON.parse(JSON.stringify(unidadeAlt))
-    // apos salvar no banco, excluo o ultimo veiculo
-    let tamanho = unidadeAlt.veiculos.length
-    let excluido = unidadeAlt.colaboradores[tamanho - 1]
-    unidadeAlt.colaboradores = unidadeAlt.colaboradores.splice(tamanho - 2, tamanho - 1)
-    return persist.alterar(unidadeAlt).then(data => {
-      // verifico se o morador foi excluido
-      expect(data.colaboradores).to.have.lengthOf(tamanho - 1)
-      expect(data.colaboradores.some(i => i.id === excluido.id)).to.equal(false)
-    })
-  })
 })
 
 function carregarUnidade () {
   return Unidade.findOne({ include: ['moradores', 'veiculos', 'colaboradores'] })
+}
+
+function diferencaEmDias (dataInicio, dataFim) {
+  let _inicio = moment(dataInicio)
+  let _fim = moment(dataFim)
+  return _fim.diff(_inicio, 'days')
 }

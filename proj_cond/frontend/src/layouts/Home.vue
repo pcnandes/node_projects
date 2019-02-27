@@ -139,7 +139,7 @@ export default {
     }
     .barra-botoes > button {
       margin-right: 20px;
-      min-width: 200px;
+      min-width: 150px;
     }
 /*
   .barra-navegacao {

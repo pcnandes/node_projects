@@ -2,20 +2,24 @@
   <q-page class="justify-center pagina">
     <botoes-crud @cancelar="cancelar()" :exibeExcluir="false" labelConfirmar="Salvar" @confirmar="salvar()"
       :titulo="getTitulo" />
-
     <!-- moradores -->
     <q-list inset-separator no-border>
       <q-collapsible class="col-12 q-my-lg">
         <template slot="header">
-          <q-item-side><q-item-tile icon="mdi-human-male-boy" color="positive" /></q-item-side><q-item-main label="Moradores" />
+          <q-item-side><q-item-tile icon="mdi-human-male-boy" color="positive" /></q-item-side>
+          <q-item-main label="Moradores" />
+          <q-item-side side="right" v-if="possuiPerfis(['ADMIN', 'SINDICO']) && unidade.moradores && unidade.moradores.length>0">
+            <q-checkbox v-model="exibeMoradoresInativos" label="Exibe excluídos" />
+            <q-tooltip>Exibe moradores anteriores da unidade</q-tooltip>
+          </q-item-side>
         </template>
         <q-list inset-separator no-border highlight v-if="unidade.moradores && unidade.moradores.length>0">
-          <q-item v-for="m in unidade.moradores" :key="m.id" @click.native="prepararAlterarMorador(m)">
+          <q-item v-for="(m, i) in getMoradores" :key="m.id" @click.native="prepararAlterarMorador(i)">
             <q-item-side :letter="m.tipo.substring(0,1)" color="secondary">
               <q-tooltip>{{m.tipo}}</q-tooltip>
             </q-item-side>
             <q-item-main :label="m.nome"
-              :sublabel="`${m.email ? 'email: ' + m.email : ''}` + `${m.telefone ? ' Telefone: ' + m.telefone : ''}` + `${m.celular1 ? ' Celular1: ' + m.celular1 : ''}` + `${m.celular2 ? ' Celular2: ' + m.celular2 : ''}`"
+              :sublabel="`${m.dataCriacao ? 'Cadastro: ' + formataData(m.dataCriacao) : ''} ${m.dataExclusao ? 'Exclusao: ' + formataData(m.dataExclusao) : ''} ${m.email ? 'email: ' + m.email : ''}` + `${m.telefone ? ' Telefone: ' + m.telefone : ''}` + `${m.celular1 ? ' Celular1: ' + m.celular1 : ''}` + `${m.celular2 ? ' Celular2: ' + m.celular2 : ''}`"
             />
             <q-item-side right v-if="!m.dataDesativacao && m.responsavel" icon="mdi-human-greeting" color="primary">
               <q-tooltip>Responsável pela unidade</q-tooltip>
@@ -40,13 +44,20 @@
             <q-item-tile icon="mdi-worker" color="warning" />
           </q-item-side>
           <q-item-main label="Colaboradores" />
+          <q-item-side side="right" v-if="unidade.colaboradores && unidade.colaboradores.length>0">
+            <q-checkbox v-model="exibeColaboradoresInativos" label="Exibe Excluídos" />
+            <q-tooltip>Exibe colaboradores inativos</q-tooltip>
+          </q-item-side>
         </template>
         <q-list inset-separator no-border highlight v-if="unidade.colaboradores && unidade.colaboradores.length>0">
-          <q-item v-for="c in unidade.colaboradores" :key="c.id" @click.native="prepararAlterarColaborador(c)">
+          <q-item v-for="(c, i) in getColaboradores" :key="c.id" @click.native="prepararAlterarColaborador(i)">
+            <q-item-side :letter="`${c.dataFim && maiorData(c.dataFim, new Date()) ? 'I' : 'A'}`" color="secondary">
+              <q-tooltip>{{c.dataFim && maiorData(c.dataFim, new Date()) ? 'Colaborador Inativo' : 'Colaborador Ativo'}}</q-tooltip>
+            </q-item-side>
             <q-item-main :label="`${c.nome}`"
-              :sublabel="`Identificação: ${c.tipoDoc} - ${c.numeroDoc} Início Atividade: ${date.formatDate(c.dataInicio, 'DD/MM/YYYY')} ${c.dataFim ? 'Fim Atividade: ' + date.formatDate(c.dataFim, 'DD/MM/YYYY') : ''}`"
+              :sublabel="`Início Atividade: ${formataData(c.dataInicio)} ${c.dataFim ? 'Fim Atividade: ' + formataData(c.dataFim) : ''} ${c.tipoDoc}: ${c.numeroDoc}`"
             />
-            <q-item-side right  v-if="c.dataFim" icon="mdi-account-off" color="secondary">
+            <q-item-side right v-if="c.dataFim && maiorData(c.dataFim, new Date())" icon="mdi-account-off" color="secondary">
               <q-tooltip>Não presta mais serviço</q-tooltip>
             </q-item-side>
           </q-item>
@@ -63,14 +74,18 @@
             <q-item-tile icon="mdi-car-side" color="info" />
           </q-item-side>
           <q-item-main label="Veículos" />
+          <q-item-side side="right" v-if="possuiPerfis(['ADMIN', 'SINDICO']) && unidade.veiculos && unidade.veiculos.length>0">
+            <q-checkbox v-model="exibeVeiculosInativos" label="Exibe Excluídos" />
+            <q-tooltip>Exibe veículos de morades anteriores</q-tooltip>
+          </q-item-side>
         </template>
         <q-list inset-separator no-border highlight v-if="unidade.veiculos && unidade.veiculos.length>0">
-          <q-item v-for="v in unidade.veiculos" :key="v.id" @click.native="prepararAlterarVeiculo(v)">
+          <q-item v-for="(v, i) in getVeiculos" :key="v.id" @click.native="prepararAlterarVeiculo(i)">
             <q-item-side :letter="v.tipo.substring(0,1)" color="secondary">
               <q-tooltip>{{v.tipo}}</q-tooltip>
             </q-item-side>
             <q-item-main :label="`${v.marca} - ${v.modelo}`"
-              :sublabel="`Placa: ${v.placa} Cor: ${v.cor}`"
+              :sublabel="`${v.dataCriacao ? 'Cadastro: ' + formataData(v.dataCriacao) : ''} ${v.dataExclusao ? 'Exclusao: ' + formataData(v.dataExclusao) : ''} Placa: ${v.placa} Cor: ${v.cor}`"
             />
             <q-item-side right  v-if="v.dataExclusao" icon="mdi-account-off" color="secondary">
               <q-tooltip>Veículo excluído</q-tooltip>
@@ -95,22 +110,23 @@
 </template>
 
 <script>
-import { QBtn, QField, QInput, QCollapsible, QTooltip, date } from 'quasar'
+import { QBtn, QField, QInput, QCollapsible, QTooltip, QCheckbox } from 'quasar'
 import axios from 'axios'
 import BotoesCrud from '../../shared/BotoesCrud'
 import AdicionarMorador from './AdicionarMorador.vue'
 import AdicionarColaborador from './AdicionarColaborador.vue'
 import AdicionarVeiculo from './AdicionarVeiculo.vue'
-// import { PERFIS } from './../../../const'
-// import { getUnidadeNew } from './../mixin.js'
 
 export default {
   name: 'Editar_Unidade',
-  components: { QBtn, QField, QInput, QCollapsible, QTooltip, date, 'botoes-crud': BotoesCrud, 'adicionar-morador': AdicionarMorador, 'adicionar-colaborador': AdicionarColaborador, 'adicionar-veiculo': AdicionarVeiculo },
+  components: { QBtn, QField, QInput, QCollapsible, QTooltip, QCheckbox, 'botoes-crud': BotoesCrud, 'adicionar-morador': AdicionarMorador, 'adicionar-colaborador': AdicionarColaborador, 'adicionar-veiculo': AdicionarVeiculo },
   data () {
     return {
       unidade: {},
-      unidadeId: this.$route.params.unidadeId
+      unidadeId: this.$route.params.unidadeId,
+      exibeMoradoresInativos: false,
+      exibeColaboradoresInativos: false,
+      exibeVeiculosInativos: false
     }
   },
   methods: {
@@ -140,25 +156,34 @@ export default {
     cancelar () {
       this.$router.push('/condominio')
     },
-    async prepararAlterarMorador (morador) {
+    async prepararAlterarMorador (index) {
+      let morador = this.moradores[index]
       let _morador = await this.$refs.moradorModal.prepararAlteracao(morador)
-      Object.assign(morador, _morador)
+      if (_morador) {
+        Object.assign(morador, _morador)
+      } else this.unidade.moradores.splice(index, 1)
     },
     async prepararAdicionarMorador () {
       let _morador = await this.$refs.moradorModal.prepararInclusao()
       this.unidade.moradores.push(_morador)
     },
-    async prepararAlterarColaborador (colaborador) {
+    async prepararAlterarColaborador (index) {
+      let colaborador = this.colaboradores[index]
       let _colaborador = await this.$refs.colaboradorModal.prepararAlteracao(colaborador)
-      Object.assign(colaborador, _colaborador)
+      if (_colaborador) {
+        Object.assign(colaborador, _colaborador)
+      } else this.unidade.colaboradores.splice(index, 1)
     },
     async prepararAdicionarColaborador () {
       let _colaborador = await this.$refs.colaboradorModal.prepararInclusao()
       this.unidade.colaboradores.push(_colaborador)
     },
-    async prepararAlterarVeiculo (veiculo) {
+    async prepararAlterarVeiculo (index) {
+      let veiculo = this.veiculos[index]
       let _veiculo = await this.$refs.veiculoModal.prepararAlteracao(veiculo)
-      Object.assign(veiculo, _veiculo)
+      if (_veiculo) {
+        Object.assign(veiculo, _veiculo)
+      } else this.unidade.veiculos.splice(index, 1)
     },
     async prepararAdicionarVeiculo () {
       let _veiculo = await this.$refs.veiculoModal.prepararInclusao()
@@ -173,6 +198,21 @@ export default {
       return this.unidade.bloco && !this.isMobile
         ? `${this.unidade.bloco.condominio.nome} | ${this.unidade.bloco.nome} | ${this.unidade.nome}`
         : this.unidade.nome
+    },
+    getMoradores: function () {
+      if (this.unidade.moradores && this.unidade.moradores.length > 0) {
+        return this.exibeMoradoresInativos ? this.unidade.moradores : this.unidade.moradores.filter(i => !i.dataExclusao)
+      } else return null
+    },
+    getVeiculos: function () {
+      if (this.unidade.veiculos && this.unidade.veiculos.length > 0) {
+        return this.exibeMoradoresInativos ? this.unidade.veiculos : this.unidade.veiculos.filter(i => !i.dataExclusao)
+      } else return null
+    },
+    getColaboradores: function () {
+      if (this.unidade.colaboradores && this.unidade.colaboradores.length > 0) {
+        return this.exibeColaboradoresInativos ? this.unidade.colaboradores : this.unidade.colaboradores.filter(i => !i.dataFim || !this.maiorQueDataAtual(i.dataFim))
+      } else return null
     }
   }
 }

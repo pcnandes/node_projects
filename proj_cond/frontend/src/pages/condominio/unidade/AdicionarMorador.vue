@@ -46,6 +46,7 @@
         <div class="barra-botoes">
           <q-btn class="col-xs-12" color="faded" @click="cancelar()" label="Cancelar" />
           <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" />
+          <q-btn class="col-xs-12" color="negative" @click="excluir()" label="Excluir"  v-if="modo==='ALTERACAO'"/>
         </div>
     </div>
   </q-modal>
@@ -126,6 +127,15 @@ export default {
         this.promiseResolve(this.morador)
         this.$refs.modalRef.hide()
       }
+    },
+    excluir () {
+      if (this.morador.id) {
+        this.morador.dataExclusao = new Date()
+        this.promiseResolve(this.morador)
+      } else {
+        this.promiseResolve(null)
+      }
+      this.$refs.modalRef.hide()
     }
   }
 }

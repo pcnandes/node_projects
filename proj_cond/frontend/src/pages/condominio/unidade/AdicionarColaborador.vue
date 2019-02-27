@@ -15,13 +15,13 @@
           />
         </q-field>
         <q-field class="col-12" icon="mdi-account-card-details">
-          <q-input v-if="tipoDocumentoSelecionado==='CPF'" float-label="Número CPF" v-model="colaborador.numeroDoc"
-            v-mask="'###.###.###-##'" :placeholder="`Número ${tipoDocumentoSelecionado}`"
+          <q-input v-if="colaborador.tipoDoc==='CPF'" float-label="Número CPF" v-model="colaborador.numeroDoc"
+            v-mask="'###.###.###-##'" :placeholder="`Número CPF`"
             @blur="$v.colaborador.numeroDoc.$touch" :error="$v.colaborador.numeroDoc.$error"/>
-          <q-input v-if="tipoDocumentoSelecionado==='CNPJ'" float-label="Número CNPJ" v-model="colaborador.numeroDoc"
+          <q-input v-else-if="colaborador.tipoDoc==='CNPJ'" float-label="Número CNPJ" v-model="colaborador.numeroDoc"
             v-mask="'##.###.###/####-##'" placeholder="Número CNPJ"
             @blur="$v.colaborador.numeroDoc.$touch" :error="$v.colaborador.numeroDoc.$error"/>
-          <q-input v-if="tipoDocumentoSelecionado==='RG'" float-label="Número RG" v-model="colaborador.numeroDoc"
+          <q-input v-else-if="colaborador.tipoDoc==='RG'" float-label="Número RG" v-model="colaborador.numeroDoc"
             placeholder="Número RG"
             v-mask="'##############'"
             @blur="$v.colaborador.numeroDoc.$touch" :error="$v.colaborador.numeroDoc.$error"/>
@@ -109,17 +109,16 @@ export default {
     },
     confirmar () {
       this.$v.$touch()
+      // data fim maior que inicio
+      if (this.colaborador.dataFim && this.maiorData(this.colaborador.dataFim, this.colaborador.dataInicio)) {
+        this.$q.notify('A data de fim da atividade não pode ser menor que a data de início.')
+      }
       if (this.$v.colaborador.$error) {
         this.$q.notify('Preencha as informações do obrigatórias e clique em confirmar.')
       } else {
         this.promiseResolve(this.colaborador)
         this.$refs.modalRef.hide()
       }
-    }
-  },
-  computed: {
-    tipoDocumentoSelecionado: function () {
-      return this.colaborador.tipoDoc
     }
   }
 }

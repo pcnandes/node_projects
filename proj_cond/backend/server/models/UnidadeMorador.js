@@ -1,5 +1,5 @@
 module.exports = (sequelize, type) => {
-  const Morador = sequelize.define('Morador', {
+  const UnidadeMorador = sequelize.define('UnidadeMorador', {
     id: {
       type: type.INTEGER,
       primaryKey: true,
@@ -62,18 +62,19 @@ module.exports = (sequelize, type) => {
       defaultValue: type.NOW,
       allowNull: false
     },
-    dataDesativacao: {
-      field: 'data_desativacao',
+    dataExclusao: {
+      field: 'data_exclusao',
       type: type.DATE,
       allowNull: true,
       defaultValue: null
     }
 
-  }, { tableName: 'morador' })
+  }, { tableName: 'unidade_morador' })
 
-  Morador.associate = function ({ Unidade }) {
-    Morador.belongsTo(Unidade, { as: 'unidade', allowNull: false, onDelete: 'CASCADE' })
+  // permite apenas exclusao logica
+  UnidadeMorador.associate = function ({ Unidade }) {
+    UnidadeMorador.belongsTo(Unidade, { as: 'unidade', allowNull: false })
   }
 
-  return Morador
+  return UnidadeMorador
 }

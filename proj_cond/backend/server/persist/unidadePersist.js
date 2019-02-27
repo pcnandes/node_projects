@@ -1,4 +1,4 @@
-const { Condominio, Bloco, Unidade, Morador, UnidadeVeiculo, UnidadeColaborador, sequelize } = require('./../models')
+const { Condominio, Bloco, Unidade, UnidadeMorador, UnidadeVeiculo, UnidadeColaborador, sequelize } = require('./../models')
 const util = require('./util')
 
 exports.listar = function (usuario) {
@@ -10,7 +10,7 @@ exports.carregar = function (id) {
     include: [{
       model: Bloco, as: 'bloco', include: [{ model: Condominio, as: 'condominio' }]
     },
-    { model: Morador, as: 'moradores' },
+    { model: UnidadeMorador, as: 'moradores' },
     { model: UnidadeVeiculo, as: 'veiculos' }, { model: UnidadeColaborador, as: 'colaboradores' }]
   })
 }
@@ -31,19 +31,19 @@ exports.alterar = async function (unidade) {
       if (!m.dataCriacao) delete m['dataCriacao']
       return m
     })
-    promises = promises.concat(util.gravarListaPromises({ listaBd: unidadeBd.moradores, lista: unidade.moradores, obj: Morador, transaction }))
+    promises = promises.concat(util.gravarListaExclusaoLogicaPromises({ listaBd: unidadeBd.moradores, lista: unidade.moradores, obj: UnidadeMorador, transaction }))
   }
 
   // veiculos
   if (unidade.veiculos) {
     unidade.veiculos = unidade.veiculos.map(m => { m.unidade_id = unidade.id; return m })
-    promises = promises.concat(util.gravarListaPromises({ listaBd: unidadeBd.veiculos, lista: unidade.veiculos, obj: UnidadeVeiculo, transaction }))
+    promises = promises.concat(util.gravarListaExclusaoLogicaPromises({ listaBd: unidadeBd.veiculos, lista: unidade.veiculos, obj: UnidadeVeiculo, transaction }))
   }
 
   // colaboradores
   if (unidade.colaboradores) {
     unidade.colaboradores = unidade.colaboradores.map(m => { m.unidade_id = unidade.id; return m })
-    promises = promises.concat(util.gravarListaPromises({ listaBd: unidadeBd.colaboradores, lista: unidade.colaboradores, obj: UnidadeColaborador, transaction }))
+    promises = promises.concat(util.gravarListaPromises({ lista: unidade.colaboradores, obj: UnidadeColaborador, transaction }))
   }
 
   // adiciono o update da unidade

@@ -1,4 +1,5 @@
 // import store from '../store'
+import {date} from 'quasar'
 
 export default ({ Vue }) => {
   // Vue.prototype.$axios = axios
@@ -35,10 +36,7 @@ export default ({ Vue }) => {
         return this.$store.getters['auth/isPossuiPerfil'](perfis)
       },
       possuiPerfis (perfis) {
-        this.$store.dispatch('auth/hasRole', perfis)
-          .then((res) => {
-            return res
-          })
+        return this.$store.getters['auth/isPossuiPerfil'](perfis)
       },
       setNavItens (navItens) {
         return this.$store.commit('auth/setNavItens', navItens)
@@ -48,6 +46,17 @@ export default ({ Vue }) => {
       },
       carregarValoresCombo (obj) {
         return Object.keys(obj).map(key => ({value: key, label: obj[key]}))
+      },
+      formataData (data) {
+        return data ? date.formatDate(data, 'DD/MM/YYYY') : null
+      },
+      maiorData (dataIni, dataFim) {
+        let diff = date.getDateDiff(dataIni, dataFim, 'days')
+        return diff < 0
+      },
+      maiorQueDataAtual (dataIni) {
+        let diff = date.getDateDiff(dataIni, new Date(), 'days')
+        return diff <= 0
       }
     },
     computed: {
