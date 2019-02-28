@@ -29,11 +29,11 @@ module.exports = (sequelize, type) => {
     // Unidade.hasOne(Usuario, { as: 'usuario', allowNull: true, onDelete: 'CASCADE', hooks: true })
     Unidade.hasOne(Usuario, { allowNull: true, onDelete: 'CASCADE', hooks: true })
     // permite apenas exclusao logica
-    Unidade.hasMany(UnidadeMorador, { as: 'moradores', allowNull: true })
+    Unidade.hasMany(UnidadeMorador, { as: 'moradores', allowNull: true, onDelete: 'CASCADE', hooks: true })
     // permite apenas exclusao logica
-    Unidade.hasMany(UnidadeVeiculo, { as: 'veiculos', allowNull: true })
+    Unidade.hasMany(UnidadeVeiculo, { as: 'veiculos', allowNull: true, onDelete: 'CASCADE', hooks: true })
     // não permite exclusao
-    Unidade.hasMany(UnidadeColaborador, { as: 'colaboradores', allowNull: true })
+    Unidade.hasMany(UnidadeColaborador, { as: 'colaboradores', allowNull: true, onDelete: 'CASCADE', hooks: true })
   }
 
   return Unidade

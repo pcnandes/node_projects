@@ -14,21 +14,21 @@
           </q-item-side>
         </template>
         <q-list inset-separator no-border highlight v-if="unidade.moradores && unidade.moradores.length>0">
-          <q-item v-for="(m, i) in getMoradores" :key="m.id" @click.native="prepararAlterarMorador(i)">
+          <q-item v-for="m in getMoradores" :key="m.id" @click.native="prepararAlterarMorador(m)">
             <q-item-side :letter="m.tipo.substring(0,1)" color="secondary">
               <q-tooltip>{{m.tipo}}</q-tooltip>
             </q-item-side>
             <q-item-main :label="m.nome"
               :sublabel="`${m.dataCriacao ? 'Cadastro: ' + formataData(m.dataCriacao) : ''} ${m.dataExclusao ? 'Exclusao: ' + formataData(m.dataExclusao) : ''} ${m.email ? 'email: ' + m.email : ''}` + `${m.telefone ? ' Telefone: ' + m.telefone : ''}` + `${m.celular1 ? ' Celular1: ' + m.celular1 : ''}` + `${m.celular2 ? ' Celular2: ' + m.celular2 : ''}`"
             />
-            <q-item-side right v-if="!m.dataDesativacao && m.responsavel" icon="mdi-human-greeting" color="primary">
+            <q-item-side right v-if="!m.dataExclusao && m.responsavel" icon="mdi-human-greeting" color="primary">
               <q-tooltip>Responsável pela unidade</q-tooltip>
             </q-item-side>
-            <q-item-side right  v-if="!m.dataDesativacao && m.enviarNotificacaoEmail" icon="mdi-contact-mail" color="secondary">
+            <q-item-side right  v-if="!m.dataExclusao && m.enviarNotificacaoEmail" icon="mdi-contact-mail" color="secondary">
               <q-tooltip>Recebe notificações por email</q-tooltip>
             </q-item-side>
-            <q-item-side right  v-if="m.dataDesativacao" icon="mdi-account-off" color="secondary">
-              <q-tooltip>Morador desativado</q-tooltip>
+            <q-item-side right  v-if="m.dataExclusao" icon="mdi-cancel" color="fadded">
+              <q-tooltip>Morador excluídp</q-tooltip>
             </q-item-side>
           </q-item>
         </q-list>
@@ -50,14 +50,14 @@
           </q-item-side>
         </template>
         <q-list inset-separator no-border highlight v-if="unidade.colaboradores && unidade.colaboradores.length>0">
-          <q-item v-for="(c, i) in getColaboradores" :key="c.id" @click.native="prepararAlterarColaborador(i)">
+          <q-item v-for="c in getColaboradores" :key="c.id" @click.native="prepararAlterarColaborador(c)">
             <q-item-side :letter="`${c.dataFim && maiorData(c.dataFim, new Date()) ? 'I' : 'A'}`" color="secondary">
               <q-tooltip>{{c.dataFim && maiorData(c.dataFim, new Date()) ? 'Colaborador Inativo' : 'Colaborador Ativo'}}</q-tooltip>
             </q-item-side>
             <q-item-main :label="`${c.nome}`"
               :sublabel="`Início Atividade: ${formataData(c.dataInicio)} ${c.dataFim ? 'Fim Atividade: ' + formataData(c.dataFim) : ''} ${c.tipoDoc}: ${c.numeroDoc}`"
             />
-            <q-item-side right v-if="c.dataFim && maiorData(c.dataFim, new Date())" icon="mdi-account-off" color="secondary">
+            <q-item-side right v-if="c.dataFim && maiorData(c.dataFim, new Date())" icon="mdi-cancel" color="fadded">
               <q-tooltip>Não presta mais serviço</q-tooltip>
             </q-item-side>
           </q-item>
@@ -80,14 +80,14 @@
           </q-item-side>
         </template>
         <q-list inset-separator no-border highlight v-if="unidade.veiculos && unidade.veiculos.length>0">
-          <q-item v-for="(v, i) in getVeiculos" :key="v.id" @click.native="prepararAlterarVeiculo(i)">
+          <q-item v-for="v in getVeiculos" :key="v.id" @click.native="prepararAlterarVeiculo(v)">
             <q-item-side :letter="v.tipo.substring(0,1)" color="secondary">
               <q-tooltip>{{v.tipo}}</q-tooltip>
             </q-item-side>
             <q-item-main :label="`${v.marca} - ${v.modelo}`"
               :sublabel="`${v.dataCriacao ? 'Cadastro: ' + formataData(v.dataCriacao) : ''} ${v.dataExclusao ? 'Exclusao: ' + formataData(v.dataExclusao) : ''} Placa: ${v.placa} Cor: ${v.cor}`"
             />
-            <q-item-side right  v-if="v.dataExclusao" icon="mdi-account-off" color="secondary">
+            <q-item-side right  v-if="v.dataExclusao" icon="mdi-cancel" color="fadded">
               <q-tooltip>Veículo excluído</q-tooltip>
             </q-item-side>
           </q-item>
@@ -156,8 +156,8 @@ export default {
     cancelar () {
       this.$router.push('/condominio')
     },
-    async prepararAlterarMorador (index) {
-      let morador = this.moradores[index]
+    async prepararAlterarMorador (morador) {
+      let index = this.unidade.moradores.indexOf(morador)
       let _morador = await this.$refs.moradorModal.prepararAlteracao(morador)
       if (_morador) {
         Object.assign(morador, _morador)
@@ -165,10 +165,10 @@ export default {
     },
     async prepararAdicionarMorador () {
       let _morador = await this.$refs.moradorModal.prepararInclusao()
-      this.unidade.moradores.push(_morador)
+      if (_morador) this.unidade.moradores.push(_morador)
     },
-    async prepararAlterarColaborador (index) {
-      let colaborador = this.colaboradores[index]
+    async prepararAlterarColaborador (colaborador) {
+      let index = this.unidade.colaboradores.indexOf(colaborador)
       let _colaborador = await this.$refs.colaboradorModal.prepararAlteracao(colaborador)
       if (_colaborador) {
         Object.assign(colaborador, _colaborador)
@@ -176,10 +176,10 @@ export default {
     },
     async prepararAdicionarColaborador () {
       let _colaborador = await this.$refs.colaboradorModal.prepararInclusao()
-      this.unidade.colaboradores.push(_colaborador)
+      if (_colaborador) this.unidade.colaboradores.push(_colaborador)
     },
-    async prepararAlterarVeiculo (index) {
-      let veiculo = this.veiculos[index]
+    async prepararAlterarVeiculo (veiculo) {
+      let index = this.unidade.veiculos.indexOf(veiculo)
       let _veiculo = await this.$refs.veiculoModal.prepararAlteracao(veiculo)
       if (_veiculo) {
         Object.assign(veiculo, _veiculo)
@@ -187,7 +187,7 @@ export default {
     },
     async prepararAdicionarVeiculo () {
       let _veiculo = await this.$refs.veiculoModal.prepararInclusao()
-      this.unidade.veiculos.push(_veiculo)
+      if (_veiculo) this.unidade.veiculos.push(_veiculo)
     }
   },
   mounted () {
@@ -206,11 +206,12 @@ export default {
     },
     getVeiculos: function () {
       if (this.unidade.veiculos && this.unidade.veiculos.length > 0) {
-        return this.exibeMoradoresInativos ? this.unidade.veiculos : this.unidade.veiculos.filter(i => !i.dataExclusao)
+        return this.exibeVeiculosInativos ? this.unidade.veiculos : this.unidade.veiculos.filter(i => !i.dataExclusao)
       } else return null
     },
     getColaboradores: function () {
       if (this.unidade.colaboradores && this.unidade.colaboradores.length > 0) {
+        console.log('entrouaaa', this.exibeColaboradoresInativos)
         return this.exibeColaboradoresInativos ? this.unidade.colaboradores : this.unidade.colaboradores.filter(i => !i.dataFim || !this.maiorQueDataAtual(i.dataFim))
       } else return null
     }

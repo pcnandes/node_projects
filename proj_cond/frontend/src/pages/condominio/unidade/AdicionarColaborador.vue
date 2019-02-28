@@ -28,19 +28,21 @@
         </q-field>
         <q-field class="col-12" icon="mdi-calendar">
           <q-datetime v-model="colaborador.dataInicio" type="date" float-label="Inicio Atividade"
-            min="2012-12-31" default-view="year"
+            min="2012-12-31" default-view="year" clearable
             @blur="$v.colaborador.dataInicio.$touch" :error="$v.colaborador.dataInicio.$error"/>
         </q-field>
         <q-field class="col-12" icon="mdi-calendar">
           <q-datetime v-model="colaborador.dataFim" type="date" float-label="Fim Atividade"
-            min="2012-12-31" default-view="year"/>
+            min="2012-12-31" default-view="year" clearable />
         </q-field>
         <q-field class="col-12" icon="mdi-clipboard-text">
           <q-input type="textarea" v-model="colaborador.observacao" float-label="Observações"/>
         </q-field>
         <div class="barra-botoes">
-          <q-btn class="col-xs-12" color="faded" @click="cancelar()" label="Cancelar" />
-          <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" />
+          <q-btn class="col-xs-12" color="faded" @click="cancelar()" label="Cancelar" v-if="modo!=='DETALHE'"/>
+          <q-btn class="col-xs-12" color="negative" @click="excluir()" label="Excluir"  v-if="modo==='ALTERACAO' && !colaborador.id"/>
+          <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" v-if="modo!=='DETALHE'"/>
+          <q-btn class="col-xs-12" color="faded" @click="cancelar()" label="Fechar" v-if="modo==='DETALHE'"/>
         </div>
     </div>
   </q-modal>
@@ -94,7 +96,7 @@ export default {
       try {
         this.$v.colaborador.$reset()
         this.colaborador = JSON.parse(JSON.stringify(objAlt))
-        this.modo = 'ALTERACAO'
+        this.modo = this.possuiPerfis(['ADMIN', 'SINDICO', 'MORADOR']) ? 'ALTERACAO' : 'DETALHE'
         await this.$refs.modalRef.show()
         return new Promise((resolve, reject) => {
           this.promiseResolve = resolve
@@ -119,6 +121,12 @@ export default {
         this.promiseResolve(this.colaborador)
         this.$refs.modalRef.hide()
       }
+    },
+    excluir () {
+      if (!this.colaborador.id) {
+        this.promiseResolve(null)
+      }
+      this.$refs.modalRef.hide()
     }
   }
 }

@@ -22,7 +22,7 @@ module.exports = (sequelize, type) => {
       }
     },
     perfis: {
-      // type: type.ENUM('ADMIN', 'SINDICO'),
+      // type: type.ENUM('ADMIN', 'SINDICO', 'MORADOR'),
       type: type.STRING,
       get () {
         let perfis = this.getDataValue('perfis')
