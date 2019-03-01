@@ -1,10 +1,14 @@
+function getCondominioNew () {
+  return {id: undefined, nome: '', blocos: [], situacao: 'NÃO SALVO'}
+}
+
 function getBlocoNew () {
   return {id: undefined, nome: '', unidades: [], condominio: {}}
 }
 
-function getCondominioNew () {
-  return {id: undefined, nome: '', blocos: [], situacao: 'NÃO SALVO'}
-}
+/* function getUnidadeNew () {
+  return {id: undefined, nome: '', andar: undefined, bloco: undefined, usuario: undefined, moradores: [], veiculos: [], colaboradores: []}
+} */
 
 function getMoradorNew () {
   return {id: undefined, nome: '', tipo: 'MORADOR', email: undefined, telefone: undefined, celular1: undefined, celular2: undefined, responsavel: false, enviarNotificacaoEmail: false, dataCriacao: undefined, dataExclusao: undefined}

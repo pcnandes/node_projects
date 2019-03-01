@@ -11,7 +11,16 @@ exports.carregar = function (id) {
       model: Bloco, as: 'bloco', include: [{ model: Condominio, as: 'condominio' }]
     },
     { model: UnidadeMorador, as: 'moradores' },
-    { model: UnidadeVeiculo, as: 'veiculos' }, { model: UnidadeColaborador, as: 'colaboradores' }]
+    { model: UnidadeVeiculo, as: 'veiculos' },
+    { model: UnidadeColaborador, as: 'colaboradores' }],
+    order: [
+      [ { model: UnidadeMorador, as: 'moradores' }, 'dataCriacao', 'DESC' ],
+      [ { model: UnidadeVeiculo, as: 'veiculos' }, 'dataCriacao', 'DESC' ],
+      [ { model: UnidadeColaborador, as: 'colaboradores' }, 'dataInicio', 'DESC' ],
+      [ sequelize.fn('not isnull', sequelize.col('moradores.data_exclusao')) ],
+      [ sequelize.fn('not isnull', sequelize.col('veiculos.data_exclusao')) ],
+      [ sequelize.fn('not isnull', sequelize.col('colaboradores.data_fim')) ]
+    ]
   })
 }
 

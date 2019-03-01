@@ -40,13 +40,13 @@ module.exports = (sequelize, type) => {
       }
     },
     dataInicio: {
-      field: 'data_criacao',
+      field: 'data_inicio',
       type: type.DATE,
       defaultValue: type.NOW,
       allowNull: false
     },
     dataFim: {
-      field: 'data_desativacao',
+      field: 'data_fim',
       type: type.DATE,
       allowNull: true,
       defaultValue: null
