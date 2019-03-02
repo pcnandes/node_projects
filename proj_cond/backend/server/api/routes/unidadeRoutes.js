@@ -1,14 +1,13 @@
 const express = require('express')
 const controller = require('./../../controllers/unidadeController')
-// TODO descobrir uma forma de centralizar a autorização
-const security = require('../../controllers/usuarioController')
 const router = express.Router()
+const { verifyJWT } = require('../../controllers/usuarioController')
 
 router.route('/')
-  .get(security.verifyJWT, controller.listar)
+  .get(verifyJWT, controller.listar)
 
 router.route('/:id')
-  .get(security.verifyJWT, controller.carregar)
-  .put(security.verifyJWT, controller.salvar)
+  .get(verifyJWT, controller.carregar)
+  .put(verifyJWT, controller.salvar)
 
 module.exports = router

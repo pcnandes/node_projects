@@ -3,9 +3,9 @@ const tempoExpiracao = 60 * 3 // 3 minutos
 const persist = require('../persist/usuarioPersist')
 const { onSuccess } = require('./../api/responses/successHandler')
 const { onError, onErrorNaoAutorizado } = require('./../api/responses/errorHandler')
+let usuarioLogado = null
 
 exports.login = async function (req, res, next) {
-  console.log('logiiiiin', req.body)
   let credenciais = req.body
   try {
     if (credenciais.login && credenciais.senha) {
@@ -57,7 +57,6 @@ exports.logout = function (req, res) {
   return onSuccess(res, { 'token': null })
 }
 
-// TODO trocar nome para verificar acesso e usar verificaCaptcha
 exports.verifyJWT = function (req, res, next) {
   let token = req.headers['authorization']
   if (!token) {
@@ -67,9 +66,50 @@ exports.verifyJWT = function (req, res, next) {
     if (err) {
       return onErrorNaoAutorizado(res, 'Erro ao autenticar usando token enviado.', err)
     }
+    usuarioLogado = carregarUsuario(req)
     // se tudo estiver ok, deixo seguir o processamento
     next()
   })
+  // usuarioLogado = carregarUsuario(req)
+  // if (!usuarioLogado) return onErrorNaoAutorizado(res, 'Token não enviado.')
+  // se tudo estiver ok, deixo seguir o processamento
+  // next()
+}
+
+exports.getUsuarioLogado = function (req) {
+  return usuarioLogado
+}
+
+exports.possuiPerfil = function (perfil) {
+  let perfis = []
+  perfis.push(perfil)
+  return _possuiPerfis(perfis)
+}
+
+exports.possuiPerfis = function (perfis) {
+  return _possuiPerfis(perfis)
+}
+
+function _possuiPerfis (perfis) {
+  // verifico se existe exigencia de perfil
+  if (!perfis || perfis.length === 0) return true
+  let _perfis = usuarioLogado ? usuarioLogado.perfis : null
+  if (!_perfis) return false
+  // verifico se o usuario possui o perfil
+  return perfis.some(_perfil => _perfis.some(perfil => perfil === _perfil))
+}
+
+function carregarUsuario (req) {
+  let token = req.headers['authorization']
+  if (!token) {
+    return null
+  }
+  let retorno = jwt.verify(token, process.env.SECRET, function (err, decoded) {
+    if (err) {
+      return null
+    } else return decoded.usuario
+  })
+  return retorno
 }
 
 function gerarToken (usuario) {
