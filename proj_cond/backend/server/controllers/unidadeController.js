@@ -3,12 +3,18 @@ const { onSuccess } = require('./../api/responses/successHandler')
 const { onError } = require('./../api/responses/errorHandler')
 const { possuiPerfis, getUsuarioLogado } = require('./usuarioController')
 
+// Verificar permissao igual ao carregar
 exports.salvar = async function (req, res) {
   try {
-    const retorno = await persist.alterar(req.body)
-    return onSuccess(res, retorno)
+    let idUnidade = parseInt(req.body.id)
+    if (!usuarioPossuiPermissao(idUnidade)) {
+      return onError(res, 'Usuário não possui permissão para salvar essa unidade', null)
+    } else {
+      const retorno = await persist.alterar(req.body)
+      return onSuccess(res, retorno)
+    }
   } catch (err) {
-    return onError(res, 'Erro ao cadastrar condominio', err)
+    return onError(res, 'Erro ao cadastrar unidade', err)
   }
 }
 
@@ -23,8 +29,7 @@ exports.listar = async function (req, res) {
 
 exports.carregar = async function (req, res) {
   try {
-    let id = req.params.id
-    id = parseInt(id)
+    let id = parseInt(req.params.id)
     if (id) {
       if (!usuarioPossuiPermissao(id)) {
         return onError(res, 'Usuário não possui permissão para acessar essa unidade', null)
@@ -39,7 +44,8 @@ exports.carregar = async function (req, res) {
 }
 
 function usuarioPossuiPermissao (idUnidade) {
-  if (possuiPerfis(['ADMIN', 'SINDICO'])) return true
+  if (!idUnidade) return false
+  else if (possuiPerfis(['ADMIN', 'SINDICO'])) return true
   else {
     let usuario = getUsuarioLogado()
     if (possuiPerfis(['MORADOR']) && usuario && usuario.unidade_id === idUnidade) return true
