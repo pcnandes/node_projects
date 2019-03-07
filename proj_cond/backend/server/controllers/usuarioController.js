@@ -3,6 +3,7 @@ const tempoExpiracao = 60 * 3 // 3 minutos
 const persist = require('../persist/usuarioPersist')
 const { onSuccess } = require('./../api/responses/successHandler')
 const { onError, onErrorNaoAutorizado } = require('./../api/responses/errorHandler')
+const bcrypt = require('bcrypt')
 let usuarioLogado = null
 
 exports.login = async function (req, res, next) {
@@ -10,8 +11,7 @@ exports.login = async function (req, res, next) {
   try {
     if (credenciais.login && credenciais.senha) {
       let usuarioLogado = await persist.findByLogin(credenciais)
-      // TODO validar usando bcrypt
-      if (usuarioLogado && usuarioLogado.senha === credenciais.senha) {
+      if (usuarioLogado && await verificaSenha(credenciais.senha, usuarioLogado.senha)) {
         const token = gerarToken(usuarioLogado)
         return onSuccess(res, { 'token': token })
       }
@@ -117,4 +117,10 @@ function gerarToken (usuario) {
   return jwt.sign({ usuario }, process.env.SECRET, {
     expiresIn: tempoExpiracao // '1h'
   })
+}
+
+async function verificaSenha (senhaInformada, senhaUsuario) {
+  // uso o bcrypt, ou caso a senha nao tenha passada pelo bcript (usuario inserido manualmente no banco verifico se são iguais)
+  let retorno = await bcrypt.compareSync(senhaInformada, senhaUsuario) || senhaInformada === senhaUsuario
+  return retorno
 }

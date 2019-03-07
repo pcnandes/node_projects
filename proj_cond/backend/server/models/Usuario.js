@@ -1,3 +1,6 @@
+const bcrypt = require('bcrypt')
+const saltRounds = 12
+
 module.exports = (sequelize, type) => {
   const Usuario = sequelize.define('Usuario', {
     id: {
@@ -18,7 +21,11 @@ module.exports = (sequelize, type) => {
       allowNull: false,
       validate: {
         notEmpty: true,
-        len: [3, 50]
+        len: [3, 240]
+      },
+      set (val) {
+        let passwd = bcrypt.hashSync(val, saltRounds)
+        this.setDataValue('senha', passwd)
       }
     },
     perfis: {
@@ -30,7 +37,13 @@ module.exports = (sequelize, type) => {
         else return null
       }
     }
-  }, { tableName: 'usuario' })
+  },
+  {
+    tableName: 'usuario',
+    indexes: [
+      { fields: ['login', 'unidade_id'], name: 'usuario_unique' }
+    ]
+  })
 
   Usuario.associate = function ({ Unidade }) {
     Usuario.belongsTo(Unidade, { as: 'unidade' })

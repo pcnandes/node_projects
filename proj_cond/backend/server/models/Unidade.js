@@ -22,7 +22,12 @@ module.exports = (sequelize, type) => {
       }
     }
     // Coloco os dados de usuário? Como fica o sindico que nao tem unidade, porteiro, etc?
-  }, { tableName: 'unidade' })
+  }, {
+    tableName: 'unidade',
+    indexes: [
+      { fields: ['nome', 'bloco_id'], name: 'unidade_unique' }
+    ]
+  })
 
   Unidade.associate = function ({ Bloco, UnidadeMorador, UnidadeVeiculo, UnidadeColaborador, Usuario }) {
     Unidade.belongsTo(Bloco, { as: 'bloco' })
