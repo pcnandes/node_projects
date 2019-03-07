@@ -89,7 +89,7 @@ export default {
         })
         .catch((err) => {
           console.log('deu erro ', err)
-          this.alertaErro(err.message)
+          // this.alertaErro(err.message)
         })
     },
     listarCondominios () {

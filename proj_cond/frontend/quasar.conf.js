@@ -75,7 +75,8 @@ module.exports = function (ctx) {
       plugins: [
         'Notify',
         'Dialog',
-        'Screen'
+        'Screen',
+        'Loading'
       ],
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
       iconSet: 'mdi',
