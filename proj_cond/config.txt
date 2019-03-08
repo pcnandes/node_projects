@@ -74,6 +74,7 @@ https://medium.com/@jgrisafe/custom-user-authentication-with-express-sequelize-a
 
 
 TODO
+- testar controlar acesso pelo axios.js se voltar um 401 retornar para tela de logon, se 403 dar um restory back
 - verificar regras de validação de morador no backend (garantir que apenas o proprio, o sindico do seu condominio e o adm possam alterar)
 - criar mensgens de erro padrao no backend
 - passar erros de validacao do backend para exibir no frontend

@@ -63,10 +63,11 @@
 
 <script>
 import { QBtnDropdown, colors, QBreadcrumbs, QBreadcrumbsEl } from 'quasar'
+import TrocarSenha from '../pages/TrocarSenha'
 
 import routes from '../router/routes'
 export default {
-  components: { QBtnDropdown, colors, QBreadcrumbs, QBreadcrumbsEl },
+  components: { QBtnDropdown, colors, QBreadcrumbs, QBreadcrumbsEl, TrocarSenha },
   name: 'Home',
   data () {
     return {

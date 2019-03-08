@@ -54,14 +54,14 @@ export default {
   components: { QBtn, QToolbar, QIcon, QToolbarTitle, QField, QInput, QSelect, QCheckbox },
   data () {
     return {
-      logarDireto: false,
+      loginSemInfCondominio: false,
       condominios: [],
       blocos: [],
       form: {
-        condominio: '',
-        bloco: '',
-        login: '',
-        senha: ''
+        condominio: null,
+        bloco: null,
+        login: null,
+        senha: null
       },
       lembreDeMim: false
     }
@@ -77,19 +77,15 @@ export default {
   methods: {
     onSubmit () {
       this.$v.form.$touch()
-      if (this.$v.form.$error && !this.logarDireto) {
+      // se nao existem condominios cadastrados, libera informar apenas login e senha
+      if ((!this.loginSemInfCondominio && this.$v.form.$error) ||
+        (this.loginSemInfCondominio && this.$v.form.login.$error && this.$v.form.senha.$error)) {
         this.$q.notify('Preencha as informaçoes de login.')
         return
       }
       this.$store.dispatch('auth/login', {'credenciais': this.form, 'lembreDeMim': this.lembreDeMim})
         .then((res) => {
-          console.log('sucesso login? ', res)
-          console.log('login com sucesso redirecionar para a pagina')
           this.$router.push('/home')
-        })
-        .catch((err) => {
-          console.log('deu erro ', err)
-          // this.alertaErro(err.message)
         })
     },
     listarCondominios () {
@@ -97,7 +93,7 @@ export default {
         .then((res) => {
           console.log(res)
           if (!res.data || res.data.length === 0) {
-            this.logarDireto = true
+            this.loginSemInfCondominio = true
           } else {
             this.condominios = res.data.map(c => {
               let retorno = { label: c.nome, value: c.id, blocos: [] }
@@ -108,7 +104,7 @@ export default {
         })
         .catch((err) => {
           console.error('ERRO: ', err.response.erro, err.erro)
-          this.alertaErro(err.message)
+          // this.alertaErro(err.message)
         })
     },
     carregarBlocos (condominioId) {

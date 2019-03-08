@@ -86,7 +86,7 @@ export default {
           })
           .catch((err) => {
             console.error('ERRO: ', err.response.erro, err.erro)
-            throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+            // throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
           })
       }
     },
@@ -105,7 +105,7 @@ export default {
           })
           .catch((err) => {
             console.error('ERRO: ', err.response.erro)
-            throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+            // throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
           })
       } else {
         axios.put(`/api/condominio/${this.condominio.id}`, this.condominio)
@@ -114,7 +114,8 @@ export default {
             this.alertaSucesso('Condomínio salvo com sucesso')
           })
           .catch((err) => {
-            throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+            console.error('ERRO: ', err.response.erro)
+            // throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
           })
       }
     },
