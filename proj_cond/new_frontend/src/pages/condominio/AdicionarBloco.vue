@@ -1,6 +1,7 @@
 <template>
-  <q-modal no-backdrop-dismiss no-esc-dismiss ref="modalRef"
-    :content-css="{minWidth: '50vw', maxWidth: '80vw'}">
+  <!--<q-modal no-backdrop-dismiss no-esc-dismiss ref="modalRef"
+    :content-css="{minWidth: '50vw', maxWidth: '80vw'}"> -->
+  <q-dialog v-model="confirm" persistent ref="modalRef">
     <i class="material-icons light_gray absolute-top-right"
       title="Essa tela facilitará a criação de um bloco. Informe o 'Quantidade de andares' e 'Unidades por andar' para 'Gerar Bloco'. Caso a 'Primeira unidade' nao seja a 101, informe.">
       help
@@ -46,17 +47,14 @@
           <q-btn color="primary" @click="confirmar()" label="Confirmar" />
         </div>
     </div>
-  </q-modal>
+  </q-dialog>
 </template>
 
 <script>
-import { QBtn, QField, QInput, QModal } from 'quasar'
-import { required } from 'vuelidate/lib/validators'
 import { getBlocoNew } from './mixin.js'
 
 export default {
   components: {
-    QBtn, QField, QInput, QModal
   },
   data () {
     return {
@@ -69,17 +67,17 @@ export default {
       modo: 'INCLUSAO'
     }
   },
-  validations: {
+  /* validations: {
     bloco: {
       nome: { required },
       unidades: []
     },
     andares: { required },
     unidadesPorAndar: { required }
-  },
+  }, */
   methods: {
     async prepararInclusao () {
-      this.$v.bloco.$reset()
+      // this.$v.bloco.$reset()
       this.modo = 'INCLUSAO'
       await this.$refs.modalRef.show()
       return new Promise((resolve, reject) => {
@@ -136,7 +134,7 @@ export default {
             andarCorrente++
           }
           // defino o numero do andar
-          this.bloco.unidades[i] = {nome: contUnidade + 100 * andarCorrente, andar: andarCorrente}
+          this.bloco.unidades[i] = { nome: contUnidade + 100 * andarCorrente, andar: andarCorrente }
         }
       }
     },

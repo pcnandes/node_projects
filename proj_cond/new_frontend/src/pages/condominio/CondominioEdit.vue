@@ -1,6 +1,6 @@
 <template>
   <q-page class="justify-center pagina">
-    <botoes-crud @excluir="excluir()" @cancelar="cancelar()"
+    <my-botoes-crud @excluir="excluir()" @cancelar="cancelar()"
       :exibeExcluir="alteravel && !!condominio.id"
       :exibeConfirmar="alteravel" @confirmar="salvar()"
       labelConfirmar="Salvar"
@@ -43,7 +43,7 @@
             </div>
           </div>
         </div>
-      </q-collapsible>
+      </q-expansion-item>
     </q-list>
     <div v-if="condominioId && alteravel" class="barra-botoes">
       <q-btn icon="mdi-plus" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
@@ -58,15 +58,14 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
 import { getBlocoNew, getCondominioNew } from './mixin.js'
 import axios from 'axios'
 import AdicionarBloco from './AdicionarBloco.vue'
-import BotoesCrud from 'pages/shared/BotoesCrud'
+import MyBotoesCrud from '../../shared/MyBotoesCrud.vue'
 
 export default {
   name: 'CadastroCondominio',
-  components: { 'adicionar-bloco': AdicionarBloco, 'botoes-crud': BotoesCrud },
+  components: { 'adicionar-bloco': AdicionarBloco, 'my-botoes-crud': MyBotoesCrud },
   data () {
     return {
       condominioId: this.$route.params.id,
@@ -74,11 +73,11 @@ export default {
       condominio: getCondominioNew()
     }
   },
-  validations: {
+  /* validations: {
     condominio: {
       nome: { required }
     }
-  },
+  }, */
   methods: {
     carregarPagina () {
       if (this.condominioId) {
@@ -93,10 +92,10 @@ export default {
       }
     },
     salvar () {
-      this.$v.condominio.nome.$touch()
+      /* this.$v.condominio.nome.$touch()
       if (this.$v.condominio.nome.$error) {
         this.alertaErro('Informe o nome do Condomínio')
-      }
+      } */
       if (!this.condominio.id) {
         axios.post('/api/condominio', this.condominio)
           .then((res) => {

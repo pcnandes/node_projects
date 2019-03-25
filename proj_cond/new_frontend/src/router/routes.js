@@ -1,4 +1,4 @@
-import condominio from 'pages/cadastro/condominio/routes.js'
+// import condominio from 'pages/condominio/routes.js'
 
 const routes = [
   {
@@ -16,8 +16,12 @@ const routes = [
     ]
   },
   { path: '/condominio',
-    component: () => import('pages/cadastro/condominio/Condominio.vue'),
-    children: condominio,
+    component: () => import('layouts/Home.vue'),
+    children: [
+      { path: '', component: () => import('pages/condominio/CondominioList.vue'), meta: { perfis: ['ADMIN', 'SINDICO'] } },
+      { path: 'novo', component: () => import('pages/condominio/CondominioEdit.vue'), meta: { perfis: ['ADMIN', 'SINDICO'] } },
+      { path: ':id', component: () => import('pages/condominio/CondominioEdit.vue'), meta: { perfis: ['ADMIN', 'SINDICO'] } }
+    ],
     itemMenu: true,
     tituloMenu: 'Cadastro de condomínio',
     icone: 'mdi-domain'

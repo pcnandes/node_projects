@@ -30,23 +30,19 @@
 </template>
 
 <script>
-import { QBtn } from 'quasar'
 
 export default {
-  components: {
-    QBtn
-  },
   props: {
-    exibeCancelar: {type: Boolean, default: true},
-    labelCancelar: {type: String, default: 'Voltar'},
-    titleCancelar: {type: String, default: 'Voltar'},
-    exibeConfirmar: {type: Boolean, default: true},
-    labelConfirmar: {type: String, default: 'Confirmar'},
-    titleConfirmar: {type: String, default: 'Confirmar'},
-    exibeExcluir: {type: Boolean, default: true},
-    labelExcluir: {type: String, default: 'Excluir'},
-    titleExcluir: {type: String, default: 'Excluir'},
-    titulo: {type: String}
+    exibeCancelar: { type: Boolean, default: true },
+    labelCancelar: { type: String, default: 'Voltar' },
+    titleCancelar: { type: String, default: 'Voltar' },
+    exibeConfirmar: { type: Boolean, default: true },
+    labelConfirmar: { type: String, default: 'Confirmar' },
+    titleConfirmar: { type: String, default: 'Confirmar' },
+    exibeExcluir: { type: Boolean, default: true },
+    labelExcluir: { type: String, default: 'Excluir' },
+    titleExcluir: { type: String, default: 'Excluir' },
+    titulo: { type: String }
   },
   data () {
     return {

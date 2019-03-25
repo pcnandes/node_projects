@@ -41,7 +41,7 @@ module.exports = (sequelize, type) => {
       allowNull: true
     }
   },
-  { tableName: 'Funcionario' })
+  { tableName: 'funcionario' })
 
   Funcionario.associate = function ({ Usuario, FuncionarioCondominio, Condominio }) {
     Funcionario.belongsTo(Usuario, { as: 'usuario' })

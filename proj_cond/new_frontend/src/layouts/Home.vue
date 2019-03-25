@@ -39,8 +39,8 @@
       bordered
       content-class="bg-grey-3"
     >
-      <q-list v-for="(item, i) in itensMenu" :key="i">
-        <q-item clickable v-ripple>
+      <q-list v-for="(item, i) in itensMenu" :key="i" >
+        <q-item clickable v-ripple :to="item.path" @click.native="closeMenu()">
           <q-item-section avatar>
             <q-icon :name="item.icone" />
           </q-item-section>
@@ -75,7 +75,8 @@ export default {
     },
     itensMenu () {
       let retorno = []
-      console.log('aqui')
+      retorno = routes.filter(rota => rota.itemMenu)
+      /*
       routes.forEach(route => {
         if (route.children && route.children.length > 0) {
           route.children.forEach(rotaFilha => {
@@ -90,10 +91,11 @@ export default {
           let rotas = route.children.filter(children => {
           // TODO verificar permissoes de usuario
             return children.itemMenu
-          }) */
+          })
           // retorno = retorno.concat(rotas)
-        }
-      })
+    }
+      }) */
+      console.log('menu', retorno)
       return retorno
     }
   },
