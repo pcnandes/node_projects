@@ -12,6 +12,28 @@ exports.listar = function (usuario) {
   return Usuario.findAll()
 }
 
+exports.listarSemMorador = function (usuario) {
+  return Usuario.findAll({
+    where: {
+      perfis: {
+        [sequelize.Op.notLike]: '%MORADOR%'
+      }
+    },
+    include: [{ model: Unidade,
+        as: 'unidade',
+        include: [{
+          model: Bloco,
+          as: 'bloco',
+          include: [{
+            model: Condominio,
+            as: 'condominio'
+          }]
+        }]
+      }],
+    order: [['login', 'ASC']]
+  })
+}
+
 exports.carregar = function (id) {
   return Usuario.findByPk(id, {
     include: [{

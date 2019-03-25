@@ -29,7 +29,7 @@ module.exports = (sequelize, type) => {
       }
     },
     perfis: {
-      // type: type.ENUM('ADMIN', 'SINDICO', 'MORADOR'),
+      // type: type.ENUM('ADMIN', 'SINDICO', 'SUB-SINDICO', 'FUNCIONARIO', 'MORADOR'),
       type: type.STRING,
       get () {
         let perfis = this.getDataValue('perfis')
@@ -45,8 +45,9 @@ module.exports = (sequelize, type) => {
     ]
   })
 
-  Usuario.associate = function ({ Unidade }) {
+  Usuario.associate = function ({ Unidade, Funcionario }) {
     Usuario.belongsTo(Unidade, { as: 'unidade' })
+    Unidade.hasOne(Funcionario, { as: 'funcionario', allowNull: true })
   }
 
   return Usuario

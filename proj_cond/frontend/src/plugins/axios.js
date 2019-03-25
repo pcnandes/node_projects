@@ -5,7 +5,8 @@ export default ({ Vue }) => {
   // Vue.prototype.$axios = axios
   _vue.$axios = axios.create({
     baseURL: 'http://localhost:3000/',
-    timeout: 1000
+    // aguarda até 15 segundos
+    timeout: 15000
     // headers: {'X-Custom-Header': 'foobar'}
   })
 

@@ -1,6 +1,7 @@
 const { expect, initdb, db } = require('./config/helpers')
 const { Condominio, Bloco, Unidade, Usuario } = db
 const persist = require('./../../server/persist/condominioPersist')
+const bcrypt = require('bcrypt')
 
 const novoCondominio = {
   nome: 'condominio test',
@@ -201,8 +202,9 @@ describe('Teste Unitario do CondominioPersist', () => {
       .then(async data => {
         // Usuario.findByPk(data.blocos[0].unidades[0])
         let usuario = await data.blocos[0].unidades[0].getUsuario()
+        let senhaIguais = await verificaSenha(usuario.login, usuario.senha)
         expect(usuario.login).to.deep.equal(data.blocos[0].unidades[0].nome)
-        expect(usuario.senha).to.deep.equal(data.blocos[0].unidades[0].nome)
+        expect(senhaIguais).to.deep.equal(true)
         expect(data.blocos[0].unidades[0].dataValues).to.have.all.keys(
           ['bloco_id', 'id', 'nome', 'andar']
         )
@@ -233,4 +235,11 @@ function carregarUnidade () {
       include: ['unidades']
     }]
   })
+}
+
+// TODO incluir function dentro do usuario
+async function verificaSenha (senhaInformada, senhaUsuario) {
+  // uso o bcrypt, ou caso a senha nao tenha passada pelo bcript (usuario inserido manualmente no banco verifico se são iguais)
+  let retorno = await bcrypt.compareSync(senhaInformada, senhaUsuario) || senhaInformada === senhaUsuario
+  return retorno
 }

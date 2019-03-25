@@ -87,3 +87,7 @@ Regra para cadastrar usuario
 - administrador nao pode estar vinculado a codominio ou unidade
 - sindico tem q estar vinculado a um condominio e também pode estar a uma unidade
 
+
+-Quasar 1.0
+TODO
+- \router\index verificar se controle de perfil esta funcionando corretamente

@@ -81,13 +81,23 @@ export default {
   computed: {
     itensMenu () {
       let retorno = []
+      console.log('aqui')
       routes.forEach(route => {
         if (route.children && route.children.length > 0) {
+          route.children.forEach(rotaFilha => {
+            if (rotaFilha.itemMenu) retorno.push(rotaFilha)
+            if (rotaFilha.children && rotaFilha.children.length > 0) {
+              rotaFilha.children.forEach(rotaNeta => {
+                if (rotaNeta.itemMenu) retorno.push(rotaNeta)
+              })
+            }
+          })
+          /*
           let rotas = route.children.filter(children => {
           // TODO verificar permissoes de usuario
             return children.itemMenu
-          })
-          retorno = retorno.concat(rotas)
+          }) */
+          // retorno = retorno.concat(rotas)
         }
       })
       return retorno
@@ -100,7 +110,8 @@ export default {
   methods: {
     abrirCadastroUsuario () {
       let u = this.getUsuarioLogado.unidade
-      this.$router.push(`/condominio/${u.bloco.condominio.id}/${u.bloco.id}/${u.id}`)
+      if (u) this.$router.push(`/condominio/${u.bloco.condominio.id}/${u.bloco.id}/${u.id}`)
+      else this.$router.push(`/cadastro/${u.bloco.condominio.id}/${u.bloco.id}/${u.id}`)
     },
     logout () {
       this.$store.dispatch('auth/logout')
@@ -130,6 +141,7 @@ export default {
   }
   .formulario {
     min-height: calc(100vh - 450px);
+    margin-bottom: 40px;
   }
   .barra-botoes {
       display: flex;

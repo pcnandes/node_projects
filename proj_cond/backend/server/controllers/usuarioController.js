@@ -6,13 +6,31 @@ const { onError, onErrorNaoAutorizado } = require('./../api/responses/errorHandl
 const bcrypt = require('bcrypt')
 let usuarioLogado = null
 
+exports.listar = async function (req, res) {
+  try {
+    let retorno = await persist.listarSemMorador()
+    return onSuccess(res, retorno)
+  } catch (err) {
+    return onError(res, 'Erro ao listar os usuarios', err)
+  }
+}
+
+exports.novo = async function (req, res, next) {
+}
+
+exports.carregar = async function (req, res, next) {
+}
+
+exports.salvar = async function (req, res, next) {
+}
+
 exports.login = async function (req, res, next) {
   let credenciais = req.body
   try {
     if (credenciais.login && credenciais.senha) {
       let usuarioLogado = await persist.findByLogin(credenciais)
       if (usuarioLogado && await verificaSenha(credenciais.senha, usuarioLogado.senha)) {
-        const token = gerarToken(usuarioLogado)
+        const token = gerarToken(usuarioLogado, credenciais.lembreDeMim)
         return onSuccess(res, { 'token': token })
       }
       return onErrorNaoAutorizado(res, 'Usuário ou senha inválidos')
@@ -38,7 +56,7 @@ exports.retoken = function (req, res, next) {
           let login = decoded.usuario.login
           let bloco = decoded.usuario.unidade ? decoded.usuario.unidade.bloco.id : null
           const usuario = await persist.findByLogin({ login, bloco })
-          token = await gerarToken(usuario)
+          token = await gerarToken(usuario, null)
           return onSuccess(res, { 'token': token })
         } else {
           return onErrorNaoAutorizado(res, 'Erro ao reautenticar!')
@@ -112,13 +130,14 @@ function carregarUsuario (req) {
   return retorno
 }
 
-function gerarToken (usuario) {
+function gerarToken (usuario, infinito) {
   usuario = JSON.parse(JSON.stringify(usuario))
   return jwt.sign({ usuario }, process.env.SECRET, {
-    expiresIn: tempoExpiracao // '1h'
+    expiresIn: !infinito ? tempoExpiracao : 60 * 60 // 1h, depous alterar para 1 semana
   })
 }
 
+// TODO incluir function dentro do usuario
 async function verificaSenha (senhaInformada, senhaUsuario) {
   // uso o bcrypt, ou caso a senha nao tenha passada pelo bcript (usuario inserido manualmente no banco verifico se são iguais)
   let retorno = await bcrypt.compareSync(senhaInformada, senhaUsuario) || senhaInformada === senhaUsuario

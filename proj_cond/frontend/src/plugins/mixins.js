@@ -60,6 +60,14 @@ export default ({ Vue }) => {
       }
     },
     computed: {
+      getUsuarioLogado: function () {
+        return this.$store.getters['auth/getUsuario']
+      },
+      getCondominioUsuarioLogado: function () {
+        let usuario = this.getUsuarioLogado
+        if (!usuario.unidade) return null
+        else if (usuario.unidade.bloco) return usuario.unidade.bloco.condominio
+      },
       isMobile: function () {
         return !!this.$q.platform.is.mobile || this.$q.screen.lt.md
       },
@@ -68,9 +76,6 @@ export default ({ Vue }) => {
       },
       getNavItens: function () {
         return this.$store.getters['auth/getNavItens']
-      },
-      getUsuarioLogado: function () {
-        return this.$store.getters['auth/getUsuario']
       }
     }
   })

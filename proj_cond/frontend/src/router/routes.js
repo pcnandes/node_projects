@@ -20,12 +20,18 @@ const routes = [
         tituloMenu: 'Cadastro de condomínio',
         icone: 'mdi-domain'
       },
-      { path: '/cadastro_usuario',
-        component: () => import('pages/CadastroUsuario.vue'),
+      /* { path: '/cadastro_funcionario',
+        component: () => import('pages/CadastroFuncionarioList.vue'),
         itemMenu: true,
-        tituloMenu: 'Cadastro de usuário',
-        icone: 'mdi-account'
+        tituloMenu: 'Cadastro de funcionário',
+        icone: 'mdi-account',
+        meta: {perfis: ['ADMIN', 'SINDICO']}
       },
+      { path: '/cadastro_funcionario/novo',
+        component: () => import('pages/CadastroFuncionarioEdit.vue'),
+        itemMenu: false,
+        meta: {perfis: ['ADMIN', 'SINDICO']}
+      }, */
       { path: '/cadastro_colaborador',
         component: () => import('pages/CadastroColaborador.vue'),
         itemMenu: true,

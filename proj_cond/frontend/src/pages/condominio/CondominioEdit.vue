@@ -155,7 +155,6 @@ export default {
               throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
             })
         })
-        .catch(() => {})
     },
     detalharUnidade (blocoId, unidadeId) {
       this.$router.push(`/condominio/${this.condominio.id}/${blocoId}/${unidadeId}`)

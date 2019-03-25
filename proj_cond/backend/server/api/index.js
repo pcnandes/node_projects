@@ -11,6 +11,8 @@ const errorHandlerApi = require('./responses/errorHandlerApi')
 const publicRoutes = require('./routes/publicRoutes')
 const condominioRoutes = require('./routes/condominioRoutes')
 const unidadeRoutes = require('./routes/unidadeRoutes')
+const usuarioRoutes = require('./routes/usuarioRoutes')
+const funcionarioRoutes = require('./routes/funcionarioRoutes')
 
 const app = express()
 
@@ -35,5 +37,7 @@ app.use(errorHandlerApi)
 app.use('/api/public', publicRoutes)
 app.use('/api/condominio', condominioRoutes)
 app.use('/api/unidade', unidadeRoutes)
+app.use('/api/usuario', usuarioRoutes)
+app.use('/api/funcionario', funcionarioRoutes)
 
 module.exports = app
