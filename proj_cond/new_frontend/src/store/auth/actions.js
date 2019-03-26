@@ -3,15 +3,15 @@ import { axiosInstance } from 'boot/axios'
 import { ID_TOKEN } from '../../const'
 
 export const login = ({ commit, dispatch }, data) => {
-  let credenciais = JSON.parse(JSON.stringify(data.credenciais))
+  // let credenciais = JSON.parse(JSON.stringify(data.credenciais))
   // TODO estou fazendo essa gambi pq o emitValue do componente nao funciona
-  if (credenciais.condominio) credenciais.condominio = credenciais.condominio.id
-  if (credenciais.bloco) credenciais.bloco = credenciais.bloco.id
-  return axiosInstance.post('/api/public/login', credenciais)
+  // if (credenciais.condominio) credenciais.condominio = credenciais.condominio.id
+  // if (credenciais.bloco) credenciais.bloco = credenciais.bloco.id
+  return axiosInstance.post('/api/public/login', data.credenciais)
     .then((res) => {
       let retorno = dispatch('setToken', res.data.token)
-      commit('setCondominioLogin', data.credenciais.condominio)
-      commit('setBlocoLogin', data.credenciais.bloco)
+      // commit('setCondominioLogin', data.credenciais.condominio)
+      // commit('setBlocoLogin', data.credenciais.bloco)
       return retorno
     })
     .catch((err) => {
@@ -75,6 +75,8 @@ export const setToken = ({ commit, dispatch, state, getters }, encodedToken) => 
         localStorage.setItem(ID_TOKEN, JSON.stringify(encodedToken))
         commit('setUsuario', usuario)
         commit('setExpiracaoToken', dataExpiracao)
+        commit('setCondominioLogin', decodedToken.condominioLogin)
+        commit('setBlocoLogin', decodedToken.blocoLogin)
 
         /*
         // confirmar que usuário logado possui condominio e bloco informados no login

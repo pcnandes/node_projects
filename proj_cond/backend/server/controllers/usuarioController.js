@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const tempoExpiracao = 60 * 3 // 3 minutos
 const persist = require('../persist/usuarioPersist')
+const condominioPersist = require('../persist/condominioPersist')
 const { onSuccess } = require('./../api/responses/successHandler')
 const { onError, onErrorNaoAutorizado } = require('./../api/responses/errorHandler')
 const bcrypt = require('bcrypt')
@@ -25,12 +26,15 @@ exports.salvar = async function (req, res, next) {
 }
 
 exports.login = async function (req, res, next) {
-  let credenciais = req.body
+  let credenciais = { login: req.body.login, senha: req.body.senha, condominio: req.body.condominio.id, bloco: req.body.bloco.id }
   try {
     if (credenciais.login && credenciais.senha) {
       let usuarioLogado = await persist.findByLogin(credenciais)
       if (usuarioLogado && await verificaSenha(credenciais.senha, usuarioLogado.senha)) {
-        const token = gerarToken(usuarioLogado, credenciais.lembreDeMim)
+        let condominioLogin = await condominioPersist.carregar(credenciais.condominio)
+        let blocoLogin = condominioLogin.blocos.filter(bl => bl.id === credenciais.bloco)
+        blocoLogin = blocoLogin.length > 0 ? blocoLogin[0] : null
+        const token = gerarToken({ usuario: usuarioLogado, condominioLogin, blocoLogin }, credenciais.lembreDeMim)
         return onSuccess(res, { 'token': token })
       }
       return onErrorNaoAutorizado(res, 'Usuário ou senha inválidos')
@@ -54,9 +58,10 @@ exports.retoken = function (req, res, next) {
         if (!err) {
           // const usuario = await persist.carregar(decoded.usuario.id)
           let login = decoded.usuario.login
-          let bloco = decoded.usuario.unidade ? decoded.usuario.unidade.bloco.id : null
+          let bloco = decoded.blocoLogin ? decoded.blocoLogin.id : null
+          console.log('decoded', decoded)
           const usuario = await persist.findByLogin({ login, bloco })
-          token = await gerarToken(usuario, null)
+          token = await gerarToken({ usuario, condominioLogin: [decoded.condominioLogin], blocoLogin: [decoded.blocoLogin] }, null)
           return onSuccess(res, { 'token': token })
         } else {
           return onErrorNaoAutorizado(res, 'Erro ao reautenticar!')
@@ -130,10 +135,10 @@ function carregarUsuario (req) {
   return retorno
 }
 
-function gerarToken (usuario, infinito) {
-  usuario = JSON.parse(JSON.stringify(usuario))
-  return jwt.sign({ usuario }, process.env.SECRET, {
-    expiresIn: !infinito ? tempoExpiracao : 60 * 60 // 1h, depous alterar para 1 semana
+function gerarToken (obj, lembrar) {
+  obj = JSON.parse(JSON.stringify(obj))
+  return jwt.sign({ ...obj }, process.env.SECRET, {
+    expiresIn: !lembrar ? tempoExpiracao : 60 * 60 // 1h, depous alterar para 1 semana
   })
 }
 

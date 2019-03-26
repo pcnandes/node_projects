@@ -95,7 +95,6 @@ export default {
           // retorno = retorno.concat(rotas)
     }
       }) */
-      console.log('menu', retorno)
       return retorno
     }
   },

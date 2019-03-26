@@ -1,23 +1,23 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import VuexPersistence from 'vuex-persist'
+// import VuexPersistence from 'vuex-persist'
 
-// import example from './module-example'
 import auth from './auth'
 
 Vue.use(Vuex)
 
+/*
 const vuexLocal = new VuexPersistence({
-  storage: window.localStorage
-  /* reducer: (state) => ([
+  storage: window.localStorage,
+  reducer: (state) => ([
     state.auth.condominioLogin,
     state.auth.blocoLogin
-  ]) */
-  /* reducer: (state) => ([
-    { condominioLogin: state.auth.condominioLogin },
-    { blocoLogin: state.auth.blocoLogin }
-  ]) */
-})
+  ])
+  // reducer: (state) => ([
+  //  { condominioLogin: state.auth.condominioLogin },
+  //  { blocoLogin: state.auth.blocoLogin }
+  // ])
+}) */
 
 /*
  * If not building with SSR mode, you can
@@ -29,8 +29,8 @@ export default function (/* { ssrContext } */) {
     modules: {
       auth
       // example
-    },
-    plugins: [vuexLocal.plugin]
+    }
+    // plugins: [vuexLocal.plugin]
   })
 
   return Store

@@ -2,16 +2,15 @@
 <div>
   <q-select
         filled
-        :value="value" @input="updateValue()"
+        v-model="valor" @input="updateValue()"
         :options="options"
         :option-value="optionValue"
         :option-label="optionLabel"
-        map-options
+        :map-options="mapOptions"
         :label="label"
         ref="mySelect"
       />
-  <!--
-  <q-select :value="value" @input="updateValue()" ref="mySelect"
+  <!-- <q-select :value="value" @input="updateValue()" ref="mySelect"
     :options="options" :label="label" :autofocus="autofocus"
     filled bg-color="grey-5" color="blue-grey-14" transition-show="scale" transition-hide="scale"
     :rules="[val => !required || !!val]" :option-label="optionLabel" :option-value="optionValue"
@@ -23,7 +22,6 @@
       <slot name="depois_fora"></slot>
     </template>
   </q-select> -->
-  value: {{value}}
 </div>
 </template>
 
@@ -43,13 +41,14 @@ export default {
   },
   data () {
     return {
+      valor: this.value
     }
   },
   methods: {
     updateValue () {
       // this.$emit('input', this.valor)
-      console.log('testeeee', this.value)
-      this.$emit('input', this.value)
+      console.log('testeeee', this.valor)
+      this.$emit('input', this.valor)
     },
     hasError () {
       this.$refs.mySelect.validate()
