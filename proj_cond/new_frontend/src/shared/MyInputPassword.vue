@@ -1,7 +1,7 @@
 <template>
-  <q-input v-model.trim="valor" :label="label" :type="isPwd ? 'password' : 'text'" @input="updateValue()"
+  <q-input :value="value" :label="label" :type="isPwd ? 'password' : 'text'" @input="updateValue"
     filled bg-color="grey-5" color="blue-grey-14" :autofocus="autofocus"
-    :rules="[val => !required || !!val]" ref="myInputPass">
+    :rules="[val => !required || !!val]" ref="myInputPass" :error="comErro">
     <template v-slot:append>
       <q-icon
         :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -17,6 +17,7 @@
 
 <script>
 export default {
+  name: 'my-input-password',
   props: {
     label: { type: String, required: false, default: 'Senha' },
     value: { required: true },
@@ -26,16 +27,17 @@ export default {
   data () {
     return {
       isPwd: true,
-      valor: this.value
+      comErro: false
     }
   },
   methods: {
-    updateValue () {
-      this.$emit('input', this.valor)
+    updateValue (itemValue) {
+      this.$emit('input', itemValue)
     },
     hasError () {
       this.$refs.myInputPass.validate()
-      return this.$refs.myInputPass.hasError
+      this.comErro = this.$refs.myInputPass.hasError
+      return this.comErro
     }
   }
 }

@@ -51,32 +51,10 @@
           <q-icon name="mdi-textbox-password" />
         </template>
       </q-input> -->
-      <q-select
-        filled
-        v-model="form.condominio"
-        :options="condominios"
-        option-value="id"
-        option-label="nome"
-        map-options
-        label="Condomínio"
-        @input="selecionarBloco()"
-        ref="condominio"
-      />
-      <q-select
-        filled
-        v-model="form.bloco"
-        :options="blocos"
-        option-value="id"
-        option-label="nome"
-        map-options
-        label="Bloco"
-        ref="bloco"
-      />
-      <!--
       <my-select ref="condominio" icon="mdi-domain" v-model="form.condominio" :options="condominios"
-        option-label="nome" option-value="id" label="Condomínio" required map-options/>
+        option-label="nome" option-value="id" label="Condomínio" required map-options @input="selecionaBloco"/>
       <my-select ref="bloco" icon="mdi-office-building" v-show="form.condominio" v-model="form.bloco"
-        :options="blocos" option-label="nome" option-value="id" label="Bloco" required map-options/> -->
+        :options="blocos" option-label="nome" option-value="id" label="Bloco" required map-options/>
       <my-input-text ref="usuario" icon="mdi-account" v-model.trim="form.login" label="Usuário" autofocus required />
       <my-input-password class="q-mb-lg" ref="senha" icon="mdi-textbox-password" v-model="form.senha" required />
       <q-btn color="primary" size="18px" type="submit">Login</q-btn>
@@ -89,13 +67,13 @@
 
 <script>
 
-// import MySelect from '../shared/MySelect'
+import MySelect from '../shared/MySelect'
 import MyInputText from '../shared/MyInputText'
 import MyInputPassword from '../shared/MyInputPassword'
 
 export default {
   name: 'Login',
-  components: { 'my-input-text': MyInputText, 'my-input-password': MyInputPassword }, // , 'my-select': MySelect
+  components: { 'my-input-text': MyInputText, 'my-input-password': MyInputPassword, 'my-select': MySelect },
   data () {
     return {
       isPwd: true,
@@ -112,18 +90,11 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.$refs.condominio.validate()
-      this.$refs.bloco.validate()
-      // this.$refs.usuario.validate()
-      // this.$refs.senha.validate()
-      let erroCondBloco = this.$refs.condominio.hasError || this.$refs.bloco.hasError
-      // let erroUsuSenha = this.$refs.usuario.hasError || this.$refs.senha.hasError
-
       // DESCOMENTAR quando estiver OK
-      // let erroCondBloco = this.$refs.condominio.hasError() || this.$refs.bloco.hasError()
+      let erroCondBloco = this.$refs.condominio.hasError() || this.$refs.bloco.hasError()
       let erroUsuSenha = this.$refs.usuario.hasError() || this.$refs.senha.hasError()
       // se nao existem condominios cadastrados, libera informar apenas login e senha
-      if ((!this.loginSemInfCondominio && erroCondBloco && erroUsuSenha) ||
+      if ((!this.loginSemInfCondominio && (erroCondBloco || erroUsuSenha)) ||
         (this.loginSemInfCondominio && erroUsuSenha)) {
         // this.$q.notify('Preencha as informaçoes de login.')
         this.alertaErro('Preencha as informaçoes de login.')
@@ -147,13 +118,10 @@ export default {
         })
         .catch((err) => {
           console.error('ERRO: ', err.response.erro, err.erro)
-          // this.alertaErro(err.message)
         })
     },
-    selecionarBloco () {
-      // this.$refs.bloco_sel.optionIndex = 0
-      this.form.bloco = this.form.condominio.blocos[0]
-      console.log('aqui', this.form.condominio.blocos[0])
+    selecionaBloco (condominio) {
+      this.form.bloco = condominio.blocos[0]
     }
   },
   mounted () {
