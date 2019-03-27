@@ -1,16 +1,16 @@
 <template>
 <div>
-  <q-select
+ <!-- <q-select
         filled
-        v-model="valor" @input="updateValue()"
+        :value="value" @input="updateValue"
         :options="options"
         :option-value="optionValue"
         :option-label="optionLabel"
         :map-options="mapOptions"
         :label="label"
         ref="mySelect"
-      />
-  <!-- <q-select :value="value" @input="updateValue()" ref="mySelect"
+      /> -->
+  <q-select :value="value" @input="updateValue" ref="mySelect"
     :options="options" :label="label" :autofocus="autofocus"
     filled bg-color="grey-5" color="blue-grey-14" transition-show="scale" transition-hide="scale"
     :rules="[val => !required || !!val]" :option-label="optionLabel" :option-value="optionValue"
@@ -21,12 +21,13 @@
     <template v-slot:after>
       <slot name="depois_fora"></slot>
     </template>
-  </q-select> -->
+  </q-select>
 </div>
 </template>
 
 <script>
 export default {
+  name: 'my-select',
   props: {
     label: { type: String, required: true },
     value: { required: true },
@@ -41,14 +42,11 @@ export default {
   },
   data () {
     return {
-      valor: this.value
     }
   },
   methods: {
-    updateValue () {
-      // this.$emit('input', this.valor)
-      console.log('testeeee', this.valor)
-      this.$emit('input', this.valor)
+    updateValue (itemSelect) {
+      this.$emit('input', itemSelect)
     },
     hasError () {
       this.$refs.mySelect.validate()

@@ -1,5 +1,5 @@
 <template>
-  <q-input v-model.trim="valor" :label="label" @input="updateValue()"
+  <q-input :value="value" :label="label" @input="updateValue"
     filled  bg-color="grey-5" color="blue-grey-14" :autofocus="autofocus"
     :rules="[val => !required || !!val]" ref="myInputText">
     <template v-if="icon" v-slot:prepend>
@@ -10,6 +10,7 @@
 
 <script>
 export default {
+  name: 'my-input-text',
   props: {
     label: { type: String, required: true },
     value: { required: true },
@@ -19,12 +20,11 @@ export default {
   },
   data () {
     return {
-      valor: this.value
     }
   },
   methods: {
-    updateValue () {
-      this.$emit('input', this.valor)
+    updateValue (itemValue) {
+      this.$emit('input', itemValue)
     },
     hasError () {
       this.$refs.myInputText.validate()
