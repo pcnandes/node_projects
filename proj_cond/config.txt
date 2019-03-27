@@ -62,6 +62,13 @@ chamada para teste compilando com babel
 "unit-test": "NODE_ENV=test mocha --opts ./test/unit/config/mocha.opts --require babel-core/register --require babel-polyfill ./test/unit/condominio.test.js"
 
 
+**** DICAS VUE JS ***
+- a reatividade (detecção de mudança e renderização) do vue é sempre de cima para baixo;
+- para propagar mudança de baixo para cima usar os eventos;
+- não fazer binding (v-model) com as props, somente o que ta no data();
+- se passar um objeto com valor de prop, então alterações nos atributos do objeto são propagadas, mas mudar o objeto em si não propaga;
+- evitar copiar props para o data(), pq quando o prop mudar no componente pai, ele não vai propagar para o data() do filho, a não ser que voce use watches, mas é ruim fazer dessa maneira
+
 TODO 
 ajustar usuario mascarando senha (https://medium.com/@jgrisafe/custom-user-authentication-with-express-sequelize-and-bcrypt-667c4c0edef5)
 verificar uso do lodash
