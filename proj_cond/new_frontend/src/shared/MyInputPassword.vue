@@ -1,6 +1,6 @@
 <template>
   <q-input :value="value" :label="label" :type="isPwd ? 'password' : 'text'" @input="updateValue"
-    filled bg-color="grey-5" color="blue-grey-14" :autofocus="autofocus"
+    filled bg-color="grey-5" color="blue-grey-14" :autofocus="autofocus" class="q-pa-xs q-mb-sm"
     :rules="[val => !required || !!val]" ref="myInputPass" :error="comErro"
     :readonly="readonly" :disable="disable">
     <template v-slot:append>

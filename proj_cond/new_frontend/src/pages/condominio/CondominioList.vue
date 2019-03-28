@@ -6,7 +6,7 @@
           option-label="nome" option-value="id" label="Condomínio" required map-options>
         </my-select>
       </div>
-      <q-btn icon="mdi-check" color="blue-grey-14" size="20px" @click="detalhar()">
+      <q-btn icon="mdi-check" color="blue-grey-14" size="20px" class="q-mt-xs q-mb-md" @click="detalhar()">
         <q-tooltip>
           Selecionar condomínio
         </q-tooltip>

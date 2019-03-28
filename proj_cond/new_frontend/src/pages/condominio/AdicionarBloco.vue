@@ -1,24 +1,31 @@
 <template>
   <!--<q-modal no-backdrop-dismiss no-esc-dismiss ref="modalRef"
     :content-css="{minWidth: '50vw', maxWidth: '80vw'}"> -->
-  <q-dialog persistent ref="modalRef">
-    <i class="material-icons light_gray absolute-top-right"
-      title="Essa tela facilitará a criação de um bloco. Informe o 'Quantidade de andares' e 'Unidades por andar' para 'Gerar Bloco'. Caso a 'Primeira unidade' nao seja a 101, informe.">
-      help
-    </i>
-    <div class="doc-container justify-center gutter-y-sm" style="padding: 20px;">
-        <div class="row justify-center q-display-1">
-          Cadastro Bloco
-        </div>
-        <div class="row gutter-sm" >
-          <my-input-text ref="nome" icon="mdi-account" v-model.trim="bloco.nome"
-            label="Nome" autofocus required/>
-          <my-input-text ref="numeroPrimeiraUnidade" icon="mdi-account" v-model.trim="numeroPrimeiraUnidade"
-            label="Primeira Unidade" autofocus required/>
-          <my-input-text ref="andares" icon="mdi-account" v-model.trim="andares"
-            label="Qtd. andares" autofocus required/>
-          <my-input-text ref="unidadesPorAndar" icon="mdi-account" v-model.trim="unidadesPorAndar"
-            label="Unidades por andar" autofocus required/>
+  <q-dialog persistent ref="modalRef" :maximized="isMobile">
+    <q-card style="min-width: 600px">
+      <q-bar dark class="bg-primary text-white">
+        <q-icon name="mdi-office-building"/>
+        <div class="col text-center text-weight-bold">Cadastro Bloco</div>
+        <q-space />
+        <i class="material-icons light_gray">
+          <q-tooltip>Essa tela facilitará a criação de um bloco. Informe o 'Quantidade de andares' e 'Unidades por andar' para 'Gerar Bloco'. Caso a 'Primeira unidade' nao seja a 101, informe.</q-tooltip>
+          help
+        </i>
+        <q-btn dense flat icon="close" v-close-popup>
+          <q-tooltip>Fechar / Cancelar</q-tooltip>
+        </q-btn>
+      </q-bar>
+      <div style="margin: 20px;">
+        <div class="row" >
+          <my-input-text ref="nome" v-model.trim="bloco.nome"
+            counter maxlength="50" label="Nome" autofocus required
+            class="col-12" />
+          <my-input-text ref="numeroPrimeiraUnidade" v-model.trim="numeroPrimeiraUnidade"
+            label="Primeira Unidade" class="col-6" autofocus required/>
+          <my-input-text ref="andares" v-model.trim="andares"
+            label="Qtd. andares" class="col-6" autofocus required/>
+          <my-input-text ref="unidadesPorAndar" v-model.trim="unidadesPorAndar"
+            label="Unidades por andar" class="col-6" autofocus required/>
           <div class="col-12 row justify-end" v-if="modo==='INCLUSAO'">
             <q-btn class="col-xs-12 col-md-auto" color="secondary" @click="gerarBloco()" label="Gerar bloco" />
           </div>
@@ -54,10 +61,11 @@
           </div>
         </div>
         <div class="barra-botoes">
-          <q-btn color="faded" @click="cancelar()" label="Cancelar" />
+          <q-btn color="grey-14" @click="cancelar()" label="Cancelar" />
           <q-btn color="primary" @click="confirmar()" label="Confirmar" />
         </div>
-    </div>
+      </div>
+    </q-card>
   </q-dialog>
 </template>
 

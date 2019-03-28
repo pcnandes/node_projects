@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'my-input-text',
+  name: 'my-input-number',
   props: {
     label: { type: String, required: true },
     value: { required: true },

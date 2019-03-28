@@ -10,7 +10,7 @@
         :label="label"
         ref="mySelect"
       /> -->
-  <q-select :value="value" @input="updateValue" ref="mySelect"
+  <q-select :value="value" @input="updateValue" ref="mySelect" class="q-pa-xs q-mb-sm"
     :options="options" :label="label" :autofocus="autofocus"
     filled :bg-color="bgColor" :color="color" transition-show="scale" transition-hide="scale"
     :rules="[val => !required || !!val]" :option-label="optionLabel" :option-value="optionValue"

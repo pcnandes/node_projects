@@ -10,7 +10,7 @@
         label="Nome do Condomínio" autofocus required v-bind:class="[!alteravel ? 'col-xs-12' : 'col-md-10 col-xs-12']"
         maxlength="50" counter/>
       <my-input-text v-model.trim="condominio.situacao"
-        label="Situação" class="col-md-2 col-xs-12 q-pl-sm" :bg-color="classSituacao[1]" readonly/>
+        label="Situação" class="col-md-2 col-xs-12 q-pl-sm q-mb-lg" :bg-color="classSituacao[1]" readonly/>
     </div>
 
     <q-list v-if="condominioId && condominio.blocos && condominio.blocos.length>0" highlight class="col-12 q-my-lg">
