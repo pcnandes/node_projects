@@ -1,7 +1,7 @@
 <template>
   <!--<q-modal no-backdrop-dismiss no-esc-dismiss ref="modalRef"
     :content-css="{minWidth: '50vw', maxWidth: '80vw'}"> -->
-  <q-dialog v-model="confirm" persistent ref="modalRef">
+  <q-dialog persistent ref="modalRef">
     <i class="material-icons light_gray absolute-top-right"
       title="Essa tela facilitará a criação de um bloco. Informe o 'Quantidade de andares' e 'Unidades por andar' para 'Gerar Bloco'. Caso a 'Primeira unidade' nao seja a 101, informe.">
       help
@@ -11,7 +11,18 @@
           Cadastro Bloco
         </div>
         <div class="row gutter-sm" >
-          <q-field :count="10" class="col-md-6 col-xs-12" v-bind:class="modo==='ALTERACAO'?'col-md-12':''">
+          <my-input-text ref="nome" icon="mdi-account" v-model.trim="bloco.nome"
+            label="Nome" autofocus required/>
+          <my-input-text ref="numeroPrimeiraUnidade" icon="mdi-account" v-model.trim="numeroPrimeiraUnidade"
+            label="Primeira Unidade" autofocus required/>
+          <my-input-text ref="andares" icon="mdi-account" v-model.trim="andares"
+            label="Qtd. andares" autofocus required/>
+          <my-input-text ref="unidadesPorAndar" icon="mdi-account" v-model.trim="unidadesPorAndar"
+            label="Unidades por andar" autofocus required/>
+          <div class="col-12 row justify-end" v-if="modo==='INCLUSAO'">
+            <q-btn class="col-xs-12 col-md-auto" color="secondary" @click="gerarBloco()" label="Gerar bloco" />
+          </div>
+          <!--<q-field :count="10" class="col-md-6 col-xs-12" v-bind:class="modo==='ALTERACAO'?'col-md-12':''">
             <q-input v-model="bloco.nome" type="text" float-label="Nome do bloco"
               @blur="$v.bloco.nome.$touch" :error="$v.bloco.nome.$error"/>
           </q-field>
@@ -28,7 +39,7 @@
           </q-field>
           <div class="col-12 row justify-end" v-if="modo==='INCLUSAO'">
             <q-btn class="col-xs-12 col-md-auto" color="secondary" @click="gerarBloco()" label="Gerar bloco" />
-          </div>
+          </div> -->
         </div>
         <div class="row col-12 justify-center">
           <div style="display: table;">
@@ -52,10 +63,10 @@
 
 <script>
 import { getBlocoNew } from './mixin.js'
+import MyInputText from '../../shared/MyInputText'
 
 export default {
-  components: {
-  },
+  components: { 'my-input-text': MyInputText },
   data () {
     return {
       bloco: getBlocoNew(),
@@ -87,7 +98,7 @@ export default {
     },
     async prepararAlteracao (bloco) {
       try {
-        this.$v.bloco.$reset()
+        // this.$v.bloco.$reset()
         this.bloco = JSON.parse(JSON.stringify(bloco))
         this.modo = 'ALTERACAO'
         await this.$refs.modalRef.show()
@@ -103,18 +114,18 @@ export default {
       this.$refs.modalRef.hide()
     },
     confirmar () {
-      this.$v.bloco.$touch()
-      if (this.$v.bloco.$error || this.bloco.unidades.length === 0) {
-        this.$q.notify('Preencha as informações do bloco e clique em Gerar Bloco.')
-      } else {
-        if (this.modo === 'ALTERACAO') {
-          // Object.assign(this.value, this.bloco)
-          this.promiseResolve(this.bloco)
-        } else if (this.modo === 'INCLUSAO') {
-          this.promiseResolve(this.bloco)
-        }
-        this.$refs.modalRef.hide()
+      // this.$v.bloco.$touch()
+      // if (this.$v.bloco.$error || this.bloco.unidades.length === 0) {
+      //  this.$q.notify('Preencha as informações do bloco e clique em Gerar Bloco.')
+      // } else {
+      if (this.modo === 'ALTERACAO') {
+        // Object.assign(this.value, this.bloco)
+        this.promiseResolve(this.bloco)
+      } else if (this.modo === 'INCLUSAO') {
+        this.promiseResolve(this.bloco)
       }
+      this.$refs.modalRef.hide()
+      // }
     },
     gerarBloco () {
       this.$v.andares.$touch()

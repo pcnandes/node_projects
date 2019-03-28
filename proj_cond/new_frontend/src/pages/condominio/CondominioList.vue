@@ -1,19 +1,6 @@
 <template>
   <q-page class="justify-center pagina">
-      <!-- <q-list v-if="condominios.length>0" highlight class="col-12">
-        <q-list-header>Condomínios cadastrados</q-list-header>
-        <q-item v-for="c in condominios" :key="c.id" @click.native="detalhar(c)">
-          <q-item-side>
-            <q-item-tile icon="mdi-domain" color="primary" />
-          </q-item-side>
-          <q-item-main :label="c.nome" />
-        </q-item>
-      </q-list>
-      <p v-else>Nenhum condomínio cadastrado</p>
-      <div class="barra-botoes">
-        <q-btn icon="mdi-plus" label="Cadastrar Condomínio" @click="novo()" color="secondary"/>
-      </div> -->
-      <div class="row q-mb-xl" v-if="condominios.length>0">
+    <div class="row q-mb-xl" v-if="condominios.length>0">
       <div class="col-8 q-mr-xs">
         <my-select icon="mdi-domain" ref="condominio" v-model="condominio" :options="condominios"
           option-label="nome" option-value="id" label="Condomínio" required map-options>
@@ -56,7 +43,8 @@ export default {
         })
     },
     detalhar () {
-      this.$router.push('/condominio/' + this.condominio.id)
+      if (this.$refs.condominio.hasError()) this.alertaErro('Selecione o condominio.')
+      else this.$router.push('/condominio/' + this.condominio.id)
     },
     novo () {
       this.$router.push('/condominio/novo')

@@ -1,5 +1,5 @@
 <template>
-  <q-input :value="value" :label="label" @input="updateValue"
+  <q-input :value="value" :label="label" @input="updateValue" class="col-12"
     filled  bg-color="grey-5" color="blue-grey-14" :autofocus="autofocus"
     :rules="[val => !required || !!val]" ref="myInputText">
     <template v-if="icon" v-slot:prepend>
