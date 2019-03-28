@@ -57,7 +57,7 @@
         :options="blocos" option-label="nome" option-value="id" label="Bloco" required map-options/>
       <my-input-text ref="usuario" icon="mdi-account" v-model.trim="form.login" label="Usuário" autofocus required />
       <my-input-password class="q-mb-lg" ref="senha" icon="mdi-textbox-password" v-model="form.senha" required />
-      <q-btn color="primary" size="18px" type="submit">Login</q-btn>
+      <q-btn color="primary" size="17px" type="submit">Login</q-btn>
       <q-checkbox v-model="form.lembreDeMim" color="blue-grey-14" label="Lembre-se de mim" />
     </form>
   </q-page>

@@ -6,19 +6,11 @@
       labelConfirmar="Salvar"
       :titulo="!alteravel ? condominio.nome : null" />
     <div class="row" v-bind:class="[$q.screen.lt.sm ? '' : 'gutter-sm']" v-if="alteravel">
-      <!-- <q-field :count="50" v-bind:class="[!alteravel ? 'col-xs-12' : 'col-md-10 col-xs-12']">
-        <q-input v-model="condominio.nome" float-label="Nome do Condomínio"/>
-      </q-field> -->
-        <my-input-text ref="nome" icon="mdi-account" v-model.trim="condominio.nome"
-          label="Nome do Condomínio" autofocus required v-bind:class="[!alteravel ? 'col-xs-12' : 'col-md-10 col-xs-12']"/>
-        <div class="col-md-2 col-xs-12" v-bind:class="'text-'+classSituacao[1]">
-          {{condominio.situacao}}
-        </div>
-      <!-- <q-field class="col-md-2 col-xs-12" label="Situação" orientation="vertical">
-        <div class="col-md-2 col-xs-12" v-bind:class="'text-'+classSituacao[1]">
-          {{condominio.situacao}}
-        </div>
-      </q-field> -->
+      <my-input-text ref="nome" icon="mdi-account" v-model.trim="condominio.nome"
+        label="Nome do Condomínio" autofocus required v-bind:class="[!alteravel ? 'col-xs-12' : 'col-md-10 col-xs-12']"
+        maxlength="50" counter/>
+      <my-input-text v-model.trim="condominio.situacao"
+        label="Situação" class="col-md-2 col-xs-12 q-pl-sm" :bg-color="classSituacao[1]" readonly/>
     </div>
 
     <q-list v-if="condominioId && condominio.blocos && condominio.blocos.length>0" highlight class="col-12 q-my-lg">
@@ -50,8 +42,9 @@
       </q-expansion-item>
     </q-list>
     <div v-if="condominioId && alteravel" class="barra-botoes">
-      <q-btn icon="mdi-plus" label="Adicionar bloco" @click="prepararAdicionarBloco()" color="secondary"/>
-      <q-btn v-if="condominioPronto && condominio.situacao==='RASCUNHO'"
+      <q-btn icon="mdi-plus" label="Adicionar bloco" @click="prepararAdicionarBloco()"
+        color="secondary" size="17px"/>
+      <q-btn v-if="condominioPronto && condominio.situacao==='RASCUNHO'" size="17px"
         icon="mdi-check-all" color="negative"
         label="Finalizar condominio"
         title="Gera o(s) Bloco(s), as unidades e as respectivas contas de usuários"
@@ -92,10 +85,10 @@ export default {
       }
     },
     salvar () {
-      /* this.$v.condominio.nome.$touch()
-      if (this.$v.condominio.nome.$error) {
+      if (this.$refs.nome.hasError()) {
         this.alertaErro('Informe o nome do Condomínio')
-      } */
+        return
+      }
       if (!this.condominio.id) {
         this.$axios.post('/api/condominio', this.condominio)
           .then((res) => {
@@ -106,7 +99,6 @@ export default {
           })
           .catch((err) => {
             console.error('ERRO: ', err.response.erro)
-            // throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
           })
       } else {
         this.$axios.put(`/api/condominio/${this.condominio.id}`, this.condominio)
@@ -116,7 +108,6 @@ export default {
           })
           .catch((err) => {
             console.error('ERRO: ', err.response.erro)
-            // throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
           })
       }
     },
@@ -124,16 +115,14 @@ export default {
       this.$router.push('/condominio')
     },
     excluir () {
-      this.modalConfirmaAcao().then(() => {
-        this.$axios.delete(`/api/condominio/${this.condominio.id}`)
-          .then((res) => {
-            this.alertaSucesso('Condomínio excluído com sucesso!')
-            this.cancelar()
-          })
-          .catch((err) => {
-            throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
-          })
-      }).catch(() => {})
+      this.$axios.delete(`/api/condominio/${this.condominio.id}`)
+        .then((res) => {
+          this.alertaSucesso('Condomínio excluído com sucesso!')
+          this.cancelar()
+        })
+        .catch((err) => {
+          throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+        })
     },
     async prepararAlterarBloco (bloco) {
       // this.bloco = bloco

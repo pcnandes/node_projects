@@ -13,7 +13,7 @@
       </q-btn>
     </div>
     <div class="barra-botoes">
-      <q-btn icon="mdi-plus" size="18px" label="Cadastrar Condomínio" @click="novo()" color="primary"/>
+      <q-btn icon="mdi-plus" size="17px" label="Cadastrar Condomínio" @click="novo()" color="primary"/>
     </div>
   </q-page>
 </template>

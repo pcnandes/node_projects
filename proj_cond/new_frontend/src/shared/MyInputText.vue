@@ -1,7 +1,9 @@
 <template>
-  <q-input :value="value" :label="label" @input="updateValue" class="col-12"
-    filled  bg-color="grey-5" color="blue-grey-14" :autofocus="autofocus"
-    :rules="[val => !required || !!val]" ref="myInputText">
+  <q-input :value="value" :label="label" @input="updateValue"
+    filled  :bg-color="bgColor" :color="color" :autofocus="autofocus"
+    :rules="[val => !required || !!val]" ref="myInputText"
+    :readonly="readonly" :disable="disable"
+    :counter="counter" :maxlength="maxlength">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
     </template>
@@ -14,9 +16,15 @@ export default {
   props: {
     label: { type: String, required: true },
     value: { required: true },
+    bgColor: { required: false, default: 'grey-5' },
+    color: { required: false, default: 'blue-grey-14' },
     autofocus: { type: Boolean, required: false },
     required: { type: Boolean, required: false },
-    icon: { type: String, required: false }
+    icon: { type: String, required: false },
+    readonly: { type: Boolean, required: false },
+    disable: { type: Boolean, required: false },
+    counter: { type: Boolean, required: false },
+    maxlength: { required: false }
   },
   data () {
     return {

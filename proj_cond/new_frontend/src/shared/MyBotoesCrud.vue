@@ -17,7 +17,7 @@
         :fab-mini="$q.screen.lt.sm" flat
         icon="mdi-close" :label="labelExcluir" color="negative"
         :title="titleExcluir"
-        @click="excluir()"/>
+        @click="confirmaExclusao()"/>
       <q-btn class="q-ml-sm"
         v-if="exibeConfirmar"
         :fab-mini="$q.screen.lt.sm" flat
@@ -26,12 +26,16 @@
         :title="labelConfirmar"
         @click="confirmar()"/>
     </div>
+    <my-confirmacao ref="confirmaExclusao" @click="excluir()"></my-confirmacao>
   </div>
 </template>
 
 <script>
+import MyConfirmacao from './MyConfirmacao'
 
 export default {
+  name: 'Botoes_Crud',
+  components: { 'my-confirmacao': MyConfirmacao },
   props: {
     exibeCancelar: { type: Boolean, default: true },
     labelCancelar: { type: String, default: 'Voltar' },
@@ -57,6 +61,9 @@ export default {
     },
     excluir () {
       this.$emit('excluir')
+    },
+    confirmaExclusao () {
+      this.$refs.confirmaExclusao.show()
     }
   }
 }

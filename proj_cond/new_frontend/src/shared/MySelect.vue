@@ -10,11 +10,12 @@
         :label="label"
         ref="mySelect"
       /> -->
-  <q-select :value="value" @input="updateValue" ref="mySelect" class="col-12"
+  <q-select :value="value" @input="updateValue" ref="mySelect"
     :options="options" :label="label" :autofocus="autofocus"
-    filled bg-color="grey-5" color="blue-grey-14" transition-show="scale" transition-hide="scale"
+    filled :bg-color="bgColor" :color="color" transition-show="scale" transition-hide="scale"
     :rules="[val => !required || !!val]" :option-label="optionLabel" :option-value="optionValue"
-    :emit-value="emitValue" :map-ptions="mapOptions">
+    :emit-value="emitValue" :map-ptions="mapOptions"
+    :readonly="readonly" :disable="disable">
     <template v-if="icon" v-slot:prepend>
         <q-icon :name="icon" />
     </template>
@@ -31,6 +32,8 @@ export default {
   props: {
     label: { type: String, required: true },
     value: { required: true },
+    bgColor: { required: false, default: 'grey-5' },
+    color: { required: false, default: 'blue-grey-14' },
     options: { type: Array, required: true },
     optionLabel: { required: false },
     optionValue: { required: false },
@@ -38,7 +41,9 @@ export default {
     mapOptions: { type: Boolean, required: false },
     autofocus: { type: Boolean, required: false },
     required: { type: Boolean, required: false },
-    icon: { type: String, required: false }
+    icon: { type: String, required: false },
+    readonly: { type: Boolean, required: false },
+    disable: { type: Boolean, required: false }
   },
   data () {
     return {
