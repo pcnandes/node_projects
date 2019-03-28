@@ -51,7 +51,7 @@
           <q-icon name="mdi-textbox-password" />
         </template>
       </q-input> -->
-      <my-select ref="condominio" icon="mdi-domain" v-model="form.condominio" :options="condominios"
+      <my-select ref="condominio" v-show="condominios && condominios.length > 0" icon="mdi-domain" v-model="form.condominio" :options="condominios"
         option-label="nome" option-value="id" label="Condomínio" required map-options @input="selecionaBloco"/>
       <my-select ref="bloco" icon="mdi-office-building" v-show="form.condominio" v-model="form.bloco"
         :options="blocos" option-label="nome" option-value="id" label="Bloco" required map-options/>

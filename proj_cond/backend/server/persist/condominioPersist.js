@@ -46,6 +46,12 @@ exports.carregar = async function (id) {
   })
 }
 
+exports.carregarComBlocos = async function (id) {
+  return Condominio.findByPk(id, {
+    include: ['blocos']
+  })
+}
+
 /*
 exports.alterar = async function (condominio, transaction) {
   if (condominio.situacao === 'RASCUNHO') {
@@ -145,3 +151,4 @@ exports.gerarContasUsuario = async function (condominio) {
     return Promise.reject(err)
   })
 }
+

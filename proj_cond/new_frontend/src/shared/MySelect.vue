@@ -54,8 +54,6 @@ export default {
     }
   },
   mounted () {
-    console.log('valor', this.valor)
-    console.log('value', this.value)
     this.valor = this.value
   }
 }

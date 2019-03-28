@@ -26,14 +26,21 @@ exports.salvar = async function (req, res, next) {
 }
 
 exports.login = async function (req, res, next) {
-  let credenciais = { login: req.body.login, senha: req.body.senha, condominio: req.body.condominio.id, bloco: req.body.bloco.id }
   try {
+    let credenciais = { login: req.body.login,
+      senha: req.body.senha,
+      condominio: req.body.condominio ? req.body.condominio.id : null,
+      bloco: req.body.bloco ? req.body.bloco.id : null }
+    let condominioLogin = null
+    let blocoLogin = null
     if (credenciais.login && credenciais.senha) {
       let usuarioLogado = await persist.findByLogin(credenciais)
       if (usuarioLogado && await verificaSenha(credenciais.senha, usuarioLogado.senha)) {
-        let condominioLogin = await condominioPersist.carregar(credenciais.condominio)
-        let blocoLogin = condominioLogin.blocos.filter(bl => bl.id === credenciais.bloco)
-        blocoLogin = blocoLogin.length > 0 ? blocoLogin[0] : null
+        if (credenciais.condominio) {
+          condominioLogin = await condominioPersist.carregarComBlocos(credenciais.condominio)
+          blocoLogin = condominioLogin.blocos.filter(bl => bl.id === credenciais.bloco)
+          blocoLogin = blocoLogin.length > 0 ? blocoLogin[0] : null
+        }
         const token = gerarToken({ usuario: usuarioLogado, condominioLogin, blocoLogin }, credenciais.lembreDeMim)
         return onSuccess(res, { 'token': token })
       }
@@ -59,9 +66,8 @@ exports.retoken = function (req, res, next) {
           // const usuario = await persist.carregar(decoded.usuario.id)
           let login = decoded.usuario.login
           let bloco = decoded.blocoLogin ? decoded.blocoLogin.id : null
-          console.log('decoded', decoded)
           const usuario = await persist.findByLogin({ login, bloco })
-          token = await gerarToken({ usuario, condominioLogin: [decoded.condominioLogin], blocoLogin: [decoded.blocoLogin] }, null)
+          token = await gerarToken({ usuario, condominioLogin: decoded.condominioLogin, blocoLogin: decoded.blocoLogin }, null)
           return onSuccess(res, { 'token': token })
         } else {
           return onErrorNaoAutorizado(res, 'Erro ao reautenticar!')
