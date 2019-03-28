@@ -47,7 +47,8 @@ module.exports = function (ctx) {
         'QBtnDropdown',
         'QTooltip',
         'QExpansionItem',
-        'QDialog'
+        'QDialog',
+        'QAvatar'
       ],
 
       directives: [

@@ -6,15 +6,19 @@
       labelConfirmar="Salvar"
       :titulo="!alteravel ? condominio.nome : null" />
     <div class="row" v-bind:class="[$q.screen.lt.sm ? '' : 'gutter-sm']" v-if="alteravel">
-      <q-field :count="50" v-bind:class="[!alteravel ? 'col-xs-12' : 'col-md-10 col-xs-12']">
-        <q-input v-model="condominio.nome" float-label="Nome do Condomínio"
-          @blur="$v.condominio.nome.$touch" :error="$v.condominio.nome.$error"/>
-      </q-field>
-      <q-field class="col-md-2 col-xs-12" label="Situação" orientation="vertical">
-        <div v-bind:class="'text-'+classSituacao[1]">
+      <!-- <q-field :count="50" v-bind:class="[!alteravel ? 'col-xs-12' : 'col-md-10 col-xs-12']">
+        <q-input v-model="condominio.nome" float-label="Nome do Condomínio"/>
+      </q-field> -->
+        <my-input-text ref="nome" icon="mdi-account" v-model.trim="condominio.nome"
+          label="Nome do Condomínio" autofocus required v-bind:class="[!alteravel ? 'col-xs-12' : 'col-md-10 col-xs-12']"/>
+        <div class="col-md-2 col-xs-12" v-bind:class="'text-'+classSituacao[1]">
           {{condominio.situacao}}
         </div>
-      </q-field>
+      <!-- <q-field class="col-md-2 col-xs-12" label="Situação" orientation="vertical">
+        <div class="col-md-2 col-xs-12" v-bind:class="'text-'+classSituacao[1]">
+          {{condominio.situacao}}
+        </div>
+      </q-field> -->
     </div>
 
     <q-list v-if="condominioId && condominio.blocos && condominio.blocos.length>0" highlight class="col-12 q-my-lg">
@@ -59,13 +63,13 @@
 
 <script>
 import { getBlocoNew, getCondominioNew } from './mixin.js'
-import axios from 'axios'
 import AdicionarBloco from './AdicionarBloco.vue'
 import MyBotoesCrud from '../../shared/MyBotoesCrud.vue'
+import MyInputText from '../../shared/MyInputText'
 
 export default {
   name: 'CadastroCondominio',
-  components: { 'adicionar-bloco': AdicionarBloco, 'my-botoes-crud': MyBotoesCrud },
+  components: { 'my-input-text': MyInputText, 'adicionar-bloco': AdicionarBloco, 'my-botoes-crud': MyBotoesCrud },
   data () {
     return {
       condominioId: this.$route.params.id,
@@ -73,21 +77,17 @@ export default {
       condominio: getCondominioNew()
     }
   },
-  /* validations: {
-    condominio: {
-      nome: { required }
-    }
-  }, */
   methods: {
     carregarPagina () {
       if (this.condominioId) {
-        axios.get(`/api/condominio/${this.condominioId}`)
+        this.$axios.get(`/api/condominio/${this.condominioId}`)
           .then((res) => {
             this.condominio = res.data
           })
           .catch((err) => {
             console.error('ERRO: ', err.response.erro, err.erro)
-            // throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
+            this.alertaErro('Erro ao carregar o condomínio')
+            this.$router.go(-1)
           })
       }
     },
@@ -97,7 +97,7 @@ export default {
         this.alertaErro('Informe o nome do Condomínio')
       } */
       if (!this.condominio.id) {
-        axios.post('/api/condominio', this.condominio)
+        this.$axios.post('/api/condominio', this.condominio)
           .then((res) => {
             this.condominio = res.data
             this.condominioId = res.data.id
@@ -109,7 +109,7 @@ export default {
             // throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
           })
       } else {
-        axios.put(`/api/condominio/${this.condominio.id}`, this.condominio)
+        this.$axios.put(`/api/condominio/${this.condominio.id}`, this.condominio)
           .then((res) => {
             this.condominio = res.data
             this.alertaSucesso('Condomínio salvo com sucesso')
@@ -125,7 +125,7 @@ export default {
     },
     excluir () {
       this.modalConfirmaAcao().then(() => {
-        axios.delete(`/api/condominio/${this.condominio.id}`)
+        this.$axios.delete(`/api/condominio/${this.condominio.id}`)
           .then((res) => {
             this.alertaSucesso('Condomínio excluído com sucesso!')
             this.cancelar()
@@ -147,7 +147,7 @@ export default {
     gerarUsuarios () {
       this.modalConfirmaAcao('Atenção', 'Verique se todos os blocos e unidades estão corretos. Não será possível realizar alterações futuramente! ')
         .then(() => {
-          axios.put(`/api/condominio/${this.condominio.id}/gerar_contas_usuario`, this.condominio)
+          this.$axios.put(`/api/condominio/${this.condominio.id}/gerar_contas_usuario`, this.condominio)
             .then((res) => {
               this.condominio = res.data
               this.alertaSucesso('Unidades e contas de usuarios geradas com sucesso')
