@@ -1,7 +1,7 @@
 <template>
-  <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm" v-bind:class="counter ? 'q-mb-lg' : ''"
+  <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm"
     filled  :bg-color="bgColor" :color="color" :autofocus="autofocus"
-    :rules="[val => !required || !!val]" ref="myInputText"
+    :rules="[val => !required || !!val]" ref="myInputNumber"
     :readonly="readonly" :disable="disable" :mask="mascara">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
@@ -33,8 +33,9 @@ export default {
       this.$emit('input', itemValue)
     },
     hasError () {
-      this.$refs.myInputText.validate()
-      return this.$refs.myInputText.hasError
+      console.log('teste', this.$refs.myInputNumber)
+      this.$refs.myInputNumber.validate()
+      return this.$refs.myInputNumber.hasError
     }
   },
   computed: {

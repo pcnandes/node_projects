@@ -8,7 +8,7 @@
     <div class="row" v-bind:class="[$q.screen.lt.sm ? '' : 'gutter-sm']" v-if="alteravel">
       <my-input-text ref="nome" icon="mdi-account" v-model.trim="condominio.nome"
         label="Nome do Condomínio" autofocus required v-bind:class="[!alteravel ? 'col-xs-12' : 'col-md-10 col-xs-12']"
-        maxlength="50" counter/>
+        max-length="50" counter/>
       <my-input-text v-model.trim="condominio.situacao"
         label="Situação" class="col-md-2 col-xs-12 q-pl-sm q-mb-lg" :bg-color="classSituacao[1]" readonly/>
     </div>
@@ -185,7 +185,7 @@ export default {
   .divUnidade {
     position:relative;
     border: 1px solid #5a5a5a;
-    min-width: 60px!important;
+    min-width: 50px!important;
     max-width: 88px!important;
     margin-bottom: 5px;
     margin-right: 5px;

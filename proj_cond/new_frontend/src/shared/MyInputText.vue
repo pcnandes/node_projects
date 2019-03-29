@@ -3,7 +3,7 @@
     filled  :bg-color="bgColor" :color="color" :autofocus="autofocus"
     :rules="[val => !required || !!val]" ref="myInputText"
     :readonly="readonly" :disable="disable"
-    :counter="counter" :max-length="maxLength">
+    :counter="counter" :maxlength="maxLength" lazy-rules>
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
     </template>

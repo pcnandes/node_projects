@@ -2,7 +2,7 @@
   <!--<q-modal no-backdrop-dismiss no-esc-dismiss ref="modalRef"
     :content-css="{minWidth: '50vw', maxWidth: '80vw'}"> -->
   <q-dialog persistent ref="modalRef" :maximized="isMobile">
-    <q-card style="min-width: 600px" class="bg-grey-4">
+    <q-card style="min-width: 900px" class="bg-grey-4">
       <q-bar dark class="bg-primary text-white" style="height: 40px">
         <q-icon name="mdi-office-building" size="30px"/>
         <div class="col text-center text-weight-bold">Cadastro Bloco</div>
@@ -16,12 +16,12 @@
         </q-btn>
       </q-bar>
       <div style="margin: 20px;">
-        <div class="row" >
-          <my-input-text ref="nome" v-model.trim="bloco.nome"
-            counter maxlength="50" label="Nome" autofocus required
+        <div class="row q-mb-md" >
+          <my-input-text ref="nome" v-model.trim="bloco.nome" :form-erro="false"
+            counter max-length="50" label="Nome" autofocus required
             class="col-12" />
           <my-input-number ref="numeroPrimeiraUnidade" v-model="numeroPrimeiraUnidade"
-            label="Primeira Unidade" class="col-6" :max-length="3" required/>
+            label="Primeira Unidade" class="col-6" :max-length="3"/>
           <my-input-number ref="andares" v-model="andares"
             label="Qtd. andares" class="col-6" :max-length="2" required/>
           <my-input-number ref="unidadesPorAndar" v-model="unidadesPorAndar"
@@ -53,7 +53,7 @@
             <div class="divUnidade"
               v-bind:class="[unidade.andar !== bloco.unidades[Math.max(i - 1,0)].andar ? 'clear' : '']"
               v-for="(unidade, i) in bloco.unidades" :key="i">
-              <q-input :value="unidade.nome"
+              <q-input :value="unidade.nome" dense
                 @input="val => {bloco.unidades[i].nome = val}"/>
               <q-btn flat dense round class="botaoExcluirUnidade material-icons primary"
                 @click="deletarUnidade(i)" title="Deletar unidade" icon="mdi-delete" size="17px"/>
@@ -98,6 +98,7 @@ export default {
   methods: {
     async prepararInclusao () {
       // this.$v.bloco.$reset()
+      this.limparTela()
       this.modo = 'INCLUSAO'
       await this.$refs.modalRef.show()
       return new Promise((resolve, reject) => {
@@ -123,23 +124,28 @@ export default {
       this.$refs.modalRef.hide()
     },
     confirmar () {
-      // this.$v.bloco.$touch()
-      // if (this.$v.bloco.$error || this.bloco.unidades.length === 0) {
-      //  this.$q.notify('Preencha as informações do bloco e clique em Gerar Bloco.')
-      // } else {
-      if (this.modo === 'ALTERACAO') {
-        // Object.assign(this.value, this.bloco)
-        this.promiseResolve(this.bloco)
-      } else if (this.modo === 'INCLUSAO') {
-        this.promiseResolve(this.bloco)
+      let erro = false
+      erro = this.$refs.nome.hasError() || erro
+      erro = this.$refs.andares.hasError() || erro
+      erro = this.$refs.unidadesPorAndar.hasError() || erro
+
+      if (erro) {
+        this.$q.notify('Preencha as informações do bloco e clique em Gerar Bloco.')
+      } else {
+        if (this.modo === 'ALTERACAO') {
+          // Object.assign(this.value, this.bloco)
+          this.promiseResolve(this.bloco)
+        } else if (this.modo === 'INCLUSAO') {
+          this.promiseResolve(this.bloco)
+        }
+        this.$refs.modalRef.hide()
       }
-      this.$refs.modalRef.hide()
-      // }
     },
     gerarBloco () {
-      this.$v.andares.$touch()
-      this.$v.unidadesPorAndar.$touch()
-      if (this.$v.andares.$error || this.$v.unidadesPorAndar.$error) {
+      // this.$v.andares.$touch()
+      // this.$v.unidadesPorAndar.$touch()
+      // if (this.$v.andares.$error || this.$v.unidadesPorAndar.$error) {
+      if (this.$refs.andares.hasError() || this.$refs.unidadesPorAndar.hasError()) {
         this.$q.notify('Informe a Qtd. andares e Unidades por andar.')
       } else {
         const primeira = this.numeroPrimeiraUnidade ? this.numeroPrimeiraUnidade : 101
@@ -163,6 +169,15 @@ export default {
       // verifica se existem elementos no array
       // if (this.bloco.unidades.length > 0) this.$set(this.bloco.andar, andar, this.bloco.andar[andar])
       // else this.bloco.andar.splice(andar, 1)
+    },
+    limparTela () {
+      this.bloco = getBlocoNew()
+      this.andares = null
+      this.unidadesPorAndar = null
+      this.numeroPrimeiraUnidade = null
+      // this.$refs.nome.resetValidation()
+      // this.$refs.andares.resetValidation()
+      // this.$refs.unidadesPorAndar.resetValidation()
     }
   }
 }
