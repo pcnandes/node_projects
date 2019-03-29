@@ -146,7 +146,7 @@ export default {
     margin: 0 auto; /*centralizo meu elemento na pagina*/
     width: 100%;
     max-width: 85vw; /*defino um tamanho maximo caso o site seja aberto em dispositivos com muita resolução*/
-    background-color: rgb(247, 247, 247);
+    background-color: #e0e0e0;
     padding: 20px;
     /*
     padding-left: 5%;

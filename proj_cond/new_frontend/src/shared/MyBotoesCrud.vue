@@ -77,7 +77,7 @@ export default {
     padding-left: 20px;
   }
   .barra-botoes-crud {
-    background-color: rgb(221, 221, 221);
+    background-color: #b0bec5;
     margin-top: -20px;
     margin-left: -20px;
     margin-right: -20px;

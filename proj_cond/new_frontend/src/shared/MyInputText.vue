@@ -3,7 +3,7 @@
     filled  :bg-color="bgColor" :color="color" :autofocus="autofocus"
     :rules="[val => !required || !!val]" ref="myInputText"
     :readonly="readonly" :disable="disable"
-    :counter="counter" :maxlength="maxlength">
+    :counter="counter" :max-length="maxLength">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
     </template>
@@ -24,7 +24,7 @@ export default {
     readonly: { type: Boolean, required: false },
     disable: { type: Boolean, required: false },
     counter: { type: Boolean, required: false },
-    maxlength: { required: false }
+    maxLength: { required: false }
   },
   data () {
     return {

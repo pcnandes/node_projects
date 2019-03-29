@@ -2,8 +2,7 @@
   <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm" v-bind:class="counter ? 'q-mb-lg' : ''"
     filled  :bg-color="bgColor" :color="color" :autofocus="autofocus"
     :rules="[val => !required || !!val]" ref="myInputText"
-    :readonly="readonly" :disable="disable"
-    :counter="counter" :maxlength="maxlength">
+    :readonly="readonly" :disable="disable" :mask="mascara">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
     </template>
@@ -23,8 +22,7 @@ export default {
     icon: { type: String, required: false },
     readonly: { type: Boolean, required: false },
     disable: { type: Boolean, required: false },
-    counter: { type: Boolean, required: false },
-    maxlength: { required: false }
+    maxLength: { type: Number, required: false, default: 9 }
   },
   data () {
     return {
@@ -37,6 +35,15 @@ export default {
     hasError () {
       this.$refs.myInputText.validate()
       return this.$refs.myInputText.hasError
+    }
+  },
+  computed: {
+    mascara: function () {
+      let retorno = ''
+      for (let i = 0; i < this.maxLength; i++) {
+        retorno += '#'
+      }
+      return retorno
     }
   }
 }

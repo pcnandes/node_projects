@@ -13,32 +13,34 @@
         label="Situação" class="col-md-2 col-xs-12 q-pl-sm q-mb-lg" :bg-color="classSituacao[1]" readonly/>
     </div>
 
-    <q-list v-if="condominioId && condominio.blocos && condominio.blocos.length>0" highlight class="col-12 q-my-lg">
+    <q-list v-if="condominioId && condominio.blocos && condominio.blocos.length>0"
+        class="col-12 q-my-lg" bordered>
       <q-expansion-item
-        v-for="(bl, i) in condominio.blocos" :key="i">
+        v-for="(bl, i) in condominio.blocos" :key="i" header-class="bg-grey-7 text-white" expand-icon-class="text-white">
         <template v-slot:header>
           <q-item-section avatar>
-            <q-avatar icon="mdi-office-building" color="primary" text-color="white" />
+            <q-avatar icon="mdi-office-building" />
           </q-item-section>
           <q-item-section>
             {{bl.nome}}
           </q-item-section>
         </template>
-
-        <div class="absolute" v-if="alteravel" style="right: 0px; bottom: 0px" >
-          <q-btn round flat fab-mini icon="mdi-pencil" color="faded" title="Alterar Bloco" @click.native="prepararAlterarBloco(bl)"/>
-          <q-btn round flat fab-mini icon="mdi-delete" color="faded" title="Excluir Bloco"/>
-        </div>
-        <div class="row col-12 justify-center">
-          <div style="display: table;">
-            <div class="divUnidade"
-              v-bind:class="[unidade.andar !== bl.unidades[Math.max(y - 1,0)].andar ? 'clear' : '']"
-              v-for="(unidade, y) in bl.unidades" :key="y" >
-              <a v-if="condominio.situacao!=='RASCUNHO'" v-on:click="detalharUnidade(bl.id,unidade.id)">{{unidade.nome}}</a>
-              <span v-if="condominio.situacao==='RASCUNHO'">{{unidade.nome}}</span>
+        <q-card class="bg-grey-5">
+          <div class="absolute" v-if="alteravel" style="right: 0px; bottom: 0px" >
+            <q-btn round flat fab-mini icon="mdi-pencil" color="faded" title="Alterar Bloco" @click.native="prepararAlterarBloco(bl)"/>
+            <q-btn round flat fab-mini icon="mdi-delete" color="faded" title="Excluir Bloco"/>
+          </div>
+          <div class="row col-12 justify-center q-pa-sm">
+            <div style="display: table;">
+              <div class="divUnidade"
+                v-bind:class="[unidade.andar !== bl.unidades[Math.max(y - 1,0)].andar ? 'clear' : '']"
+                v-for="(unidade, y) in bl.unidades" :key="y" >
+                <a v-if="condominio.situacao!=='RASCUNHO'" v-on:click="detalharUnidade(bl.id,unidade.id)">{{unidade.nome}}</a>
+                <span v-if="condominio.situacao==='RASCUNHO'">{{unidade.nome}}</span>
+              </div>
             </div>
           </div>
-        </div>
+        </q-card>
       </q-expansion-item>
     </q-list>
     <div v-if="condominioId && alteravel" class="barra-botoes">

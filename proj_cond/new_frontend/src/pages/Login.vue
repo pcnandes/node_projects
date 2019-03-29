@@ -192,7 +192,7 @@ export default {
     border-radius: 15px 0 0 0;*/
   }
   .login_bloco > div, button, a {
-    margin-top: 13px;
+    /* margin-top: 13px; */
   }
 
   @media (max-width: 575px) {

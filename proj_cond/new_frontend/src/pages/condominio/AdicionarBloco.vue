@@ -2,16 +2,16 @@
   <!--<q-modal no-backdrop-dismiss no-esc-dismiss ref="modalRef"
     :content-css="{minWidth: '50vw', maxWidth: '80vw'}"> -->
   <q-dialog persistent ref="modalRef" :maximized="isMobile">
-    <q-card style="min-width: 600px">
-      <q-bar dark class="bg-primary text-white">
-        <q-icon name="mdi-office-building"/>
+    <q-card style="min-width: 600px" class="bg-grey-4">
+      <q-bar dark class="bg-primary text-white" style="height: 40px">
+        <q-icon name="mdi-office-building" size="30px"/>
         <div class="col text-center text-weight-bold">Cadastro Bloco</div>
         <q-space />
-        <i class="material-icons light_gray">
+        <i class="material-icons">
           <q-tooltip>Essa tela facilitará a criação de um bloco. Informe o 'Quantidade de andares' e 'Unidades por andar' para 'Gerar Bloco'. Caso a 'Primeira unidade' nao seja a 101, informe.</q-tooltip>
           help
         </i>
-        <q-btn dense flat icon="close" v-close-popup>
+        <q-btn dense flat icon="close" v-close-popup size="14px">
           <q-tooltip>Fechar / Cancelar</q-tooltip>
         </q-btn>
       </q-bar>
@@ -20,12 +20,12 @@
           <my-input-text ref="nome" v-model.trim="bloco.nome"
             counter maxlength="50" label="Nome" autofocus required
             class="col-12" />
-          <my-input-text ref="numeroPrimeiraUnidade" v-model.trim="numeroPrimeiraUnidade"
-            label="Primeira Unidade" class="col-6" autofocus required/>
-          <my-input-text ref="andares" v-model.trim="andares"
-            label="Qtd. andares" class="col-6" autofocus required/>
-          <my-input-text ref="unidadesPorAndar" v-model.trim="unidadesPorAndar"
-            label="Unidades por andar" class="col-6" autofocus required/>
+          <my-input-number ref="numeroPrimeiraUnidade" v-model="numeroPrimeiraUnidade"
+            label="Primeira Unidade" class="col-6" :max-length="3" required/>
+          <my-input-number ref="andares" v-model="andares"
+            label="Qtd. andares" class="col-6" :max-length="2" required/>
+          <my-input-number ref="unidadesPorAndar" v-model="unidadesPorAndar"
+            label="Unidades por andar" class="col-6" :max-length="3" required/>
           <div class="col-12 row justify-end" v-if="modo==='INCLUSAO'">
             <q-btn class="col-xs-12 col-md-auto" color="secondary" @click="gerarBloco()" label="Gerar bloco" />
           </div>
@@ -56,13 +56,13 @@
               <q-input :value="unidade.nome"
                 @input="val => {bloco.unidades[i].nome = val}"/>
               <q-btn flat dense round class="botaoExcluirUnidade material-icons primary"
-                @click="deletarUnidade(i)" title="Deletar unidade" icon="mdi-delete"/>
+                @click="deletarUnidade(i)" title="Deletar unidade" icon="mdi-delete" size="17px"/>
             </div>
           </div>
         </div>
         <div class="barra-botoes">
-          <q-btn color="grey-14" @click="cancelar()" label="Cancelar" />
-          <q-btn color="primary" @click="confirmar()" label="Confirmar" />
+          <q-btn color="grey-14" @click="cancelar()" label="Cancelar" size="17px" />
+          <q-btn color="primary" @click="confirmar()" label="Confirmar" size="17px" />
         </div>
       </div>
     </q-card>
@@ -72,9 +72,10 @@
 <script>
 import { getBlocoNew } from './mixin.js'
 import MyInputText from '../../shared/MyInputText'
+import MyInputNumber from '../../shared/MyInputNumber'
 
 export default {
-  components: { 'my-input-text': MyInputText },
+  components: { 'my-input-text': MyInputText, 'my-input-number': MyInputNumber },
   data () {
     return {
       bloco: getBlocoNew(),
