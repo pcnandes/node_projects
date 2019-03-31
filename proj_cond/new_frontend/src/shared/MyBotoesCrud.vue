@@ -1,5 +1,5 @@
 <template>
-  <div class="barra-botoes-crud row justify-between">
+  <div class="barra-botoes-crud row justify-between bg-grey-5">
     <div class="row items-center">
       <q-btn icon="mdi-arrow-left"
         v-if="exibeCancelar"
@@ -77,7 +77,7 @@ export default {
     padding-left: 20px;
   }
   .barra-botoes-crud {
-    background-color: #b0bec5;
+    /* background-color: #b0bec5; */
     margin-top: -20px;
     margin-left: -20px;
     margin-right: -20px;

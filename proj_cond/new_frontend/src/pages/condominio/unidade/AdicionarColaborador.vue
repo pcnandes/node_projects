@@ -1,31 +1,35 @@
 <template>
-  <q-modal no-backdrop-dismiss no-esc-dismiss ref="modalRef"
-    :content-css="{minWidth: isMobile?'100vw':'650px', maxWidth: isMobile?'100vw':'60vw'}" :maximized="isMobile">
-    <div class="doc-container justify-center gutter-y-sm" style="padding: 20px;">
-        <div class="row justify-center q-display-1">
-          Cadastro de Colaborador
-        </div>
-        <q-field class="col-12" icon="mdi-account">
-          <q-input v-model="colaborador.nome" float-label="Nome"
-            @blur="$v.colaborador.nome.$touch" :error="$v.colaborador.nome.$error"/>
-        </q-field>
-        <q-field class="col-12" icon="mdi-arrow-decision">
-          <q-select v-model="colaborador.tipoDoc" float-label="Tipo de documento" :options="tiposDoc"
-            @blur="$v.colaborador.tipoDoc.$touch" :error="$v.colaborador.tipoDoc.$error"
-          />
-        </q-field>
-        <q-field class="col-12" icon="mdi-account-card-details">
-          <q-input v-if="colaborador.tipoDoc==='CPF'" float-label="Número CPF" v-model="colaborador.numeroDoc"
-            v-mask="'###.###.###-##'" :placeholder="`Número CPF`"
-            @blur="$v.colaborador.numeroDoc.$touch" :error="$v.colaborador.numeroDoc.$error"/>
-          <q-input v-else-if="colaborador.tipoDoc==='CNPJ'" float-label="Número CNPJ" v-model="colaborador.numeroDoc"
-            v-mask="'##.###.###/####-##'" placeholder="Número CNPJ"
-            @blur="$v.colaborador.numeroDoc.$touch" :error="$v.colaborador.numeroDoc.$error"/>
-          <q-input v-else-if="colaborador.tipoDoc==='RG'" float-label="Número RG" v-model="colaborador.numeroDoc"
-            placeholder="Número RG"
-            v-mask="'##############'"
-            @blur="$v.colaborador.numeroDoc.$touch" :error="$v.colaborador.numeroDoc.$error"/>
-        </q-field>
+  <q-dialog persistent ref="modalRef" :maximized="isMobile">
+    <q-card style="min-width: 500px;" class="bg-grey-4">
+      <q-bar dark class="bg-primary text-white" style="height: 40px">
+        <q-icon name="mdi-worker" size="30px"/>
+        <div class="col text-center text-weight-bold">Cadastro de Colaborador</div>
+        <q-space />
+        <q-btn dense flat icon="close" v-close-popup size="14px">
+          <q-tooltip>Fechar / Cancelar</q-tooltip>
+        </q-btn>
+      </q-bar>
+      <div class="doc-container justify-center gutter-y-sm" style="padding: 20px;">
+        <my-input-text ref="nome" v-model.trim="colaborador.nome"
+            counter max-length="50" label="Nome" autofocus required
+            class="col-12" icon="mdi-account"/>
+        <my-select ref="tipo_documento" v-model="colaborador.tipoDoc" @input="colaborador.numeroDoc = ''"
+          :options="tiposDoc" label="Tipo de documento" required emit-value
+          class="col-12" icon="mdi-arrow-decision"/>
+        <my-input-cpf ref="cpf" v-if="colaborador.tipoDoc==='CPF'" v-model.trim="colaborador.numeroDoc"
+          required class="col-12"/>
+        <my-input-cnpj ref="cnpj" v-if="colaborador.tipoDoc==='CNPJ'" v-model.trim="colaborador.numeroDoc"
+          required class="col-12"/>
+        <my-input-rg ref="rg" v-if="colaborador.tipoDoc==='RG'" v-model.trim="colaborador.numeroDoc"
+          required class="col-12"/>
+        <my-input-data ref="dataInicio" v-model.trim="colaborador.dataInicio"
+          required class="col-6" label="Inicio Atividade"/>
+        <my-input-data ref="dataFim" v-model.trim="colaborador.dataFim"
+          class="col-6" label="Fim Atividade"/>
+        <my-input-text-area ref="observacao" v-model.trim="colaborador.observacao"
+            counter max-length="500" label="Observações"
+            class="col-12" icon="mdi-clipboard-text"/>
+        <!--
         <q-field class="col-12" icon="mdi-calendar">
           <q-datetime v-model="colaborador.dataInicio" type="date" float-label="Inicio Atividade"
             min="2012-12-31" default-view="year" clearable
@@ -37,31 +41,32 @@
         </q-field>
         <q-field class="col-12" icon="mdi-clipboard-text">
           <q-input type="textarea" v-model="colaborador.observacao" float-label="Observações"/>
-        </q-field>
+        </q-field> -->
         <div class="barra-botoes">
-          <q-btn class="col-xs-12" color="faded" @click="cancelar()" label="Cancelar" v-if="modo!=='DETALHE'"/>
-          <q-btn class="col-xs-12" color="negative" @click="excluir()" label="Excluir"  v-if="modo==='ALTERACAO' && !colaborador.id"/>
-          <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" v-if="modo!=='DETALHE'"/>
-          <q-btn class="col-xs-12" color="faded" @click="cancelar()" label="Fechar" v-if="modo==='DETALHE'"/>
+          <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Cancelar" size="17px" v-if="modo!=='DETALHE'"/>
+          <q-btn class="col-xs-12" color="negative" @click="excluir()" label="Excluir" size="17px" v-if="modo==='ALTERACAO' && !colaborador.id"/>
+          <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" size="17px" v-if="modo!=='DETALHE'"/>
+          <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Fechar" size="17px" v-if="modo==='DETALHE'"/>
         </div>
-    </div>
-  </q-modal>
+      </div>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
-import { QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox } from 'quasar'
-import { required, helpers } from 'vuelidate/lib/validators'
-import { mask } from 'vue-the-mask'
 import { TIPO_DOCUMENTO_COLABORADOR } from '../../../const'
 import { getColaboradorNew } from '../mixin.js'
-
-const cpfCnpj = helpers.regex('alpha', /^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}-?[0-9]{2}|[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}-?[0-9]{2})$/)
+import MyInputText from '../../../shared/MyInputText'
+import MySelect from '../../../shared/MySelect'
+import MyInputCpf from '../../../shared/MyInputCpf'
+import MyInputCnpj from '../../../shared/MyInputCnpj'
+import MyInputRg from '../../../shared/MyInputRg'
+import MyInputData from '../../../shared/MyInputData'
+import MyInputTextArea from '../../../shared/MyInputTextArea'
 
 export default {
-  components: {
-    QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox
-  },
-  directives: {mask},
+  components: { MyInputText, MySelect, MyInputCpf, MyInputCnpj, MyInputRg, MyInputData, MyInputTextArea },
+  // directives: {mask},
   data () {
     return {
       colaborador: getColaboradorNew(),
@@ -71,6 +76,7 @@ export default {
       modo: 'INCLUSAO'
     }
   },
+  /*
   validations () {
     return {
       colaborador: {
@@ -80,10 +86,10 @@ export default {
         dataInicio: { required }
       }
     }
-  },
+  }, */
   methods: {
     async prepararInclusao () {
-      this.$v.colaborador.$reset()
+      // this.$v.colaborador.$reset()
       this.colaborador = getColaboradorNew()
       this.modo = 'INCLUSAO'
       await this.$refs.modalRef.show()
@@ -94,7 +100,7 @@ export default {
     },
     async prepararAlteracao (objAlt) {
       try {
-        this.$v.colaborador.$reset()
+        // this.$v.colaborador.$reset()
         this.colaborador = JSON.parse(JSON.stringify(objAlt))
         this.modo = this.possuiPerfis(['ADMIN', 'SINDICO', 'MORADOR']) ? 'ALTERACAO' : 'DETALHE'
         await this.$refs.modalRef.show()
@@ -110,17 +116,17 @@ export default {
       this.$refs.modalRef.hide()
     },
     confirmar () {
-      this.$v.$touch()
+      // this.$v.$touch()
       // data fim maior que inicio
       if (this.colaborador.dataFim && this.maiorData(this.colaborador.dataFim, this.colaborador.dataInicio)) {
         this.$q.notify('A data de fim da atividade não pode ser menor que a data de início.')
       }
-      if (this.$v.colaborador.$error) {
-        this.$q.notify('Preencha as informações do obrigatórias e clique em confirmar.')
-      } else {
-        this.promiseResolve(this.colaborador)
-        this.$refs.modalRef.hide()
-      }
+      // if (erro) {
+      //  this.$q.notify('Preencha as informações do obrigatórias e clique em confirmar.')
+      // } else {
+      this.promiseResolve(this.colaborador)
+      this.$refs.modalRef.hide()
+      // }
     },
     excluir () {
       if (!this.colaborador.id) {

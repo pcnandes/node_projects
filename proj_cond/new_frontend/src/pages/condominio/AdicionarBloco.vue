@@ -17,36 +17,19 @@
       </q-bar>
       <div style="margin: 20px;">
         <div class="row q-mb-md" >
-          <my-input-text ref="nome" v-model.trim="bloco.nome" :form-erro="false"
+          <my-input-text ref="nome" v-model.trim="bloco.nome"
             counter max-length="50" label="Nome" autofocus required
             class="col-12" />
-          <my-input-number ref="numeroPrimeiraUnidade" v-model="numeroPrimeiraUnidade"
+          <my-input-number ref="numeroPrimeiraUnidade" v-model="numeroPrimeiraUnidade" v-if="modo==='INCLUSAO'"
             label="Primeira Unidade" class="col-6" :max-length="3"/>
-          <my-input-number ref="andares" v-model="andares"
+          <my-input-number ref="andares" v-model="andares" v-if="modo==='INCLUSAO'"
             label="Qtd. andares" class="col-6" :max-length="2" required/>
-          <my-input-number ref="unidadesPorAndar" v-model="unidadesPorAndar"
+          <my-input-number ref="unidadesPorAndar" v-model="unidadesPorAndar" v-if="modo==='INCLUSAO'"
             label="Unidades por andar" class="col-6" :max-length="3" required/>
           <div class="col-12 row justify-end" v-if="modo==='INCLUSAO'">
-            <q-btn class="col-xs-12 col-md-auto" color="secondary" @click="gerarBloco()" label="Gerar bloco" />
+            <q-btn class="col-xs-12 col-md-auto" size="17px" color="secondary"
+              @click="gerarBloco()" label="Gerar bloco" />
           </div>
-          <!--<q-field :count="10" class="col-md-6 col-xs-12" v-bind:class="modo==='ALTERACAO'?'col-md-12':''">
-            <q-input v-model="bloco.nome" type="text" float-label="Nome do bloco"
-              @blur="$v.bloco.nome.$touch" :error="$v.bloco.nome.$error"/>
-          </q-field>
-          <q-field :count="10" class="col-md-6 col-xs-12" v-if="modo==='INCLUSAO'">
-            <q-input v-model="numeroPrimeiraUnidade" type="number" float-label="Primeira Unidade"/>
-          </q-field>
-          <q-field :count="10" class="col-md-6 col-xs-12" v-if="modo==='INCLUSAO'">
-            <q-input v-model="andares" type="number" float-label="Qtd. andares"
-              @blur="$v.andares.$touch" :error="$v.andares.$error"/>
-          </q-field>
-          <q-field :count="10" class="col-md-6 col-xs-12" v-if="modo==='INCLUSAO'">
-            <q-input v-model="unidadesPorAndar" type="number" float-label="Unidades por andar"
-              @blur="$v.unidadesPorAndar.$touch" :error="$v.unidadesPorAndar.$error"/>
-          </q-field>
-          <div class="col-12 row justify-end" v-if="modo==='INCLUSAO'">
-            <q-btn class="col-xs-12 col-md-auto" color="secondary" @click="gerarBloco()" label="Gerar bloco" />
-          </div> -->
         </div>
         <div class="row col-12 justify-center">
           <div style="display: table;">
@@ -56,7 +39,7 @@
               <q-input :value="unidade.nome" dense
                 @input="val => {bloco.unidades[i].nome = val}"/>
               <q-btn flat dense round class="botaoExcluirUnidade material-icons primary"
-                @click="deletarUnidade(i)" title="Deletar unidade" icon="mdi-delete" size="17px"/>
+                @click="deletarUnidade(i)" title="Deletar unidade" icon="mdi-delete"/>
             </div>
           </div>
         </div>
@@ -75,7 +58,7 @@ import MyInputText from '../../shared/MyInputText'
 import MyInputNumber from '../../shared/MyInputNumber'
 
 export default {
-  components: { 'my-input-text': MyInputText, 'my-input-number': MyInputNumber },
+  components: { MyInputText, MyInputNumber },
   data () {
     return {
       bloco: getBlocoNew(),
@@ -87,14 +70,6 @@ export default {
       modo: 'INCLUSAO'
     }
   },
-  /* validations: {
-    bloco: {
-      nome: { required },
-      unidades: []
-    },
-    andares: { required },
-    unidadesPorAndar: { required }
-  }, */
   methods: {
     async prepararInclusao () {
       // this.$v.bloco.$reset()
@@ -124,16 +99,15 @@ export default {
       this.$refs.modalRef.hide()
     },
     confirmar () {
-      let erro = false
-      erro = this.$refs.nome.hasError() || erro
-      erro = this.$refs.andares.hasError() || erro
-      erro = this.$refs.unidadesPorAndar.hasError() || erro
-
-      if (erro) {
-        this.$q.notify('Preencha as informações do bloco e clique em Gerar Bloco.')
+      let erro = this.verificaErrosCampos([
+        this.$refs.nome.hasError(),
+        this.$refs.andares.hasError(),
+        this.$refs.unidadesPorAndar.hasError()
+      ])
+      if (erro || this.bloco.unidades.length === 0) {
+        this.alertaErro('Preencha as informações do bloco e clique em Gerar Bloco.')
       } else {
         if (this.modo === 'ALTERACAO') {
-          // Object.assign(this.value, this.bloco)
           this.promiseResolve(this.bloco)
         } else if (this.modo === 'INCLUSAO') {
           this.promiseResolve(this.bloco)
@@ -142,11 +116,12 @@ export default {
       }
     },
     gerarBloco () {
-      // this.$v.andares.$touch()
-      // this.$v.unidadesPorAndar.$touch()
-      // if (this.$v.andares.$error || this.$v.unidadesPorAndar.$error) {
-      if (this.$refs.andares.hasError() || this.$refs.unidadesPorAndar.hasError()) {
-        this.$q.notify('Informe a Qtd. andares e Unidades por andar.')
+      let erro = this.verificaErrosCampos([
+        this.$refs.andares.hasError(),
+        this.$refs.unidadesPorAndar.hasError()
+      ])
+      if (erro) {
+        this.alertaErro('Informe a Qtd. andares e Unidades por andar.')
       } else {
         const primeira = this.numeroPrimeiraUnidade ? this.numeroPrimeiraUnidade : 101
         this.bloco.unidades = new Array(this.andares * this.unidadesPorAndar)

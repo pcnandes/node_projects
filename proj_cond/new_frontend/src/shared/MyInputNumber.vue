@@ -33,7 +33,6 @@ export default {
       this.$emit('input', itemValue)
     },
     hasError () {
-      console.log('teste', this.$refs.myInputNumber)
       this.$refs.myInputNumber.validate()
       return this.$refs.myInputNumber.hasError
     }

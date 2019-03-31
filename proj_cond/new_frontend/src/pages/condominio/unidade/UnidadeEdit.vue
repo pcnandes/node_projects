@@ -109,9 +109,9 @@
       </q-expansion-item>
     </q-list>
     <!-- modais -->
-    <adicionar-morador ref="moradorModal"/>
+    <!-- <adicionar-morador ref="moradorModal"/> -->
     <adicionar-colaborador ref="colaboradorModal"/>
-    <adicionar-veiculo ref="veiculoModal"/>
+    <!-- <adicionar-veiculo ref="veiculoModal"/> -->
     <!-- botoes -->
     <div class="barra-botoes">
       <q-btn label="Alterar Senha" color="secondary"/>
@@ -121,15 +121,14 @@
 </template>
 
 <script>
-import axios from 'axios'
-import BotoesCrud from 'pages/shared/BotoesCrud'
-import AdicionarMorador from './AdicionarMorador.vue'
+import BotoesCrud from '../../../shared/MyBotoesCrud'
+// import AdicionarMorador from './AdicionarMorador.vue'
 import AdicionarColaborador from './AdicionarColaborador.vue'
-import AdicionarVeiculo from './AdicionarVeiculo.vue'
+// import AdicionarVeiculo from './AdicionarVeiculo.vue'
 
 export default {
   name: 'Editar_Unidade',
-  components: { 'botoes-crud': BotoesCrud, 'adicionar-morador': AdicionarMorador, 'adicionar-colaborador': AdicionarColaborador, 'adicionar-veiculo': AdicionarVeiculo },
+  components: { BotoesCrud, AdicionarColaborador }, // , AdicionarMorador, AdicionarVeiculo
   data () {
     return {
       unidade: {},
@@ -142,7 +141,7 @@ export default {
   methods: {
     carregarPagina () {
       if (this.unidadeId) {
-        axios.get(`/api/unidade/${this.unidadeId}`)
+        this.$axios.get(`/api/unidade/${this.unidadeId}`)
           .then((res) => {
             this.unidade = res.data
           })
@@ -153,14 +152,13 @@ export default {
       }
     },
     salvar () {
-      axios.put(`/api/unidade/${this.unidade.id}`, this.unidade)
+      this.$axios.put(`/api/unidade/${this.unidade.id}`, this.unidade)
         .then((res) => {
           this.unidade = res.data
           this.alertaSucesso('Unidade salva com sucesso')
         })
         .catch((err) => {
           console.error('ERRO: ', err.response.erro)
-          throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
         })
     },
     cancelar () {

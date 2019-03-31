@@ -91,8 +91,8 @@ export default {
   methods: {
     onSubmit () {
       // DESCOMENTAR quando estiver OK
-      let erroCondBloco = this.$refs.condominio.hasError() || this.$refs.bloco.hasError()
-      let erroUsuSenha = this.$refs.usuario.hasError() || this.$refs.senha.hasError()
+      let erroCondBloco = this.verificaErrosCampos([this.$refs.condominio.hasError(), this.$refs.bloco.hasError()])
+      let erroUsuSenha = this.verificaErrosCampos([this.$refs.usuario.hasError(), this.$refs.senha.hasError()])
       // se nao existem condominios cadastrados, libera informar apenas login e senha
       if ((!this.loginSemInfCondominio && (erroCondBloco || erroUsuSenha)) ||
         (this.loginSemInfCondominio && erroUsuSenha)) {

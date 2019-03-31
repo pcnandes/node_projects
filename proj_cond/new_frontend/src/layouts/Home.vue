@@ -50,7 +50,7 @@
         </q-item>
       </q-list>
     </q-drawer>
-    <q-page-container class="bg-faded">
+    <q-page-container class="bg-grey-10">
       <router-view/>
     </q-page-container>
   </q-layout>

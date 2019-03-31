@@ -54,6 +54,13 @@ export default ({ Vue }) => {
       maiorQueDataAtual (dataIni) {
         let diff = date.getDateDiff(dataIni, new Date(), 'days')
         return diff <= 0
+      },
+      verificaErrosCampos (itens) {
+        console.log('itennnns', itens)
+        if (itens && itens.length > 0) {
+          return itens.some(i => i === true)
+        }
+        return false
       }
     },
     computed: {

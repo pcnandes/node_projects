@@ -1,5 +1,5 @@
 <template>
-  <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm" v-bind:class="counter ? 'q-mb-lg' : ''"
+  <q-input :value="value" :label="label" @input="updateValue" type="textarea" class="q-pa-xs q-mb-sm" v-bind:class="counter ? 'q-mb-lg' : ''"
     filled  :bg-color="bgColor" :color="color" :autofocus="autofocus"
     :rules="[val => !required || !!val]" ref="myInputText"
     :readonly="readonly" :disable="disable"
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'my-input-text',
+  name: 'my-input-text-area',
   props: {
     label: { type: String, required: true },
     value: { required: true },

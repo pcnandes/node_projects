@@ -1,9 +1,8 @@
 <template>
-  <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm" v-bind:class="counter ? 'q-mb-lg' : ''"
-    filled  :bg-color="bgColor" :color="color" :autofocus="autofocus"
-    :rules="[val => !required || !!val]" ref="myInputText"
-    :readonly="readonly" :disable="disable"
-    :counter="counter" :maxlength="maxLength">
+  <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm"
+    filled :bg-color="bgColor" :color="color" :autofocus="autofocus"
+    :rules="[val => !required || !!val]" ref="myInputRg"
+    :readonly="readonly" :disable="disable" mask="##############">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
     </template>
@@ -12,19 +11,17 @@
 
 <script>
 export default {
-  name: 'my-input-text',
+  name: 'my-input-rg',
   props: {
-    label: { type: String, required: true },
+    label: { type: String, required: false, default: 'RG' },
     value: { required: true },
     bgColor: { required: false, default: 'grey-5' },
     color: { required: false, default: 'blue-grey-14' },
     autofocus: { type: Boolean, required: false },
     required: { type: Boolean, required: false },
-    icon: { type: String, required: false },
+    icon: { type: String, required: false, default: 'mdi-account-card-details' },
     readonly: { type: Boolean, required: false },
-    disable: { type: Boolean, required: false },
-    counter: { type: Boolean, required: false },
-    maxLength: { required: false }
+    disable: { type: Boolean, required: false }
   },
   data () {
     return {
@@ -35,8 +32,8 @@ export default {
       this.$emit('input', itemValue)
     },
     hasError () {
-      this.$refs.myInputText.validate()
-      return this.$refs.myInputText.hasError
+      this.$refs.myInputRg.validate()
+      return this.$refs.myInputRg.hasError
     }
   }
 }

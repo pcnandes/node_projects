@@ -20,7 +20,8 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/condominio/CondominioList.vue'), meta: { perfis: ['ADMIN', 'SINDICO'] } },
       { path: 'novo', component: () => import('pages/condominio/CondominioEdit.vue'), meta: { perfis: ['ADMIN', 'SINDICO'] } },
-      { path: ':id', component: () => import('pages/condominio/CondominioEdit.vue'), meta: { perfis: ['ADMIN', 'SINDICO'] } }
+      { path: ':id', component: () => import('pages/condominio/CondominioEdit.vue'), meta: { perfis: ['ADMIN', 'SINDICO'] } },
+      { path: ':id/:blocoId/:unidadeId', component: () => import(`pages/condominio/unidade/UnidadeEdit.vue`), meta: { perfis: ['ADMIN', 'SINDICO', 'MORADOR'] } }
     ],
     itemMenu: true,
     tituloMenu: 'Cadastro de condomínio',
