@@ -9,7 +9,7 @@
         <li>assembleia e pré assembleia online</li>
       </ul>
     </div>
-    <form v-on:submit.prevent="onSubmit()" class="login_bloco column">
+    <q-form ref="formLogin" @submit="onSubmit()" class="login_bloco column">
       <!-- <q-select ref="condominio" v-model="form.condominio" :options="condominios"
         option-label="nome" option-value="id" label="Condomínio" @input="selecionarBloco()"
         outlined dense bg-color="grey-2" color="indigo-2" transition-show="scale" transition-hide="scale"
@@ -59,7 +59,7 @@
       <my-input-password class="q-mb-lg" ref="senha" icon="mdi-textbox-password" v-model="form.senha" required />
       <q-btn color="primary" size="17px" type="submit">Login</q-btn>
       <q-checkbox v-model="form.lembreDeMim" color="blue-grey-14" label="Lembre-se de mim" />
-    </form>
+    </q-form>
   </q-page>
 </template>
 <style>

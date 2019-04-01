@@ -9,7 +9,7 @@
           <q-tooltip>Fechar / Cancelar</q-tooltip>
         </q-btn>
       </q-bar>
-      <div class="doc-container justify-center gutter-y-sm row" style="padding: 20px;">
+      <q-form ref="formColaborador" class="doc-container justify-center gutter-y-sm row" style="padding: 20px;">
         <my-input-text ref="nome" v-model.trim="colaborador.nome"
             counter max-length="50" label="Nome" autofocus required
             class="col-12" icon="mdi-account"/>
@@ -35,7 +35,7 @@
           <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" size="17px" v-if="modo!=='DETALHE'"/>
           <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Fechar" size="17px" v-if="modo==='DETALHE'"/>
         </div>
-      </div>
+      </q-form>
     </q-card>
   </q-dialog>
 </template>
@@ -76,7 +76,6 @@ export default {
   }, */
   methods: {
     async prepararInclusao () {
-      // this.$v.colaborador.$reset()
       this.colaborador = getColaboradorNew()
       this.modo = 'INCLUSAO'
       await this.$refs.modalRef.show()
@@ -87,7 +86,6 @@ export default {
     },
     async prepararAlteracao (objAlt) {
       try {
-        // this.$v.colaborador.$reset()
         this.colaborador = JSON.parse(JSON.stringify(objAlt))
         this.modo = this.possuiPerfis(['ADMIN', 'SINDICO', 'MORADOR']) ? 'ALTERACAO' : 'DETALHE'
         await this.$refs.modalRef.show()
@@ -103,17 +101,36 @@ export default {
       this.$refs.modalRef.hide()
     },
     confirmar () {
-      // this.$v.$touch()
-      // data fim maior que inicio
       if (this.colaborador.dataFim && this.maiorData(this.colaborador.dataFim, this.colaborador.dataInicio)) {
-        this.$q.notify('A data de fim da atividade não pode ser menor que a data de início.')
+        this.alertaErro('A data de fim da atividade não pode ser menor que a data de início.')
       }
-      // if (erro) {
-      //  this.$q.notify('Preencha as informações do obrigatórias e clique em confirmar.')
-      // } else {
-      this.promiseResolve(this.colaborador)
-      this.$refs.modalRef.hide()
-      // }
+      console.log('aquiii')
+      let validacao = []
+      validacao.push(this.$refs.nome.hasError())
+      validacao.push(this.$refs.dataInicio.hasError())
+      if (this.colaborador.tipoDoc === 'CPF') validacao.push(this.$refs.cpf.hasError())
+      else if (this.colaborador.tipoDoc === 'CNPJ') validacao.push(this.$refs.cnpj.hasError())
+      else if (this.colaborador.tipoDoc === 'RG') validacao.push(this.$refs.rg.hasError())
+      let erro = this.verificaErrosCampos(validacao)
+      if (erro) {
+        if (this.colaborador.tipoDoc === 'CPF' && !this.$refs.cpf.isValid) this.alertaErro('Informe um CPF válido')
+        else if (this.colaborador.tipoDoc === 'CNPJ' && !this.$refs.cnpj.isValid) this.alertaErro('Informe um CNPJ válido')
+        this.alertaErro('Preencha as informações do obrigatórias e clique em confirmar.')
+      } else {
+        this.promiseResolve(this.colaborador)
+        this.$refs.modalRef.hide()
+      }
+      /* this.$refs.formColaborador.validate().then(success => {
+        console.log(success)
+        if (success) {
+          this.promiseResolve(this.colaborador)
+          this.$refs.modalRef.hide()
+        } else {
+          if (this.colaborador.tipoDoc === 'CPF' && !this.$refs.cpf.isValid) this.alertaErro('Informe um CPF válido')
+          else if (this.colaborador.tipoDoc === 'CNPJ' && !this.$refs.cnpj.isValid) this.alertaErro('Informe um CNPJ válido')
+          this.alertaErro('Preencha as informações do obrigatórias e clique em confirmar.')
+        }
+      }) */
     },
     excluir () {
       if (!this.colaborador.id) {
