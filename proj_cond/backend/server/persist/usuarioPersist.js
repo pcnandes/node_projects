@@ -1,5 +1,7 @@
 const { Usuario, Unidade, Bloco, Condominio, sequelize } = require('./../models')
 const util = require('./util')
+const bcrypt = require('bcrypt')
+const saltRounds = 12
 
 exports.cadastrar = async function (usuario, transaction) {
   usuario = util.parseJson(usuario)
@@ -8,6 +10,15 @@ exports.cadastrar = async function (usuario, transaction) {
     transaction: transaction
   })
 }
+
+// TODO falta testar
+exports.alterarSenha = function (usuario) {
+  let senha = gerarSenhaHash(usuario.senha)
+  return Usuario.update({ 'senha': senha }, {
+    where: { id: usuario.id }
+  })
+}
+
 exports.listar = function (usuario) {
   return Usuario.findAll()
 }
@@ -20,16 +31,16 @@ exports.listarSemMorador = function (usuario) {
       }
     },
     include: [{ model: Unidade,
-        as: 'unidade',
+      as: 'unidade',
+      include: [{
+        model: Bloco,
+        as: 'bloco',
         include: [{
-          model: Bloco,
-          as: 'bloco',
-          include: [{
-            model: Condominio,
-            as: 'condominio'
-          }]
+          model: Condominio,
+          as: 'condominio'
         }]
-      }],
+      }]
+    }],
     order: [['login', 'ASC']]
   })
 }
@@ -123,4 +134,8 @@ exports.alterar = async function (usuario) {
   Usuario.update(usuario, { where: { id: usuario.id } }).then(data => {
     return this.carregar(data.id)
   })
+}
+
+function gerarSenhaHash(senha) {
+  return bcrypt.hashSync(senha, saltRounds)
 }

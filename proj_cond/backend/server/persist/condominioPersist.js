@@ -133,7 +133,7 @@ exports.gerarContasUsuario = async function (condominio) {
       // promises.push(condominioBd.save({ condominio }))
       condominioBd.blocos.forEach(bloco => {
         bloco.unidades.forEach(und => {
-          let usuario = Usuario.build({ login: und.nome, senha: und.nome, perfis: 'MORADOR' })
+          let usuario = Usuario.build({ login: und.nome, senha: null, perfis: 'MORADOR' })
           // adiciono a associoacao do usuario com a unidade em uma promise
           promises.push(und.setUsuario(usuario, { transaction }))
         })

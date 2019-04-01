@@ -51,9 +51,11 @@
         icon="mdi-check-all" color="negative"
         label="Finalizar condominio"
         title="Gera o(s) Bloco(s), as unidades e as respectivas contas de usuários"
-        @click="gerarUsuarios()"/>
+        @click="confirmaFinalizacao()"/>
     </div>
     <adicionar-bloco ref="blocoModal"/>
+    <my-confirmacao ref="confirmaFinalizarCondominio" @confirmar="finalizarCondominioGerarUsuarios()"
+      texto="Verique se todos os blocos e unidades estão corretos. Não será possível realizar alterações futuramente!"/>
   </q-page>
 </template>
 
@@ -62,10 +64,11 @@ import { getBlocoNew, getCondominioNew } from './mixin.js'
 import AdicionarBloco from './AdicionarBloco.vue'
 import MyBotoesCrud from '../../shared/MyBotoesCrud.vue'
 import MyInputText from '../../shared/MyInputText'
+import MyConfirmacao from '../../shared/MyConfirmacao'
 
 export default {
   name: 'CadastroCondominio',
-  components: { 'my-input-text': MyInputText, 'adicionar-bloco': AdicionarBloco, 'my-botoes-crud': MyBotoesCrud },
+  components: { MyInputText, AdicionarBloco, MyBotoesCrud, MyConfirmacao },
   data () {
     return {
       condominioId: this.$route.params.id,
@@ -136,17 +139,17 @@ export default {
       let _bloco = await this.$refs.blocoModal.prepararInclusao()
       this.condominio.blocos.push(_bloco)
     },
-    gerarUsuarios () {
-      this.modalConfirmaAcao('Atenção', 'Verique se todos os blocos e unidades estão corretos. Não será possível realizar alterações futuramente! ')
-        .then(() => {
-          this.$axios.put(`/api/condominio/${this.condominio.id}/gerar_contas_usuario`, this.condominio)
-            .then((res) => {
-              this.condominio = res.data
-              this.alertaSucesso('Unidades e contas de usuarios geradas com sucesso')
-            })
-            .catch((err) => {
-              throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
-            })
+    confirmaFinalizacao () {
+      this.$refs.confirmaFinalizarCondominio.show()
+    },
+    finalizarCondominioGerarUsuarios () {
+      this.$axios.put(`/api/condominio/${this.condominio.id}/gerar_contas_usuario`, this.condominio)
+        .then((res) => {
+          this.condominio = res.data
+          this.alertaSucesso('Unidades e contas de usuarios geradas com sucesso')
+        })
+        .catch((err) => {
+          throw new Error(`Erro(${err.response.status}) -  ${err.response.data.message}`)
         })
     },
     detalharUnidade (blocoId, unidadeId) {

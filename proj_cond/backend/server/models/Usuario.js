@@ -18,14 +18,9 @@ module.exports = (sequelize, type) => {
     },
     senha: {
       type: type.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
-        notEmpty: true,
         len: [3, 240]
-      },
-      set (val) {
-        let passwd = bcrypt.hashSync(val, saltRounds)
-        this.setDataValue('senha', passwd)
       }
     },
     perfis: {

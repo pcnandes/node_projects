@@ -26,7 +26,7 @@
         :title="labelConfirmar"
         @click="confirmar()"/>
     </div>
-    <my-confirmacao ref="confirmaExclusao" @click="excluir()"></my-confirmacao>
+    <my-confirmacao ref="confirmaExclusao" @confirmar="excluir()"></my-confirmacao>
   </div>
 </template>
 
