@@ -1,6 +1,6 @@
 <template>
   <q-dialog persistent ref="modalRef" :maximized="isMobile">
-    <q-card style="min-width: 500px;" class="bg-grey-4">
+    <q-card style="minWidth: 650px" class="bg-grey-4">
       <q-bar dark class="bg-primary text-white" style="height: 40px">
         <q-icon name="mdi-worker" size="30px"/>
         <div class="col text-center text-weight-bold">Cadastro de Colaborador</div>
@@ -9,39 +9,26 @@
           <q-tooltip>Fechar / Cancelar</q-tooltip>
         </q-btn>
       </q-bar>
-      <div class="doc-container justify-center gutter-y-sm" style="padding: 20px;">
+      <div class="doc-container justify-center gutter-y-sm row" style="padding: 20px;">
         <my-input-text ref="nome" v-model.trim="colaborador.nome"
             counter max-length="50" label="Nome" autofocus required
             class="col-12" icon="mdi-account"/>
         <my-select ref="tipo_documento" v-model="colaborador.tipoDoc" @input="colaborador.numeroDoc = ''"
           :options="tiposDoc" label="Tipo de documento" required emit-value
-          class="col-12" icon="mdi-arrow-decision"/>
+          class="col-xs-12 col-md-6" icon="mdi-arrow-decision"/>
         <my-input-cpf ref="cpf" v-if="colaborador.tipoDoc==='CPF'" v-model.trim="colaborador.numeroDoc"
-          required class="col-12"/>
+          required class="col-xs-12 col-md-6"/>
         <my-input-cnpj ref="cnpj" v-if="colaborador.tipoDoc==='CNPJ'" v-model.trim="colaborador.numeroDoc"
-          required class="col-12"/>
+          required class="col-xs-12 col-md-6"/>
         <my-input-rg ref="rg" v-if="colaborador.tipoDoc==='RG'" v-model.trim="colaborador.numeroDoc"
-          required class="col-12"/>
+          required class="col-xs-12 col-md-6"/>
         <my-input-data ref="dataInicio" v-model.trim="colaborador.dataInicio"
-          required class="col-6" label="Inicio Atividade"/>
+          required class="col-xs-12 col-md-6" label="Inicio Atividade"/>
         <my-input-data ref="dataFim" v-model.trim="colaborador.dataFim"
-          class="col-6" label="Fim Atividade"/>
+          class="col-xs-12 col-md-6" label="Fim Atividade"/>
         <my-input-text-area ref="observacao" v-model.trim="colaborador.observacao"
             counter max-length="500" label="Observações"
             class="col-12" icon="mdi-clipboard-text"/>
-        <!--
-        <q-field class="col-12" icon="mdi-calendar">
-          <q-datetime v-model="colaborador.dataInicio" type="date" float-label="Inicio Atividade"
-            min="2012-12-31" default-view="year" clearable
-            @blur="$v.colaborador.dataInicio.$touch" :error="$v.colaborador.dataInicio.$error"/>
-        </q-field>
-        <q-field class="col-12" icon="mdi-calendar">
-          <q-datetime v-model="colaborador.dataFim" type="date" float-label="Fim Atividade"
-            min="2012-12-31" default-view="year" clearable />
-        </q-field>
-        <q-field class="col-12" icon="mdi-clipboard-text">
-          <q-input type="textarea" v-model="colaborador.observacao" float-label="Observações"/>
-        </q-field> -->
         <div class="barra-botoes">
           <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Cancelar" size="17px" v-if="modo!=='DETALHE'"/>
           <q-btn class="col-xs-12" color="negative" @click="excluir()" label="Excluir" size="17px" v-if="modo==='ALTERACAO' && !colaborador.id"/>
