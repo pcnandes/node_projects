@@ -10,7 +10,7 @@
         </q-btn>
       </q-bar>
       <div style="margin: 20px;">
-        {{texto}}
+        <strong>{{texto}}</strong>
         <div class="barra-botoes">
           <q-btn color="grey-14" @click="cancelar()" label="Cancelar" size="17px" />
           <q-btn color="primary" @click="confirmarAcao()" label="Confirmar" size="17px" />
