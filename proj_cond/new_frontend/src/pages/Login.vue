@@ -117,7 +117,8 @@ export default {
           }
         })
         .catch((err) => {
-          console.error('ERRO: ', err.response.erro, err.erro)
+          // console.error('ERRO: ', err.response.erro, err.erro)
+          console.error('ERRO: ', err)
         })
     },
     selecionaBloco (condominio) {

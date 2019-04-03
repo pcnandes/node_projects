@@ -53,7 +53,6 @@ import MyInputTextArea from '../../../shared/MyInputTextArea'
 
 export default {
   components: { MyInputText, MySelect, MyInputCpf, MyInputCnpj, MyInputRg, MyInputData, MyInputTextArea },
-  // directives: {mask},
   data () {
     return {
       colaborador: getColaboradorNew(),
@@ -63,22 +62,12 @@ export default {
       modo: 'INCLUSAO'
     }
   },
-  /*
-  validations () {
-    return {
-      colaborador: {
-        tipoDoc: { required },
-        nome: { required },
-        numeroDoc: this.colaborador.tipoDoc !== TIPO_DOCUMENTO_COLABORADOR.RG ? { required, cpfCnpj } : { required },
-        dataInicio: { required }
-      }
-    }
-  }, */
   methods: {
     async prepararInclusao () {
       this.colaborador = getColaboradorNew()
       this.modo = 'INCLUSAO'
       await this.$refs.modalRef.show()
+      this.limparValidacao()
       return new Promise((resolve, reject) => {
         this.promiseResolve = resolve
         this.promiseReject = reject
@@ -89,6 +78,7 @@ export default {
         this.colaborador = JSON.parse(JSON.stringify(objAlt))
         this.modo = this.possuiPerfis(['ADMIN', 'SINDICO', 'MORADOR']) ? 'ALTERACAO' : 'DETALHE'
         await this.$refs.modalRef.show()
+        this.limparValidacao()
         return new Promise((resolve, reject) => {
           this.promiseResolve = resolve
           this.promiseReject = reject
@@ -104,7 +94,6 @@ export default {
       if (this.colaborador.dataFim && this.maiorData(this.colaborador.dataFim, this.colaborador.dataInicio)) {
         this.alertaErro('A data de fim da atividade não pode ser menor que a data de início.')
       }
-      console.log('aquiii')
       let validacao = []
       validacao.push(this.$refs.nome.hasError())
       validacao.push(this.$refs.dataInicio.hasError())
@@ -112,9 +101,15 @@ export default {
       else if (this.colaborador.tipoDoc === 'CNPJ') validacao.push(this.$refs.cnpj.hasError())
       else if (this.colaborador.tipoDoc === 'RG') validacao.push(this.$refs.rg.hasError())
       let erro = this.verificaErrosCampos(validacao)
+      // verifica data inicio maior que fim
+      if (this.colaborador.dataFim && this.colaborador.dataInicio && this.maiorData(this.colaborador.dataFim, this.colaborador.dataInicio)) {
+        this.$q.notify('A data de fim da atividade não pode ser menor que a data de início.')
+        return
+      }
+      // valida cpf e cnpj
+      if (this.colaborador.tipoDoc === 'CPF' && !this.$refs.cpf.isValid) this.alertaErro('Informe um CPF válido')
+      else if (this.colaborador.tipoDoc === 'CNPJ' && !this.$refs.cnpj.isValid) this.alertaErro('Informe um CNPJ válido')
       if (erro) {
-        if (this.colaborador.tipoDoc === 'CPF' && !this.$refs.cpf.isValid) this.alertaErro('Informe um CPF válido')
-        else if (this.colaborador.tipoDoc === 'CNPJ' && !this.$refs.cnpj.isValid) this.alertaErro('Informe um CNPJ válido')
         this.alertaErro('Preencha as informações do obrigatórias e clique em confirmar.')
       } else {
         this.promiseResolve(this.colaborador)
@@ -137,6 +132,15 @@ export default {
         this.promiseResolve(null)
       }
       this.$refs.modalRef.hide()
+    },
+    limparValidacao () {
+      /* this.$refs.nome.resetValidation()
+      this.$refs.dataInicio.resetValidation()
+      this.$refs.dataFim.resetValidation()
+      this.$refs.tipoDoc.resetValidation()
+      this.$refs.cpf.resetValidation()
+      this.$refs.cnpj.resetValidation()
+      this.$refs.rg.resetValidation() */
     }
   }
 }

@@ -38,12 +38,13 @@
           </q-item>
         </q-list>
         <div class="row justify-center">
-          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar Morador" @click="prepararAdicionarMorador()" color="secondary"/>
+          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar Morador"
+            @click="prepararAdicionarMorador()" color="secondary" size="17px"/>
         </div>
       </q-expansion-item>
 
       <!-- Colaboradores -->
-      <q-expansion-item class="col-12 q-my-lg">
+      <q-expansion-item class="col-12 q-my-lg" header-class="bg-grey-5 text-black">
         <template v-slot:header>
           <q-item-section avatar>
             <q-avatar icon="mdi-worker" color="warning" text-color="white" />
@@ -56,23 +57,31 @@
             <q-tooltip>Exibe colaboradores inativos</q-tooltip>
           </q-item-section>
         </template>
-
-        <q-list inset-separator no-border highlight v-if="unidade.colaboradores && unidade.colaboradores.length>0">
-          <q-item v-for="c in getColaboradores" :key="c.id" @click.native="prepararAlterarColaborador(c)">
-            <q-item-side :letter="`${c.dataFim && maiorData(c.dataFim, new Date()) ? 'I' : 'A'}`" color="secondary">
-              <q-tooltip>{{c.dataFim && maiorData(c.dataFim, new Date()) ? 'Colaborador Inativo' : 'Colaborador Ativo'}}</q-tooltip>
-            </q-item-side>
-            <q-item-main :label="`${c.nome}`"
-              :sublabel="`Início Atividade: ${formataData(c.dataInicio)} ${c.dataFim ? 'Fim Atividade: ' + formataData(c.dataFim) : ''} ${c.tipoDoc}: ${c.numeroDoc}`"
-            />
-            <q-item-side right v-if="c.dataFim && maiorData(c.dataFim, new Date())" icon="mdi-cancel" color="fadded">
-              <q-tooltip>Não presta mais serviço</q-tooltip>
-            </q-item-side>
-          </q-item>
-        </q-list>
-        <div class="row justify-center">
-          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar Colaborador" @click="prepararAdicionarColaborador()" color="secondary"/>
-        </div>
+        <q-card class="bg-grey-5">
+          <q-list inset-separator no-border highlight v-if="unidade.colaboradores && unidade.colaboradores.length>0">
+            <q-item v-for="c in getColaboradores" :key="c.id" @click.native="prepararAlterarColaborador(c)">
+              <q-item-section avatar color="secondary">
+                {{c.dataFim && maiorData(c.dataFim, new Date()) ? 'I' : 'A'}}
+                <q-tooltip>{{c.dataFim && maiorData(c.dataFim, new Date()) ? 'Colaborador Inativo' : 'Colaborador Ativo'}}</q-tooltip>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{c.nome}}</q-item-label>
+                <q-item-label caption lines="2">
+                  {{`Início Atividade: ${formataData(c.dataInicio)} ${c.dataFim ? 'Fim Atividade: ' + formataData(c.dataFim) : ''} ${c.tipoDoc}: ${c.numeroDoc}`}}
+                </q-item-label>
+              </q-item-section>
+              <q-item-section side top v-if="c.dataFim && maiorData(c.dataFim, new Date())">
+                <q-icon name="mdi-cancel" color="grey-14">
+                  <q-tooltip>Não presta mais serviço</q-tooltip>
+                </q-icon>
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <div class="row justify-center">
+            <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar Colaborador"
+              @click="prepararAdicionarColaborador()" color="secondary" size="17px"/>
+          </div>
+        </q-card>
       </q-expansion-item>
 
       <!-- Veículos -->
@@ -104,7 +113,8 @@
           </q-item>
         </q-list>
         <div class="row justify-center">
-          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar veículo" @click="prepararAdicionarVeiculo()" color="secondary"/>
+          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar veículo"
+            @click="prepararAdicionarVeiculo()" color="secondary" size="17px"/>
         </div>
       </q-expansion-item>
     </q-list>
@@ -114,8 +124,8 @@
     <!-- <adicionar-veiculo ref="veiculoModal"/> -->
     <!-- botoes -->
     <div class="barra-botoes">
-      <q-btn label="Alterar Senha" color="secondary"/>
-      <q-btn label="Zerar Senha" color="secondary"/>
+      <q-btn label="Alterar Senha" color="secondary" size="17px"/>
+      <q-btn label="Zerar Senha" color="secondary" size="17px"/>
     </div>
   </q-page>
 </template>

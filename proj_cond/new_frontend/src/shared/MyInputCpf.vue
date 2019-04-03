@@ -1,8 +1,9 @@
 <template>
   <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm"
     filled :bg-color="bgColor" :color="color" :autofocus="autofocus"
-    :rules="[val => !required || !!val, val => testaCPF(val)]" ref="myInputCpf"
-    :readonly="readonly" :disable="disable" mask="###.###.###-##">
+    :rules="[val => !required || !!val]" @blur="testaCPF()" ref="myInputCpf"
+    :readonly="readonly" :disable="disable" mask="###.###.###-##"
+    :error="!isValid">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
     </template>
@@ -37,13 +38,13 @@ export default {
       return this.$refs.myInputCpf.hasError
     },
     testaCPF (cpf) {
+      cpf = !cpf ? this.value : cpf
       let strCPF = JSON.parse(JSON.stringify(cpf.replace(/[^\d]+/g, '')))
       let Soma
       let Resto
       Soma = 0
-      if (cpf.length !== 11 || cpf === '00000000000' || cpf === '11111111111' || cpf === '22222222222' ||
-        cpf === '33333333333' || cpf === '44444444444' || cpf === '55555555555' || cpf === '66666666666' ||
-        cpf === '77777777777' || cpf === '88888888888' || cpf === '99999999999') {
+      var regexInvalixCpf = /^0{11}|1{11}|2{11}|3{11}|4{11}|5{11}|6{11}|7{11}|8{11}|9{11}$/g
+      if (regexInvalixCpf.test(strCPF)) {
         this.isValid = false
         return false
       }

@@ -30,17 +30,16 @@ export default async ({ Vue }) => {
     return response
   }, function (error) {
     Vue.prototype.$q.loading.hide()
-    console.log('errroooooo', error)
     // Gateway Timeout -> servidor offline
     if (error.response.status && error.response.status === 504) {
       disparaMensagemErro(Vue.prototype, `Erro(${error.response.status}) - Servidor offline`)
-      Vue.prototype.$router.push('/')
+      if (Vue.prototype.$router) Vue.prototype.$router.push('/')
     } else if (error.response.status && error.response.status === 401) {
       disparaMensagemErro(Vue.prototype, `Erro(${error.response.status}) - Login expirado, faça login novamente`)
-      Vue.prototype.$router.push('/')
+      if (Vue.prototype.$router) Vue.prototype.$router.push('/')
     } else if (error.response.status && error.response.status === 403) {
       disparaMensagemErro(Vue.prototype, `Erro(${error.response.status}) - ${error.response.data.message}`)
-      Vue.prototype.$router.go(-1)
+      if (Vue.prototype.$router) Vue.prototype.$router.go(-1)
     } else if (error.response.status) {
       disparaMensagemErro(Vue.prototype, `Erro(${error.response.status}) - ${error.response.data.message}`)
     }
