@@ -34,6 +34,9 @@ export default {
     hasError () {
       this.$refs.myInputRg.validate()
       return this.$refs.myInputRg.hasError
+    },
+    resetValidation () {
+      this.$refs.myInputRg.resetValidation()
     }
   }
 }

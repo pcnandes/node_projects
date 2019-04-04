@@ -134,13 +134,13 @@ export default {
       this.$refs.modalRef.hide()
     },
     limparValidacao () {
-      /* this.$refs.nome.resetValidation()
+      this.$refs.nome.resetValidation()
       this.$refs.dataInicio.resetValidation()
       this.$refs.dataFim.resetValidation()
-      this.$refs.tipoDoc.resetValidation()
-      this.$refs.cpf.resetValidation()
-      this.$refs.cnpj.resetValidation()
-      this.$refs.rg.resetValidation() */
+      if (this.$refs.tipoDoc) this.$refs.tipoDoc.resetValidation()
+      if (this.$refs.cpf) this.$refs.cpf.resetValidation()
+      if (this.$refs.cnpj) this.$refs.cnpj.resetValidation()
+      if (this.$refs.rg) this.$refs.rg.resetValidation()
     }
   }
 }

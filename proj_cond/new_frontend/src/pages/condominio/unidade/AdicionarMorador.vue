@@ -1,11 +1,24 @@
 <template>
-  <q-modal no-backdrop-dismiss no-esc-dismiss ref="modalRef"
-    :content-css="{minWidth: isMobile?'100vw':'650px', maxWidth: isMobile?'100vw':'60vw'}" :maximized="isMobile">
-    <div class="doc-container justify-center gutter-y-sm" style="padding: 20px;">
-        <div class="row justify-center q-display-1">
-          Cadastro de Morador
-        </div>
-        <q-field class="col-12" icon="mdi-arrow-decision">
+  <q-dialog persistent ref="modalRef" :maximized="isMobile">
+    <q-card style="minWidth: 650px" class="bg-grey-4">
+      <q-bar dark class="bg-primary text-white" style="height: 40px">
+        <q-icon name="mdi-worker" size="30px"/>
+        <div class="col text-center text-weight-bold">Cadastro de Morador</div>
+        <q-space />
+        <q-btn dense flat icon="close" v-close-popup size="14px">
+          <q-tooltip>Fechar / Cancelar</q-tooltip>
+        </q-btn>
+      </q-bar>
+      <q-form ref="formColaborador" class="doc-container justify-center gutter-y-sm row" style="padding: 20px;">
+        <my-select ref="tipo" v-model="morador.tipo" :disable="modo==='DETALHE'"
+          :options="tiposMorador" label="Tipo" required emit-value
+          class="col-xs-12 col-md-6" icon="mdi-arrow-decision" />
+        <my-input-text ref="nome" v-model.trim="morador.nome" :disable="modo==='DETALHE'"
+            counter max-length="50" label="Nome" autofocus required
+            class="col-12"/>
+        <my-input-data ref="nascimento" v-model.trim="morador.nascimento"
+          required class="col-xs-12 col-md-6" label="Inicio Atividade" :disable="modo==='DETALHE'"/>
+        <!-- <q-field class="col-12" icon="mdi-arrow-decision">
           <q-select v-model="morador.tipo" float-label="Tipo" :options="tiposMorador" :disable="modo==='DETALHE'"
             @blur="$v.morador.tipo.$touch" :error="$v.morador.tipo.$error"
           />
@@ -44,41 +57,45 @@
         <q-field class="col-12" v-if="!$v.morador.email.$invalid && this.morador.email">
           <q-checkbox v-model="morador.enviarNotificacaoEmail" label="Enviar notificações por email para esse usuário."
           :disable="modo==='DETALHE'" />
-        </q-field>
+        </q-field> -->
         <div class="barra-botoes">
-          <q-btn class="col-xs-12" color="faded" @click="cancelar()" label="Cancelar" v-if="modo!=='DETALHE'"/>
-          <q-btn class="col-xs-12" color="negative" @click="excluir()" label="Excluir"  v-if="modo==='ALTERACAO'"/>
-          <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" v-if="modo!=='DETALHE'"/>
-          <q-btn class="col-xs-12" color="primary" @click="cancelar()" label="Fechar" v-if="modo==='DETALHE'"/>
+          <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Cancelar" size="17px" v-if="modo!=='DETALHE'"/>
+          <q-btn class="col-xs-12" color="negative" @click="excluir()" label="Excluir"  size="17px" v-if="modo==='ALTERACAO'"/>
+          <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" size="17px" v-if="modo!=='DETALHE'"/>
+          <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Fechar" size="17px" v-if="modo==='DETALHE'"/>
         </div>
-    </div>
-  </q-modal>
+      </q-form>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
-import { QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox } from 'quasar'
-import { required, email, helpers } from 'vuelidate/lib/validators'
-import { mask } from 'vue-the-mask'
+// import { QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox } from 'quasar'
+// import { required, email, helpers } from 'vuelidate/lib/validators'
+// import { mask } from 'vue-the-mask'
+import MySelect from '../../../shared/MySelect'
+import MyInputText from '../../../shared/MyInputText'
+import MyInputData from '../../../shared/MyInputData'
 import { TIPO_MORADOR } from '../../../const'
-import { getMoradorNew } from '../mixin.js'
+import { Morador } from '../mixin.js'
 
-const telefone = helpers.regex('alpha', /^\([1-9]{2}\) [2-9][0-9]{3,4}-[0-9]{4}$/)
+// const telefone = helpers.regex('alpha', /^\([1-9]{2}\) [2-9][0-9]{3,4}-[0-9]{4}$/)
 
 export default {
-  components: {
-    QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox
+  components: { MySelect, MyInputText, MyInputData
+    // QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox
   },
-  directives: {mask},
+  // directives: {mask},
   data () {
     return {
-      morador: getMoradorNew(),
+      morador: new Morador(),
       tiposMorador: this.carregarValoresCombo(TIPO_MORADOR),
       promiseResolve: null,
       promiseReject: null,
       modo: 'INCLUSAO'
     }
   },
-  validations: {
+  /* validations: {
     morador: {
       tipo: { required },
       nome: { required },
@@ -87,11 +104,11 @@ export default {
       celular1: {telefone},
       celular2: {telefone}
     }
-  },
+  }, */
   methods: {
     async prepararInclusao () {
-      this.$v.morador.$reset()
-      this.morador = getMoradorNew()
+      // this.$v.morador.$reset()
+      this.morador = new Morador()
       this.modo = 'INCLUSAO'
       await this.$refs.modalRef.show()
       return new Promise((resolve, reject) => {
@@ -101,7 +118,7 @@ export default {
     },
     async prepararAlteracao (objAlt) {
       try {
-        this.$v.morador.$reset()
+        // this.$v.morador.$reset()
         this.morador = JSON.parse(JSON.stringify(objAlt))
         this.modo = !this.morador.dataExclusao && this.possuiPerfis(['ADMIN', 'SINDICO', 'MORADOR']) ? 'ALTERACAO' : 'DETALHE'
         await this.$refs.modalRef.show()
@@ -118,14 +135,16 @@ export default {
       this.promiseReject()
     },
     confirmar () {
-      this.$v.morador.$touch()
+      /* this.$v.morador.$touch()
       if (this.$v.morador.email.$invalid) {
         this.$q.notify('Informe um email vádido!')
       }
       if (this.morador.enviarNotificacaoEmail && (this.$v.morador.email.$invalid || !this.morador.email)) {
         this.$q.notify('Informe um email vádido para que o empregado possa receber notificações por email!')
       }
-      if (this.$v.morador.$error) {
+      if (this.$v.morador.$error) { */
+      let erro = true
+      if (erro) {
         this.$q.notify('Preencha as informações do obrigatórias e clique em confirmar.')
       } else {
         this.promiseResolve(this.morador)

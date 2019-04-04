@@ -1,7 +1,7 @@
 <template>
   <q-input :value="value" :label="label" @input="updateValue" type="textarea" class="q-pa-xs q-mb-sm" v-bind:class="counter ? 'q-mb-lg' : ''"
     filled  :bg-color="bgColor" :color="color" :autofocus="autofocus"
-    :rules="[val => !required || !!val]" ref="myInputText"
+    :rules="[val => !required || !!val]" ref="myInputTextArea"
     :readonly="readonly" :disable="disable"
     :counter="counter" :maxlength="maxLength">
     <template v-if="icon" v-slot:prepend>
@@ -35,8 +35,11 @@ export default {
       this.$emit('input', itemValue)
     },
     hasError () {
-      this.$refs.myInputText.validate()
-      return this.$refs.myInputText.hasError
+      this.$refs.myInputTextArea.validate()
+      return this.$refs.myInputTextArea.hasError
+    },
+    resetValidation () {
+      this.$refs.myInputTextArea.resetValidation()
     }
   }
 }

@@ -37,6 +37,9 @@ export default {
       this.$refs.myInputCpf.validate()
       return this.$refs.myInputCpf.hasError
     },
+    resetValidation () {
+      this.$refs.myInputCpf.resetValidation()
+    },
     testaCPF (cpf) {
       cpf = !cpf ? this.value : cpf
       let strCPF = JSON.parse(JSON.stringify(cpf.replace(/[^\d]+/g, '')))

@@ -41,6 +41,9 @@ export default {
       this.$refs.myInputPass.validate()
       this.comErro = this.$refs.myInputPass.hasError
       return this.comErro
+    },
+    resetValidation () {
+      this.$refs.myInputPass.resetValidation()
     }
   }
 }

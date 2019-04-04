@@ -5,7 +5,6 @@ export function _formataData (data) {
 
 export function _maiorData (dataIni, dataFim) {
   let diff = date.getDateDiff(dataIni, dataFim, 'days')
-  console.log('entrou auiiiii', diff)
   return diff > 0
 }
 

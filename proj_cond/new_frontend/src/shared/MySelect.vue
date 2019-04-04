@@ -56,6 +56,9 @@ export default {
     hasError () {
       this.$refs.mySelect.validate()
       return this.$refs.mySelect.hasError
+    },
+    resetValidation () {
+      this.$refs.mySelect.resetValidation()
     }
   },
   mounted () {

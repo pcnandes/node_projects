@@ -36,6 +36,9 @@ export default {
       this.$refs.myInputCnpj.validate()
       return this.$refs.myInputCnpj.hasError
     },
+    resetValidation () {
+      this.$refs.myInputCnpj.resetValidation()
+    },
     testaCPF (strCnpj) {
       let cnpj = JSON.parse(JSON.stringify(strCnpj.replace(/[^\d]+/g, '')))
       if (cnpj === '') return false

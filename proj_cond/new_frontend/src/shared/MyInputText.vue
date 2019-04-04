@@ -34,6 +34,9 @@ export default {
     updateValue (itemValue) {
       this.$emit('input', itemValue)
     },
+    resetValidation () {
+      this.$refs.myInputText.resetValidation()
+    },
     hasError () {
       this.$refs.myInputText.validate()
       return this.$refs.myInputText.hasError

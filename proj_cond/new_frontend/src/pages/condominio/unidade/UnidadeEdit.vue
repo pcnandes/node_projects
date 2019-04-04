@@ -57,9 +57,9 @@
             <q-tooltip>Exibe colaboradores inativos</q-tooltip>
           </q-item-section>
         </template>
-        <q-card class="bg-grey-5">
-          <q-list class="col-12 q-px-xl q-pb-md" separator v-if="unidade.colaboradores && unidade.colaboradores.length>0">
-            <q-item v-for="c in getColaboradores" :key="c.id" @click.native="prepararAlterarColaborador(c)">
+        <q-card class="bg-grey-5 q-pa-sm">
+          <q-list class="col-12 q-px-lg" separator v-if="unidade.colaboradores && unidade.colaboradores.length>0">
+            <q-item clickable v-ripple v-for="c in getColaboradores" :key="c.id" @click="prepararAlterarColaborador(c)">
               <q-item-section avatar color="secondary">
                 <q-avatar color="positive" text-color="white">
                   {{c.isAtivo() ? 'A' : 'I'}}
@@ -121,7 +121,7 @@
       </q-expansion-item>
     </q-list>
     <!-- modais -->
-    <!-- <adicionar-morador ref="moradorModal"/> -->
+    <adicionar-morador ref="moradorModal"/>
     <adicionar-colaborador ref="colaboradorModal"/>
     <!-- <adicionar-veiculo ref="veiculoModal"/> -->
     <!-- botoes -->
@@ -134,13 +134,13 @@
 
 <script>
 import BotoesCrud from '../../../shared/MyBotoesCrud'
-// import AdicionarMorador from './AdicionarMorador.vue'
+import AdicionarMorador from './AdicionarMorador.vue'
 import AdicionarColaborador from './AdicionarColaborador.vue'
 // import AdicionarVeiculo from './AdicionarVeiculo.vue'
 
 export default {
   name: 'Editar_Unidade',
-  components: { BotoesCrud, AdicionarColaborador }, // , AdicionarMorador, AdicionarVeiculo
+  components: { BotoesCrud, AdicionarColaborador, AdicionarMorador }, // , AdicionarVeiculo
   data () {
     return {
       unidade: {},

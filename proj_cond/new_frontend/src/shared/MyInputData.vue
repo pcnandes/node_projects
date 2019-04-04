@@ -1,6 +1,6 @@
 <template>
   <q-input :value="dataFormatada" @input="updateValue" :label="label" class="q-pa-xs q-mb-sm"
-    filled :bg-color="bgColor" :color="color" :autofocus="autofocus" ref="myInputData"
+    filled :bg-color="bgColor" mask="##/##/####" :color="color" :autofocus="autofocus" ref="myInputData"
     :rules="[val => !val || dataValida(val) , val => !required || !!val]" :readonly="readonly" :disable="disable">
     <template v-slot:append>
       <q-icon name="event" class="cursor-pointer">
@@ -44,6 +44,9 @@ export default {
     dataValida (data) {
       let _data = JSON.stringify(data)
       return date.isValid(_data)
+    },
+    resetValidation () {
+      this.$refs.myInputData.resetValidation()
     }
   },
   computed: {
