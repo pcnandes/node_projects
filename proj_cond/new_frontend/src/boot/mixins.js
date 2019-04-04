@@ -1,4 +1,5 @@
-import { date } from 'quasar'
+// import { date } from 'quasar'
+import { _formataData, _maiorData, _maiorQueDataAtual } from '../shared/funcoes'
 
 export default ({ Vue }) => {
   Vue.mixin({
@@ -45,15 +46,13 @@ export default ({ Vue }) => {
         return Object.keys(obj).map(key => ({ value: key, label: obj[key] }))
       },
       formataData (data) {
-        return data ? date.formatDate(data, 'DD/MM/YYYY') : null
+        return _formataData(data)
       },
       maiorData (dataIni, dataFim) {
-        let diff = date.getDateDiff(dataIni, dataFim, 'days')
-        return diff < 0
+        return _maiorData(dataIni, dataFim)
       },
       maiorQueDataAtual (dataIni) {
-        let diff = date.getDateDiff(dataIni, new Date(), 'days')
-        return diff <= 0
+        return _maiorQueDataAtual(dataIni)
       },
       verificaErrosCampos (itens) {
         console.log('itennnns', itens)

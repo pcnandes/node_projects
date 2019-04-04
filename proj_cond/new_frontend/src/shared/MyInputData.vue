@@ -1,11 +1,11 @@
 <template>
-  <q-input :value="value" @input="updateValue" :label="label" class="q-pa-xs q-mb-sm"
-    filled mask="date" :bg-color="bgColor" :color="color" :autofocus="autofocus" ref="myInputData"
+  <q-input :value="dataFormatada" @input="updateValue" :label="label" class="q-pa-xs q-mb-sm"
+    filled :bg-color="bgColor" :color="color" :autofocus="autofocus" ref="myInputData"
     :rules="[val => !val || dataValida(val) , val => !required || !!val]" :readonly="readonly" :disable="disable">
     <template v-slot:append>
       <q-icon name="event" class="cursor-pointer">
         <q-popup-proxy ref="myInputDataProx">
-          <q-date :value="value" @input="updateValue" minimal/>
+          <q-date :value="dataFormatadaComData" @input="updateValue" minimal/>
         </q-popup-proxy>
       </q-icon>
     </template>
@@ -35,7 +35,7 @@ export default {
   methods: {
     updateValue (itemValue) {
       this.$refs.myInputDataProx.hide()
-      this.$emit('input', itemValue)
+      this.$emit('input', new Date(itemValue))
     },
     hasError () {
       this.$refs.myInputData.validate()
@@ -44,6 +44,14 @@ export default {
     dataValida (data) {
       let _data = JSON.stringify(data)
       return date.isValid(_data)
+    }
+  },
+  computed: {
+    dataFormatada: function () {
+      return date.formatDate(this.value, 'DD/MM/YYYY')
+    },
+    dataFormatadaComData: function () {
+      return date.formatDate(this.value, 'YYYY/MM/DD')
     }
   }
 }

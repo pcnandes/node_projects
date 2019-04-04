@@ -42,7 +42,7 @@
 
 <script>
 import { TIPO_DOCUMENTO_COLABORADOR } from '../../../const'
-import { getColaboradorNew } from '../mixin.js'
+import { Colaborador } from '../mixin.js'
 import MyInputText from '../../../shared/MyInputText'
 import MySelect from '../../../shared/MySelect'
 import MyInputCpf from '../../../shared/MyInputCpf'
@@ -55,7 +55,7 @@ export default {
   components: { MyInputText, MySelect, MyInputCpf, MyInputCnpj, MyInputRg, MyInputData, MyInputTextArea },
   data () {
     return {
-      colaborador: getColaboradorNew(),
+      colaborador: new Colaborador(),
       tiposDoc: this.carregarValoresCombo(TIPO_DOCUMENTO_COLABORADOR),
       promiseResolve: null,
       promiseReject: null,
@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     async prepararInclusao () {
-      this.colaborador = getColaboradorNew()
+      this.colaborador = new Colaborador()
       this.modo = 'INCLUSAO'
       await this.$refs.modalRef.show()
       this.limparValidacao()

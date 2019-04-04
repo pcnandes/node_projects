@@ -58,11 +58,13 @@
           </q-item-section>
         </template>
         <q-card class="bg-grey-5">
-          <q-list inset-separator no-border highlight v-if="unidade.colaboradores && unidade.colaboradores.length>0">
+          <q-list class="col-12 q-px-xl q-pb-md" separator v-if="unidade.colaboradores && unidade.colaboradores.length>0">
             <q-item v-for="c in getColaboradores" :key="c.id" @click.native="prepararAlterarColaborador(c)">
               <q-item-section avatar color="secondary">
-                {{c.dataFim && maiorData(c.dataFim, new Date()) ? 'I' : 'A'}}
-                <q-tooltip>{{c.dataFim && maiorData(c.dataFim, new Date()) ? 'Colaborador Inativo' : 'Colaborador Ativo'}}</q-tooltip>
+                <q-avatar color="positive" text-color="white">
+                  {{c.isAtivo() ? 'A' : 'I'}}
+                  <q-tooltip>{{c.isAtivo() ? 'Colaborador Ativo' : 'Colaborador Inativo'}}</q-tooltip>
+                </q-avatar>
               </q-item-section>
               <q-item-section>
                 <q-item-label>{{c.nome}}</q-item-label>
