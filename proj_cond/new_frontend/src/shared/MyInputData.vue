@@ -1,7 +1,8 @@
 <template>
+  <!-- :rules="[val => !val || dataValida(val) , val => !required || !!val]" -->
   <q-input :value="dataFormatada" @input="updateValue" :label="label" class="q-pa-xs q-mb-sm"
     filled :bg-color="bgColor" mask="##/##/####" :color="color" :autofocus="autofocus" ref="myInputData"
-    :rules="[val => !val || dataValida(val) , val => !required || !!val]" :readonly="readonly" :disable="disable">
+    :readonly="readonly" :disable="disable" :error="!isValid" @blur="hasError()">
     <template v-slot:append>
       <q-icon name="event" class="cursor-pointer">
         <q-popup-proxy ref="myInputDataProx">
@@ -26,10 +27,14 @@ export default {
     autofocus: { type: Boolean, required: false },
     required: { type: Boolean, required: false },
     readonly: { type: Boolean, required: false },
-    disable: { type: Boolean, required: false }
+    disable: { type: Boolean, required: false },
+    minDate: { type: Number, required: false },
+    maxDate: { type: Number, required: false }
   },
   data () {
     return {
+      erros: [],
+      erroRequired: false
     }
   },
   methods: {
@@ -38,15 +43,19 @@ export default {
       this.$emit('input', new Date(itemValue))
     },
     hasError () {
-      this.$refs.myInputData.validate()
-      return this.$refs.myInputData.hasError
+      this.erros = []
+      this.erroRequired = this.required && !this.value
+      if (!this.dataValida()) this.erros.push(`Informe uma data válida`)
+      // this.$refs.myInputData.validate()
+      // return this.$refs.myInputData.hasError
     },
-    dataValida (data) {
-      let _data = JSON.stringify(data)
-      return date.isValid(_data)
+    dataValida () {
+      return date.isValid(this.value)
     },
     resetValidation () {
-      this.$refs.myInputData.resetValidation()
+      this.erroRequired = false
+      this.erros = []
+      // this.$refs.myInputData.resetValidation()
     }
   },
   computed: {
@@ -55,6 +64,9 @@ export default {
     },
     dataFormatadaComData: function () {
       return date.formatDate(this.value, 'YYYY/MM/DD')
+    },
+    isValid: function () {
+      return !this.erroRequired && this.erros.length === 0
     }
   }
 }

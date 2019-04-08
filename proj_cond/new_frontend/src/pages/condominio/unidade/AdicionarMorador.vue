@@ -9,54 +9,38 @@
           <q-tooltip>Fechar / Cancelar</q-tooltip>
         </q-btn>
       </q-bar>
-      <q-form ref="formColaborador" class="doc-container justify-center gutter-y-sm row" style="padding: 20px;">
+      <my-form ref="form" class="doc-container justify-center gutter-y-sm row" style="padding: 20px;">
         <my-select ref="tipo" v-model="morador.tipo" :disable="modo==='DETALHE'"
           :options="tiposMorador" label="Tipo" required emit-value
-          class="col-xs-12 col-md-6" icon="mdi-arrow-decision" />
+          class="col-xs-12" icon="mdi-arrow-decision" />
+
         <my-input-text ref="nome" v-model.trim="morador.nome" :disable="modo==='DETALHE'"
-            counter max-length="50" label="Nome" autofocus required
-            class="col-12"/>
+            counter max-length="50" label="Nome" autofocus required class="col-12"/>
+
+        <my-input-email ref="email" v-model.trim="morador.email" :disable="modo==='DETALHE'"
+            counter max-length="50" label="Email" class="col-12"/>
+
         <my-input-data ref="nascimento" v-model.trim="morador.nascimento"
-          required class="col-xs-12 col-md-6" label="Inicio Atividade" :disable="modo==='DETALHE'"/>
-        <!-- <q-field class="col-12" icon="mdi-arrow-decision">
-          <q-select v-model="morador.tipo" float-label="Tipo" :options="tiposMorador" :disable="modo==='DETALHE'"
-            @blur="$v.morador.tipo.$touch" :error="$v.morador.tipo.$error"
-          />
-        </q-field>
-        <q-field class="col-12" icon="mdi-account">
-          <q-input v-model="morador.nome" float-label="Nome" :disable="modo==='DETALHE'"
-            @blur="$v.morador.nome.$touch" :error="$v.morador.nome.$error"/>
-        </q-field>
-        <q-field class="col-12" icon="mdi-calendar">
+          class="col-xs-12 col-md-6" label="Nascimento" :disable="modo==='DETALHE'"/>
+
+        <my-input-telefone ref="telefone" v-model.trim="morador.telefone" icon="mdi-phone"
+          class="col-xs-12 col-md-6" label="Telefone" :disable="modo==='DETALHE'"/>
+
+        <my-input-telefone ref="celular1" v-model.trim="morador.celular1"
+          class="col-xs-12 col-md-6" label="Celular 1" :disable="modo==='DETALHE'"/>
+
+        <my-input-telefone ref="celular2" v-model.trim="morador.celular2"
+          class="col-xs-12 col-md-6" label="Celular 2" :disable="modo==='DETALHE'"/>
+
+        <q-checkbox v-model="morador.responsavel" label="Este morador é responsável pela unidade."
+          :disable="modo==='DETALHE'" class="col-12"/>
+
+        <q-checkbox v-model="morador.enviarNotificacaoEmail" label="Enviar notificações por email para esse usuário."
+          :disable="modo==='DETALHE'" v-if="morador.email" class="col-12"/>
+
+<!--        <q-field class="col-12" icon="mdi-calendar">
           <q-datetime v-model="morador.nascimento" type="date" float-label="Nascimento" :disable="modo==='DETALHE'"
             min="1900-12-31" :max="Date.now()" default-view="year" clearable/>
-        </q-field>
-        <q-field class="col-12" icon="mdi-email">
-          <q-input v-model="morador.email" type="email" float-label="email" :disable="modo==='DETALHE'"
-            @blur="$v.morador.email.$touch" :error="$v.morador.email.$error"/>
-        </q-field>
-        <q-field class="col-12" icon="mdi-phone">
-          <q-input v-model="morador.telefone" type="tel" float-label="Telefone" :disable="modo==='DETALHE'"
-            v-mask="'(##) ####-####'" placeholder="(99) 9999-9999"
-            @blur="$v.morador.telefone.$touch" :error="$v.morador.telefone.$error"/>
-        </q-field>
-        <q-field class="col-12" icon="mdi-cellphone">
-          <q-input v-model="morador.celular1" type="tel" float-label="Celular 1" :disable="modo==='DETALHE'"
-            v-mask="'(##) #####-####'" placeholder="(99) 99999-9999"
-            @blur="$v.morador.celular1.$touch" :error="$v.morador.celular1.$error"/>
-        </q-field>
-        <q-field class="col-12" icon="mdi-cellphone">
-          <q-input type="tel" float-label="Celular 2" v-model="morador.celular2" :disable="modo==='DETALHE'"
-            v-mask="'(##) #####-####'" placeholder="(99) 99999-9999"
-            @blur="$v.morador.celular2.$touch" :error="$v.morador.celular2.$error"/>
-        </q-field>
-        <q-field class="col-12">
-          <q-checkbox v-model="morador.responsavel" label="Este morador é responsável pela unidade."
-            :disable="modo==='DETALHE'" />
-        </q-field>
-        <q-field class="col-12" v-if="!$v.morador.email.$invalid && this.morador.email">
-          <q-checkbox v-model="morador.enviarNotificacaoEmail" label="Enviar notificações por email para esse usuário."
-          :disable="modo==='DETALHE'" />
         </q-field> -->
         <div class="barra-botoes">
           <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Cancelar" size="17px" v-if="modo!=='DETALHE'"/>
@@ -64,28 +48,23 @@
           <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" size="17px" v-if="modo!=='DETALHE'"/>
           <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Fechar" size="17px" v-if="modo==='DETALHE'"/>
         </div>
-      </q-form>
+      </my-form>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
-// import { QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox } from 'quasar'
-// import { required, email, helpers } from 'vuelidate/lib/validators'
-// import { mask } from 'vue-the-mask'
 import MySelect from '../../../shared/MySelect'
 import MyInputText from '../../../shared/MyInputText'
 import MyInputData from '../../../shared/MyInputData'
+import MyInputEmail from '../../../shared/MyInputEmail'
+import MyInputTelefone from '../../../shared/MyInputTelefone'
+import MyForm from '../../../shared/MyForm'
 import { TIPO_MORADOR } from '../../../const'
 import { Morador } from '../mixin.js'
 
-// const telefone = helpers.regex('alpha', /^\([1-9]{2}\) [2-9][0-9]{3,4}-[0-9]{4}$/)
-
 export default {
-  components: { MySelect, MyInputText, MyInputData
-    // QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox
-  },
-  // directives: {mask},
+  components: { MySelect, MyInputText, MyInputData, MyInputEmail, MyInputTelefone, MyForm },
   data () {
     return {
       morador: new Morador(),
@@ -95,16 +74,6 @@ export default {
       modo: 'INCLUSAO'
     }
   },
-  /* validations: {
-    morador: {
-      tipo: { required },
-      nome: { required },
-      email: {email},
-      telefone: {telefone},
-      celular1: {telefone},
-      celular2: {telefone}
-    }
-  }, */
   methods: {
     async prepararInclusao () {
       // this.$v.morador.$reset()
@@ -143,13 +112,15 @@ export default {
         this.$q.notify('Informe um email vádido para que o empregado possa receber notificações por email!')
       }
       if (this.$v.morador.$error) { */
-      let erro = true
-      if (erro) {
-        this.$q.notify('Preencha as informações do obrigatórias e clique em confirmar.')
-      } else {
+      // this.trataErrorValidacao([this.$refs.nascimento]).then(() => {
+      /* this.$refs.form.trataErrorValidacao().then(() => {
         this.promiseResolve(this.morador)
         this.$refs.modalRef.hide()
-      }
+      }) */
+      this.$refs.form.tratarErros().then(() => {
+        // this.promiseResolve(this.morador)
+        this.$refs.modalRef.hide()
+      })
     },
     excluir () {
       if (this.morador.id) {

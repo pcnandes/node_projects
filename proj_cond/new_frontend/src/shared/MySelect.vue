@@ -1,15 +1,5 @@
 <template>
 <div>
- <!-- <q-select
-        filled
-        :value="value" @input="updateValue"
-        :options="options"
-        :option-value="optionValue"
-        :option-label="optionLabel"
-        :map-options="mapOptions"
-        :label="label"
-        ref="mySelect"
-      /> -->
   <q-select :value="value" @input="updateValue" ref="mySelect" class="q-pa-xs q-mb-sm"
     :options="options" :label="label" :autofocus="autofocus"
     filled :bg-color="bgColor" :color="color" transition-show="scale" transition-hide="scale"

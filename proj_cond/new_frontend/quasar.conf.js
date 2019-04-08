@@ -71,9 +71,9 @@ module.exports = function (ctx) {
       ],
 
       // iconSet: 'ionicons-v4'
-      // lang: 'de' // Quasar language
-      iconSet: 'mdi-v3',
-      i18n: 'pt-br'
+      lang: 'pt-br', // Quasar language
+      iconSet: 'mdi-v3'
+      // i18n: 'pt-br'
     },
 
     supportIE: false,

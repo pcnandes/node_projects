@@ -54,6 +54,24 @@ export default ({ Vue }) => {
       maiorQueDataAtual (dataIni) {
         return _maiorQueDataAtual(dataIni)
       },
+      trataErrorValidacao (components) {
+        return new Promise((resolve, reject) => {
+          let erro = false
+          if (components) {
+            if (components.some(e => e.erroRequired === true)) {
+              this.alertaErro('Preencha as informações do obrigatórias.')
+              erro = true
+            }
+            components.forEach(e => e.erros.forEach(msg => {
+              if (msg) {
+                this.alertaErro(msg)
+                erro = true
+              }
+            }))
+          }
+          erro ? reject() : resolve(true)
+        })
+      },
       verificaErrosCampos (itens) {
         console.log('itennnns', itens)
         if (itens && itens.length > 0) {

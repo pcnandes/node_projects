@@ -1,7 +1,7 @@
 <template>
   <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm"
     filled :bg-color="bgColor" :color="color" :autofocus="autofocus"
-    :rules="[val => !required || !!val]" ref="myInputCnpj"
+    :rules="[val => !required || !!val]" @blur="testaCNPJ()" ref="myInputCnpj"
     :readonly="readonly" :disable="disable" mask="##.###.###/####-##">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
@@ -39,15 +39,13 @@ export default {
     resetValidation () {
       this.$refs.myInputCnpj.resetValidation()
     },
-    testaCPF (strCnpj) {
+    testaCNPJ (strCnpj) {
       let cnpj = JSON.parse(JSON.stringify(strCnpj.replace(/[^\d]+/g, '')))
       if (cnpj === '') return false
       if (cnpj.length !== 14) return false
       // Elimina CNPJs invalidos conhecidos
-      if (cnpj === '00000000000000' || cnpj === '11111111111111' || cnpj === '22222222222222' ||
-          cnpj === '33333333333333' || cnpj === '44444444444444' || cnpj === '55555555555555' ||
-          cnpj === '66666666666666' || cnpj === '77777777777777' || cnpj === '88888888888888' ||
-          cnpj === '99999999999999') {
+      var regexInvalixCnpj = /^0{14}|1{14}|2{14}|3{14}|4{14}|5{14}|6{14}|7{14}|8{14}|9{14}$/g
+      if (regexInvalixCnpj.test(strCnpj)) {
         this.isValid = false
         return false
       }
