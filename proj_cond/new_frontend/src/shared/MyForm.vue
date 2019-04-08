@@ -34,12 +34,15 @@ export default {
             }
           }))
         }
-        erro ? reject() : resolve(true)
+        erro ? resolve(false) : resolve(true)
       })
     },
     getAllChildren (itens, retorno) {
       if (itens.length > 0) {
         itens.forEach(child => {
+          if (typeof child.hasError === 'function') {
+            child.hasError()
+          }
           if (child.erroRequired || (child.erros && child.erros.length > 0)) {
             retorno.push(child)
             if (child.$children.length > 0) this.getAllChildren(child.$children, retorno)

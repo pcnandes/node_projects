@@ -1,7 +1,7 @@
 <template>
   <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm"
     filled :bg-color="bgColor" :color="color" :autofocus="autofocus"
-    :rules="[val => !required || !!val]" @blur="testaCNPJ()" ref="myInputCnpj"
+    ref="myInputCnpj" @blur="trataErro()" :error="!isValid"
     :readonly="readonly" :disable="disable" mask="##.###.###/####-##">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
@@ -25,20 +25,32 @@ export default {
   },
   data () {
     return {
-      isValid: true
+      erros: [],
+      erroRequired: false
     }
   },
   methods: {
     updateValue (itemValue) {
       this.$emit('input', itemValue)
     },
-    hasError () {
-      this.$refs.myInputCnpj.validate()
-      return this.$refs.myInputCnpj.hasError
+    // verifica se o campo possui erros e imprime os erros específicos do mesmo
+    trataErro () {
+      this.hasError()
+      this.erros.forEach(e => this.alertaErro(e))
     },
+    // verifica se o campo possui erros
+    hasError () {
+      // this.$refs.myInputCnpj.validate()
+      // return this.$refs.myInputCnpj.hasError
+      this.erros = []
+      this.erroRequired = this.required && !this.value
+      if (!this.testaCNPJ()) this.erros.push(`Informe um ${this.label} válido`)
+    },
+    // limpa a validação do campo
     resetValidation () {
       this.$refs.myInputCnpj.resetValidation()
     },
+    // verifica se o CNPJ informado é válido
     testaCNPJ (strCnpj) {
       let cnpj = JSON.parse(JSON.stringify(strCnpj.replace(/[^\d]+/g, '')))
       if (cnpj === '') return false
@@ -79,6 +91,11 @@ export default {
       }
       this.isValid = true
       return true
+    }
+  },
+  computed: {
+    isValid: function () {
+      return !this.erroRequired && this.erros.length === 0
     }
   }
 }

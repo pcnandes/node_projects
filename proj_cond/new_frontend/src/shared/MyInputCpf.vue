@@ -1,9 +1,8 @@
 <template>
   <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm"
     filled :bg-color="bgColor" :color="color" :autofocus="autofocus"
-    :rules="[val => !required || !!val]" @blur="testaCPF()" ref="myInputCpf"
-    :readonly="readonly" :disable="disable" mask="###.###.###-##"
-    :error="!isValid">
+    ref="myInputCpf" @blur="trataErro()" :error="!isValid"
+    :readonly="readonly" :disable="disable" mask="###.###.###-##">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
     </template>
@@ -26,20 +25,30 @@ export default {
   },
   data () {
     return {
-      isValid: true
+      erros: [],
+      erroRequired: false
     }
   },
   methods: {
     updateValue (itemValue) {
       this.$emit('input', itemValue)
     },
+    // verifica se o campo possui erros e imprime os erros específicos do mesmo
+    trataErro () {
+      this.hasError()
+      this.erros.forEach(e => this.alertaErro(e))
+    },
     hasError () {
-      this.$refs.myInputCpf.validate()
-      return this.$refs.myInputCpf.hasError
+      // this.$refs.myInputCpf.validate()
+      // return this.$refs.myInputCpf.hasError
+      this.erros = []
+      this.erroRequired = this.required && !this.value
+      if (!this.testaCPF()) this.erros.push(`Informe um ${this.label} válido`)
     },
     resetValidation () {
       this.$refs.myInputCpf.resetValidation()
     },
+    // verifica se o CPF é válido
     testaCPF (cpf) {
       cpf = !cpf ? this.value : cpf
       let strCPF = JSON.parse(JSON.stringify(cpf.replace(/[^\d]+/g, '')))
@@ -68,6 +77,11 @@ export default {
       }
       this.isValid = true
       return true
+    }
+  },
+  computed: {
+    isValid: function () {
+      return !this.erroRequired && this.erros.length === 0
     }
   }
 }

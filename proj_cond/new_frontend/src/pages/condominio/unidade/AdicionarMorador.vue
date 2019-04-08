@@ -21,7 +21,8 @@
             counter max-length="50" label="Email" class="col-12"/>
 
         <my-input-data ref="nascimento" v-model.trim="morador.nascimento"
-          class="col-xs-12 col-md-6" label="Nascimento" :disable="modo==='DETALHE'"/>
+          class="col-xs-12 col-md-6" label="Nascimento" :disable="modo==='DETALHE'"
+          min-date="1900-12-31" :max-date="Date.now()"/>
 
         <my-input-telefone ref="telefone" v-model.trim="morador.telefone" icon="mdi-phone"
           class="col-xs-12 col-md-6" label="Telefone" :disable="modo==='DETALHE'"/>
@@ -104,22 +105,15 @@ export default {
       this.promiseReject()
     },
     confirmar () {
-      /* this.$v.morador.$touch()
-      if (this.$v.morador.email.$invalid) {
-        this.$q.notify('Informe um email vádido!')
-      }
-      if (this.morador.enviarNotificacaoEmail && (this.$v.morador.email.$invalid || !this.morador.email)) {
-        this.$q.notify('Informe um email vádido para que o empregado possa receber notificações por email!')
-      }
-      if (this.$v.morador.$error) { */
-      // this.trataErrorValidacao([this.$refs.nascimento]).then(() => {
-      /* this.$refs.form.trataErrorValidacao().then(() => {
-        this.promiseResolve(this.morador)
-        this.$refs.modalRef.hide()
-      }) */
-      this.$refs.form.tratarErros().then(() => {
+      this.$refs.form.tratarErros().then((ok) => {
         // this.promiseResolve(this.morador)
-        this.$refs.modalRef.hide()
+        if (ok) {
+          if (this.morador.enviarNotificacaoEmail && !this.morador.email) {
+            this.alertaErro('Informe um email vádido para que o empregado possa receber notificações por email!')
+          } else {
+            this.$refs.modalRef.hide()
+          }
+        }
       })
     },
     excluir () {

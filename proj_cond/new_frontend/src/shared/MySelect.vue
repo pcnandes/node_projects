@@ -1,11 +1,11 @@
 <template>
-<div>
   <q-select :value="value" @input="updateValue" ref="mySelect" class="q-pa-xs q-mb-sm"
     :options="options" :label="label" :autofocus="autofocus"
     filled :bg-color="bgColor" :color="color" transition-show="scale" transition-hide="scale"
-    :rules="[val => !required || !!val]" :option-label="optionLabel" :option-value="optionValue"
+    :option-label="optionLabel" :option-value="optionValue"
     :emit-value="emitValue" :map-ptions="mapOptions"
-    :readonly="readonly" :disable="disable">
+    :readonly="readonly" :disable="disable"
+    :error="!isValid" @blur="trataErro()">
     <template v-if="icon" v-slot:prepend>
         <q-icon :name="icon" />
     </template>
@@ -13,7 +13,6 @@
       <slot name="depois_fora"></slot>
     </template>
   </q-select>
-</div>
 </template>
 
 <script>
@@ -37,22 +36,36 @@ export default {
   },
   data () {
     return {
+      erros: [],
+      erroRequired: false
     }
   },
   methods: {
     updateValue (itemSelect) {
       this.$emit('input', itemSelect)
     },
+    // verifica se o campo possui erros e imprime os erros específicos do mesmo
+    trataErro () {
+      this.hasError()
+      this.erros.forEach(e => this.alertaErro(e))
+    },
     hasError () {
-      this.$refs.mySelect.validate()
-      return this.$refs.mySelect.hasError
+      // this.$refs.mySelect.validate()
+      // return this.$refs.mySelect.hasError
+      this.erros = []
+      this.erroRequired = this.required && !this.value
     },
     resetValidation () {
       this.$refs.mySelect.resetValidation()
     }
   },
-  mounted () {
-    this.valor = this.value
+  // mounted () {
+  //  this.valor = this.value
+  // },
+  computed: {
+    isValid: function () {
+      return !this.erroRequired && this.erros.length === 0
+    }
   }
 }
 </script>

@@ -1,9 +1,9 @@
 <template>
   <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm"
     filled :bg-color="bgColor" :color="color" :autofocus="autofocus" type="tel"
-    :rules="[val => !required || !!val]" ref="myInputTelefone" mask="(##) ####-####"
+    ref="myInputTelefone" mask="(##) ####-####"
     :readonly="readonly" :disable="disable"
-    :error="!isValid">
+    @blur="trataErro()" :error="!isValid">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
     </template>
@@ -26,19 +26,32 @@ export default {
   },
   data () {
     return {
-      isValid: true
+      erros: [],
+      erroRequired: false
     }
   },
   methods: {
     updateValue (itemValue) {
       this.$emit('input', itemValue)
     },
+    // verifica se o campo possui erros e imprime os erros específicos do mesmo
+    trataErro () {
+      this.hasError()
+      this.erros.forEach(e => this.alertaErro(e))
+    },
     hasError () {
-      this.$refs.myInputCpf.validate()
-      return this.$refs.myInputTelefone.hasError
+      // this.$refs.myInputCpf.validate()
+      // return this.$refs.myInputTelefone.hasError
+      this.erros = []
+      this.erroRequired = this.required && !this.value
     },
     resetValidation () {
       this.$refs.myInputTelefone.resetValidation()
+    }
+  },
+  computed: {
+    isValid: function () {
+      return !this.erroRequired && this.erros.length === 0
     }
   }
 }

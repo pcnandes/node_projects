@@ -1,7 +1,7 @@
 <template>
   <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm"
     filled :bg-color="bgColor" :color="color" :autofocus="autofocus"
-    :rules="[val => !required || !!val]" ref="myInputRg"
+    ref="myInputRg"  @blur="trataErro()" :error="!isValid"
     :readonly="readonly" :disable="disable" mask="##############">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
@@ -25,18 +25,32 @@ export default {
   },
   data () {
     return {
+      erros: [],
+      erroRequired: false
     }
   },
   methods: {
     updateValue (itemValue) {
       this.$emit('input', itemValue)
     },
+    // verifica se o campo possui erros e imprime os erros específicos do mesmo
+    trataErro () {
+      this.hasError()
+      this.erros.forEach(e => this.alertaErro(e))
+    },
     hasError () {
-      this.$refs.myInputRg.validate()
-      return this.$refs.myInputRg.hasError
+      // this.$refs.myInputRg.validate()
+      // return this.$refs.myInputRg.hasError
+      this.erros = []
+      this.erroRequired = this.required && !this.value
     },
     resetValidation () {
       this.$refs.myInputRg.resetValidation()
+    }
+  },
+  computed: {
+    isValid: function () {
+      return !this.erroRequired && this.erros.length === 0
     }
   }
 }

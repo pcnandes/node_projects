@@ -1,7 +1,7 @@
 <template>
   <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm" v-bind:class="counter ? 'q-mb-lg' : ''"
     filled  :bg-color="bgColor" :color="color" :autofocus="autofocus"
-    ref="myInputText" :error="!isValid" @blur="hasError()"
+    ref="myInputText" :error="!isValid" @blur="trataErro()"
     :readonly="readonly" :disable="disable"
     :counter="counter" :maxlength="maxLength">
     <template v-if="icon" v-slot:prepend>
@@ -39,11 +39,20 @@ export default {
     resetValidation () {
       this.$refs.myInputText.resetValidation()
     },
+    // verifica se o campo possui erros e imprime os erros específicos do mesmo
+    trataErro () {
+      this.hasError()
+      this.erros.forEach(e => this.alertaErro(e))
+    },
     hasError () {
       // this.$refs.myInputText.validate()
       // return this.$refs.myInputText.hasError
       this.erros = []
       this.erroRequired = this.required && !this.value
+      if (this.verificaErroMaxLength()) this.erros.push(`Informe menos de ${this.maxLength} caracteres no campo ${this.label}`)
+    },
+    verificaErroMaxLength () {
+      return this.maxLength && this.value.length > this.maxLength
     }
   },
   computed: {
