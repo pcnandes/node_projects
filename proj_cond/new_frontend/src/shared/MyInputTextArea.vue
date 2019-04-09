@@ -52,7 +52,7 @@ export default {
       if (this.verificaErroMaxLength()) this.erros.push(`Informe menos de ${this.maxLength} caracteres no campo ${this.label}`)
     },
     verificaErroMaxLength () {
-      return this.maxLength && this.value.length > this.maxLength
+      return this.maxLength && this.value && this.value.length > this.maxLength
     }
   },
   computed: {

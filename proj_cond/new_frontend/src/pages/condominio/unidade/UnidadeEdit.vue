@@ -3,8 +3,8 @@
     <botoes-crud @cancelar="cancelar()" :exibeExcluir="false" labelConfirmar="Salvar" @confirmar="salvar()"
       :titulo="getTitulo" />
     <!-- moradores -->
-    <q-list inset-separator no-border>
-      <q-expansion-item class="col-12 q-my-lg">
+    <q-list inset-separator no-border highlight>
+      <q-expansion-item class="col-12 q-mb-xs" header-class="bg-grey-5 text-black">
         <template v-slot:header>
           <q-item-section avatar>
             <q-avatar icon="mdi-human-male-boy" color="positive" text-color="white" />
@@ -17,34 +17,43 @@
             <q-tooltip>Exibe moradores anteriores da unidade</q-tooltip>
           </q-item-section>
         </template>
-
-        <q-list inset-separator no-border highlight v-if="unidade.moradores && unidade.moradores.length>0">
-          <q-item v-for="m in getMoradores" :key="m.id" @click.native="prepararAlterarMorador(m)">
-            <q-item-side :letter="m.tipo.substring(0,1)" color="secondary">
-              <q-tooltip>{{m.tipo}}</q-tooltip>
-            </q-item-side>
-            <q-item-main :label="m.nome"
-              :sublabel="`${m.dataCriacao ? 'Cadastro: ' + formataData(m.dataCriacao) : ''} ${m.dataExclusao ? 'Exclusao: ' + formataData(m.dataExclusao) : ''} ${m.email ? 'email: ' + m.email : ''}` + `${m.telefone ? ' Telefone: ' + m.telefone : ''}` + `${m.celular1 ? ' Celular1: ' + m.celular1 : ''}` + `${m.celular2 ? ' Celular2: ' + m.celular2 : ''}`"
-            />
-            <q-item-side right v-if="!m.dataExclusao && m.responsavel" icon="mdi-human-greeting" color="primary">
-              <q-tooltip>Responsável pela unidade</q-tooltip>
-            </q-item-side>
-            <q-item-side right  v-if="!m.dataExclusao && m.enviarNotificacaoEmail" icon="mdi-contact-mail" color="secondary">
-              <q-tooltip>Recebe notificações por email</q-tooltip>
-            </q-item-side>
-            <q-item-side right  v-if="m.dataExclusao" icon="mdi-cancel" color="fadded">
-              <q-tooltip>Morador excluídp</q-tooltip>
-            </q-item-side>
-          </q-item>
-        </q-list>
-        <div class="row justify-center">
-          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar Morador"
-            @click="prepararAdicionarMorador()" color="secondary" size="17px"/>
-        </div>
+        <q-card class="bg-grey-5 q-pa-sm">
+          <q-list inset-separator no-border highlight v-if="unidade.moradores && unidade.moradores.length>0">
+            <q-item clickable v-ripple v-for="m in getMoradores" :key="m.id" @click="prepararAlterarMorador(m)">
+              <q-item-section avatar color="secondary">
+                <q-avatar color="positive" text-color="white">
+                  {{m.tipo.substring(0,1)}}
+                  <q-tooltip>{{m.tipo}}</q-tooltip>
+                </q-avatar>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{m.nome}}</q-item-label>
+                <q-item-label caption lines="2">
+                  {{`${m.dataCriacao ? 'Cadastro: ' + formataData(m.dataCriacao) : ''} ${m.dataExclusao ? 'Exclusao: ' + formataData(m.dataExclusao) : ''} ${m.email ? 'email: ' + m.email : ''}` + `${m.telefone ? ' Telefone: ' + m.telefone : ''}` + `${m.celular1 ? ' Celular1: ' + m.celular1 : ''}` + `${m.celular2 ? ' Celular2: ' + m.celular2 : ''}`}}
+                </q-item-label>
+              </q-item-section>
+              <q-item-section side top>
+                <q-icon name="mdi-human-greeting" color="primary" v-if="!m.dataExclusao && m.responsavel">
+                  <q-tooltip>Responsável pela unidade</q-tooltip>
+                </q-icon>
+                <q-icon name="mdi-contact-mail" color="secondary" v-if="!m.dataExclusao && m.enviarNotificacaoEmail">
+                  <q-tooltip>Recebe notificações por email</q-tooltip>
+                </q-icon>
+                <q-icon name="mdi-cancel" color="grey-14" v-if="m.dataExclusao">
+                  <q-tooltip>Morador excluído</q-tooltip>
+                </q-icon>
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <div class="row justify-center">
+            <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar Morador"
+              @click="prepararAdicionarMorador()" color="secondary" size="17px"/>
+          </div>
+        </q-card>
       </q-expansion-item>
 
       <!-- Colaboradores -->
-      <q-expansion-item class="col-12 q-my-lg" header-class="bg-grey-5 text-black">
+      <q-expansion-item class="col-12 q-mb-xs" header-class="bg-grey-5 text-black">
         <template v-slot:header>
           <q-item-section avatar>
             <q-avatar icon="mdi-worker" color="warning" text-color="white" />
@@ -87,7 +96,7 @@
       </q-expansion-item>
 
       <!-- Veículos -->
-      <q-expansion-item class="col-12 q-my-lg">
+      <q-expansion-item class="col-12 q-mb-xs" header-class="bg-grey-5 text-black">
         <template v-slot:header>
           <q-item-section avatar>
             <q-avatar icon="mdi-car-side" color="info" text-color="white" />
@@ -100,24 +109,25 @@
             <q-tooltip>Exibe veículos de morades anteriores</q-tooltip>
           </q-item-section>
         </template>
-
-        <q-list inset-separator no-border highlight v-if="unidade.veiculos && unidade.veiculos.length>0">
-          <q-item v-for="v in getVeiculos" :key="v.id" @click.native="prepararAlterarVeiculo(v)">
-            <q-item-side :letter="v.tipo.substring(0,1)" color="secondary">
-              <q-tooltip>{{v.tipo}}</q-tooltip>
-            </q-item-side>
-            <q-item-main :label="`${v.marca} - ${v.modelo}`"
-              :sublabel="`${v.dataCriacao ? 'Cadastro: ' + formataData(v.dataCriacao) : ''} ${v.dataExclusao ? 'Exclusao: ' + formataData(v.dataExclusao) : ''} Placa: ${v.placa} Cor: ${v.cor}`"
-            />
-            <q-item-side right  v-if="v.dataExclusao" icon="mdi-cancel" color="fadded">
-              <q-tooltip>Veículo excluído</q-tooltip>
-            </q-item-side>
-          </q-item>
-        </q-list>
-        <div class="row justify-center">
-          <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar veículo"
-            @click="prepararAdicionarVeiculo()" color="secondary" size="17px"/>
-        </div>
+        <q-card class="bg-grey-5 q-pa-sm">
+          <q-list inset-separator no-border highlight v-if="unidade.veiculos && unidade.veiculos.length>0">
+            <q-item v-for="v in getVeiculos" :key="v.id" @click.native="prepararAlterarVeiculo(v)">
+              <q-item-side :letter="v.tipo.substring(0,1)" color="secondary">
+                <q-tooltip>{{v.tipo}}</q-tooltip>
+              </q-item-side>
+              <q-item-main :label="`${v.marca} - ${v.modelo}`"
+                :sublabel="`${v.dataCriacao ? 'Cadastro: ' + formataData(v.dataCriacao) : ''} ${v.dataExclusao ? 'Exclusao: ' + formataData(v.dataExclusao) : ''} Placa: ${v.placa} Cor: ${v.cor}`"
+              />
+              <q-item-side right  v-if="v.dataExclusao" icon="mdi-cancel" color="fadded">
+                <q-tooltip>Veículo excluído</q-tooltip>
+              </q-item-side>
+            </q-item>
+          </q-list>
+          <div class="row justify-center">
+            <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar veículo"
+              @click="prepararAdicionarVeiculo()" color="secondary" size="17px"/>
+          </div>
+        </q-card>
       </q-expansion-item>
     </q-list>
     <!-- modais -->

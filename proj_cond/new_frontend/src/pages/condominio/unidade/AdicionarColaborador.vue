@@ -9,7 +9,7 @@
           <q-tooltip>Fechar / Cancelar</q-tooltip>
         </q-btn>
       </q-bar>
-      <q-form ref="formColaborador" class="doc-container justify-center gutter-y-sm row" style="padding: 20px;">
+      <my-form ref="form" class="doc-container justify-center gutter-y-sm row" style="padding: 20px;">
         <my-input-text ref="nome" v-model.trim="colaborador.nome"
             counter max-length="50" label="Nome" autofocus required
             class="col-12" icon="mdi-account"/>
@@ -35,7 +35,7 @@
           <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" size="17px" v-if="modo!=='DETALHE'"/>
           <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Fechar" size="17px" v-if="modo==='DETALHE'"/>
         </div>
-      </q-form>
+      </my-form>
     </q-card>
   </q-dialog>
 </template>
@@ -50,9 +50,10 @@ import MyInputCnpj from '../../../shared/MyInputCnpj'
 import MyInputRg from '../../../shared/MyInputRg'
 import MyInputData from '../../../shared/MyInputData'
 import MyInputTextArea from '../../../shared/MyInputTextArea'
+import MyForm from '../../../shared/MyForm'
 
 export default {
-  components: { MyInputText, MySelect, MyInputCpf, MyInputCnpj, MyInputRg, MyInputData, MyInputTextArea },
+  components: { MyInputText, MySelect, MyInputCpf, MyInputCnpj, MyInputRg, MyInputData, MyInputTextArea, MyForm },
   data () {
     return {
       colaborador: new Colaborador(),
@@ -91,41 +92,16 @@ export default {
       this.$refs.modalRef.hide()
     },
     confirmar () {
-      if (this.colaborador.dataFim && this.maiorData(this.colaborador.dataFim, this.colaborador.dataInicio)) {
-        this.alertaErro('A data de fim da atividade não pode ser menor que a data de início.')
-      }
-      let validacao = []
-      validacao.push(this.$refs.nome.hasError())
-      validacao.push(this.$refs.dataInicio.hasError())
-      if (this.colaborador.tipoDoc === 'CPF') validacao.push(this.$refs.cpf.hasError())
-      else if (this.colaborador.tipoDoc === 'CNPJ') validacao.push(this.$refs.cnpj.hasError())
-      else if (this.colaborador.tipoDoc === 'RG') validacao.push(this.$refs.rg.hasError())
-      let erro = this.verificaErrosCampos(validacao)
-      // verifica data inicio maior que fim
-      if (this.colaborador.dataFim && this.colaborador.dataInicio && this.maiorData(this.colaborador.dataFim, this.colaborador.dataInicio)) {
-        this.$q.notify('A data de fim da atividade não pode ser menor que a data de início.')
-        return
-      }
-      // valida cpf e cnpj
-      if (this.colaborador.tipoDoc === 'CPF' && !this.$refs.cpf.isValid) this.alertaErro('Informe um CPF válido')
-      else if (this.colaborador.tipoDoc === 'CNPJ' && !this.$refs.cnpj.isValid) this.alertaErro('Informe um CNPJ válido')
-      if (erro) {
-        this.alertaErro('Preencha as informações do obrigatórias e clique em confirmar.')
-      } else {
-        this.promiseResolve(this.colaborador)
-        this.$refs.modalRef.hide()
-      }
-      /* this.$refs.formColaborador.validate().then(success => {
-        console.log(success)
-        if (success) {
-          this.promiseResolve(this.colaborador)
-          this.$refs.modalRef.hide()
-        } else {
-          if (this.colaborador.tipoDoc === 'CPF' && !this.$refs.cpf.isValid) this.alertaErro('Informe um CPF válido')
-          else if (this.colaborador.tipoDoc === 'CNPJ' && !this.$refs.cnpj.isValid) this.alertaErro('Informe um CNPJ válido')
-          this.alertaErro('Preencha as informações do obrigatórias e clique em confirmar.')
+      this.$refs.form.tratarErros().then((ok) => {
+        if (ok) {
+          if (this.colaborador.dataFim && this.maiorData(this.colaborador.dataFim, this.colaborador.dataInicio)) {
+            this.alertaErro('A data de fim da atividade não pode ser menor que a data de início.')
+          } else {
+            this.promiseResolve(this.morador)
+            this.$refs.modalRef.hide()
+          }
         }
-      }) */
+      })
     },
     excluir () {
       if (!this.colaborador.id) {

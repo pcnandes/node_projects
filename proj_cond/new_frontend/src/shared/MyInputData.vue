@@ -28,8 +28,8 @@ export default {
     required: { type: Boolean, required: false },
     readonly: { type: Boolean, required: false },
     disable: { type: Boolean, required: false },
-    minDate: { type: Number, required: false },
-    maxDate: { type: Number, required: false }
+    minDate: { required: false },
+    maxDate: { required: false }
   },
   data () {
     return {

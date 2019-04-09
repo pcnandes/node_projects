@@ -54,13 +54,13 @@ export default {
       this.$refs.myInputNumber.resetValidation()
     },
     verificaErroMaxLength () {
-      return this.maxLength && this.value.length > this.maxLength
+      return this.maxLength && this.value && this.value.length > this.maxLength
     },
     verificaErroMaxValue () {
-      return this.maxLength && this.value > this.maxValue
+      return this.maxLength && this.value && this.value > this.maxValue
     },
     verificaErroMinValue () {
-      return this.maxLength && this.value < this.minValue
+      return this.maxLength && this.value && this.value < this.minValue
     }
   },
   computed: {

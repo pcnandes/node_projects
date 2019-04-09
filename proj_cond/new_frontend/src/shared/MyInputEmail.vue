@@ -53,15 +53,9 @@ export default {
       this.$refs.myInputEmail.resetValidation()
     },
     testaEmail () {
-      console.log('auiii')
       if (!this.value) return true
       var regexInvalidMail = /^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{1,3})+$/g
-      if (!regexInvalidMail.test(this.value)) {
-        this.isValid = false
-        return false
-      }
-      this.isValid = true
-      return true
+      return regexInvalidMail.test(this.value)
     },
     verificaErroMaxLength () {
       return this.maxLength && this.value && this.value.length > this.maxLength
