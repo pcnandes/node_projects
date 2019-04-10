@@ -20,7 +20,6 @@ export default {
       // this.$refs.myForm.validate()
         let components = []
         this.getAllChildren(this.$refs.myForm.$children, components)
-        console.log(components)
         let erro = false
         if (components) {
           if (components.some(e => e.erroRequired === true)) {

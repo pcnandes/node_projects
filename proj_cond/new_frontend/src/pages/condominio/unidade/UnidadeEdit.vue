@@ -17,9 +17,10 @@
             <q-tooltip>Exibe moradores anteriores da unidade</q-tooltip>
           </q-item-section>
         </template>
-        <q-card class="bg-grey-5 q-pa-sm">
-          <q-list inset-separator no-border highlight v-if="unidade.moradores && unidade.moradores.length>0">
-            <q-item clickable v-ripple v-for="m in getMoradores" :key="m.id" @click="prepararAlterarMorador(m)">
+        <q-card class="bg-grey-3 q-pa-sm">
+          <q-list separator highlight v-if="unidade.moradores && unidade.moradores.length>0">
+            <q-item clickable v-ripple v-for="m in getMoradores" :key="m.id"
+              @click="prepararAlterarMorador(m)" class="bg-grey-4">
               <q-item-section avatar color="secondary">
                 <q-avatar color="positive" text-color="white">
                   {{m.tipo.substring(0,1)}}
@@ -45,7 +46,7 @@
               </q-item-section>
             </q-item>
           </q-list>
-          <div class="row justify-center">
+          <div class="row justify-center q-mt-sm">
             <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar Morador"
               @click="prepararAdicionarMorador()" color="secondary" size="17px"/>
           </div>
@@ -61,18 +62,21 @@
           <q-item-section>
             Colaboradores
           </q-item-section>
-          <q-item-section side v-if="unidade.colaboradores && unidade.colaboradores.length>0">
-            <q-checkbox v-model="exibeColaboradoresInativos" label="Exibe Excluídos" />
+          <!--
+            <q-item-section side v-if="unidade.colaboradores && unidade.colaboradores.length>0">
+            <q-checkbox v-model="exibeColaboradoresInativos" label="Exibe Inativos" />
             <q-tooltip>Exibe colaboradores inativos</q-tooltip>
           </q-item-section>
+          -->
         </template>
-        <q-card class="bg-grey-5 q-pa-sm">
+        <q-card class="bg-grey-3 q-pa-sm">
           <q-list class="col-12 q-px-lg" separator v-if="unidade.colaboradores && unidade.colaboradores.length>0">
-            <q-item clickable v-ripple v-for="c in getColaboradores" :key="c.id" @click="prepararAlterarColaborador(c)">
+            <q-item clickable v-ripple v-for="c in getColaboradores" :key="c.id"
+              @click="prepararAlterarColaborador(c)" class="bg-grey-4">
               <q-item-section avatar color="secondary">
-                <q-avatar color="positive" text-color="white">
-                  {{c.isAtivo() ? 'A' : 'I'}}
-                  <q-tooltip>{{c.isAtivo() ? 'Colaborador Ativo' : 'Colaborador Inativo'}}</q-tooltip>
+                <q-avatar :color="colaboradorAtivo(c) ? 'positive' : 'grey-6'" text-color="white">
+                  {{colaboradorAtivo(c) ? 'A' : 'I'}}
+                  <q-tooltip>{{colaboradorAtivo(c) ? 'Colaborador Ativo' : 'Colaborador Inativo'}}</q-tooltip>
                 </q-avatar>
               </q-item-section>
               <q-item-section>
@@ -81,14 +85,14 @@
                   {{`Início Atividade: ${formataData(c.dataInicio)} ${c.dataFim ? 'Fim Atividade: ' + formataData(c.dataFim) : ''} ${c.tipoDoc}: ${c.numeroDoc}`}}
                 </q-item-label>
               </q-item-section>
-              <q-item-section side top v-if="c.dataFim && maiorData(c.dataFim, new Date())">
-                <q-icon name="mdi-cancel" color="grey-14">
+              <q-item-section side v-if="!colaboradorAtivo(c)">
+                <q-icon name="mdi-cancel" color="grey-7">
                   <q-tooltip>Não presta mais serviço</q-tooltip>
                 </q-icon>
               </q-item-section>
             </q-item>
           </q-list>
-          <div class="row justify-center">
+          <div class="row justify-center q-mt-sm">
             <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar Colaborador"
               @click="prepararAdicionarColaborador()" color="secondary" size="17px"/>
           </div>
@@ -109,9 +113,10 @@
             <q-tooltip>Exibe veículos de morades anteriores</q-tooltip>
           </q-item-section>
         </template>
-        <q-card class="bg-grey-5 q-pa-sm">
+        <q-card class="bg-grey-3 q-pa-sm">
           <q-list inset-separator no-border highlight v-if="unidade.veiculos && unidade.veiculos.length>0">
-            <q-item v-for="v in getVeiculos" :key="v.id" @click.native="prepararAlterarVeiculo(v)">
+            <q-item v-for="v in getVeiculos" :key="v.id"
+              @click.native="prepararAlterarVeiculo(v)" class="bg-grey-4">
               <q-item-side :letter="v.tipo.substring(0,1)" color="secondary">
                 <q-tooltip>{{v.tipo}}</q-tooltip>
               </q-item-side>
@@ -123,7 +128,7 @@
               </q-item-side>
             </q-item>
           </q-list>
-          <div class="row justify-center">
+          <div class="row justify-center q-mt-sm">
             <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar veículo"
               @click="prepararAdicionarVeiculo()" color="secondary" size="17px"/>
           </div>
@@ -218,6 +223,12 @@ export default {
     async prepararAdicionarVeiculo () {
       let _veiculo = await this.$refs.veiculoModal.prepararInclusao()
       if (_veiculo) this.unidade.veiculos.push(_veiculo)
+    },
+    colaboradorAtivo (colaborador) {
+      if (!colaborador.dataInicio || this.maiorData(colaborador.dataInicio, new Date())) {
+        return false
+      } else if (colaborador.dataFim || this.maiorData(new Date(), colaborador.dataFim)) return false
+      else return true
     }
   },
   mounted () {

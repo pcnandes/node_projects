@@ -49,13 +49,13 @@ import MyInputEmail from '../../../shared/MyInputEmail'
 import MyInputTelefone from '../../../shared/MyInputTelefone'
 import MyForm from '../../../shared/MyForm'
 import { TIPO_MORADOR } from '../../../const'
-import { Morador } from '../mixin.js'
+import { getMoradorNew } from '../mixin.js'
 
 export default {
   components: { MySelect, MyInputText, MyInputData, MyInputEmail, MyInputTelefone, MyForm },
   data () {
     return {
-      morador: new Morador(),
+      morador: getMoradorNew(),
       tiposMorador: this.carregarValoresCombo(TIPO_MORADOR),
       promiseResolve: null,
       promiseReject: null,
@@ -65,7 +65,7 @@ export default {
   methods: {
     async prepararInclusao () {
       // this.$v.morador.$reset()
-      this.morador = new Morador()
+      this.morador = getMoradorNew()
       this.modo = 'INCLUSAO'
       await this.$refs.modalRef.show()
       return new Promise((resolve, reject) => {

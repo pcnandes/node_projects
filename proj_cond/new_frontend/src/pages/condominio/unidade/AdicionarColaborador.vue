@@ -42,7 +42,7 @@
 
 <script>
 import { TIPO_DOCUMENTO_COLABORADOR } from '../../../const'
-import { Colaborador } from '../mixin.js'
+import { getColaboradorNew } from '../mixin.js'
 import MyInputText from '../../../shared/MyInputText'
 import MySelect from '../../../shared/MySelect'
 import MyInputCpf from '../../../shared/MyInputCpf'
@@ -56,7 +56,7 @@ export default {
   components: { MyInputText, MySelect, MyInputCpf, MyInputCnpj, MyInputRg, MyInputData, MyInputTextArea, MyForm },
   data () {
     return {
-      colaborador: new Colaborador(),
+      colaborador: getColaboradorNew(),
       tiposDoc: this.carregarValoresCombo(TIPO_DOCUMENTO_COLABORADOR),
       promiseResolve: null,
       promiseReject: null,
@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     async prepararInclusao () {
-      this.colaborador = new Colaborador()
+      this.colaborador = getColaboradorNew()
       this.modo = 'INCLUSAO'
       await this.$refs.modalRef.show()
       this.limparValidacao()
@@ -97,7 +97,7 @@ export default {
           if (this.colaborador.dataFim && this.maiorData(this.colaborador.dataFim, this.colaborador.dataInicio)) {
             this.alertaErro('A data de fim da atividade não pode ser menor que a data de início.')
           } else {
-            this.promiseResolve(this.morador)
+            this.promiseResolve(this.colaborador)
             this.$refs.modalRef.hide()
           }
         }
