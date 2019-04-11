@@ -1,5 +1,5 @@
 <template>
-  <q-select :value="value" @input="updateValue" ref="mySelect" class="q-pa-xs q-mb-sm"
+  <q-select :value="value" @input="updateValue" ref="mySelect" v-bind:class="!noSpaces ? 'q-pa-xs q-mb-sm' : ''"
     :options="options" :label="label" :autofocus="autofocus"
     filled :bg-color="bgColor" :color="color" transition-show="scale" transition-hide="scale"
     :option-label="optionLabel" :option-value="optionValue"
@@ -32,7 +32,8 @@ export default {
     required: { type: Boolean, required: false },
     icon: { type: String, required: false },
     readonly: { type: Boolean, required: false },
-    disable: { type: Boolean, required: false }
+    disable: { type: Boolean, required: false },
+    noSpaces: { type: Boolean, required: false, default: false }
   },
   data () {
     return {

@@ -26,7 +26,7 @@
             {{bl.nome}}
           </q-item-section>
         </template>
-        <q-card class="bg-grey-5">
+        <q-card class="bg-grey-3">
           <div class="absolute" v-if="alteravel" style="right: 0px; bottom: 0px" >
             <q-btn round flat fab-mini icon="mdi-pencil" color="faded" title="Alterar Bloco" @click.native="prepararAlterarBloco(bl)"/>
             <q-btn round flat fab-mini icon="mdi-delete" color="faded" title="Excluir Bloco"/>
