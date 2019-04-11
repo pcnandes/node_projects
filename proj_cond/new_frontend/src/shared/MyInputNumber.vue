@@ -1,7 +1,7 @@
 <template>
   <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm"
     filled  :bg-color="bgColor" :color="color" :autofocus="autofocus"
-    ref="myInputNumber" :error="!isValid" @blur="trataErro()"
+    ref="myInputNumber" @blur="hasError()" :error="!isValid" :error-message="errorMessage"
     :readonly="readonly" :disable="disable" :mask="mascara">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
@@ -28,8 +28,9 @@ export default {
   },
   data () {
     return {
-      erros: [],
-      erroRequired: false
+      // erros: [],
+      // erroRequired: false
+      errorMessage: null
     }
   },
   methods: {
@@ -37,21 +38,24 @@ export default {
       this.$emit('input', itemValue)
     },
     // verifica se o campo possui erros e imprime os erros específicos do mesmo
-    trataErro () {
+    /* trataErro () {
       this.hasError()
       this.erros.forEach(e => this.alertaErro(e))
-    },
+    }, */
     hasError () {
       // this.$refs.myInputNumber.validate()
       // return this.$refs.myInputNumber.hasError
-      this.erros = []
-      this.erroRequired = this.required && !this.value
-      if (this.verificaErroMaxLength()) this.erros.push(`Informe menos de ${this.maxLength} caracteres no campo ${this.label}`)
-      if (this.verificaErroMaxValue()) this.erros.push(`O número informado não pode ser maior que ${this.maxValue}`)
-      if (this.verificaErroMinValue()) this.erros.push(`O número informado não pode ser menor que ${this.maxValue}`)
+      // this.erros = []
+      // this.erroRequired = this.required && !this.value
+      this.errorMessage = null
+      if (this.required && !this.value) this.errorMessage = 'Campo obrigatório!'
+      if (this.verificaErroMaxLength()) this.errorMessage = `Máximo de ${this.maxLength} caracteres`
+      if (this.verificaErroMaxValue()) this.errorMessage = `Número maior que ${this.maxValue}`
+      if (this.verificaErroMinValue()) this.errorMessage = `Número menor que ${this.maxValue}`
     },
     resetValidation () {
-      this.$refs.myInputNumber.resetValidation()
+      // this.$refs.myInputNumber.resetValidation()
+      this.errorMessage = null
     },
     verificaErroMaxLength () {
       return this.maxLength && this.value && this.value.length > this.maxLength
@@ -72,13 +76,11 @@ export default {
       return retorno
     },
     isValid: function () {
-      return !this.erroRequired && this.erros.length === 0
+      // return !this.erroRequired && this.erros.length === 0
+      return !this.errorMessage
     }
   }
 }
 </script>
 <style scoped>
-  .q-field--with-bottom {
-    padding-bottom: 0px;
-  }
 </style>

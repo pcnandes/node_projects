@@ -1,7 +1,7 @@
 <template>
   <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm"
     filled :bg-color="bgColor" :color="color" :autofocus="autofocus"
-    ref="myInputCnpj" @blur="trataErro()" :error="!isValid"
+    ref="myInputCnpj" @blur="hasError()" :error="!isValid" :error-message="errorMessage"
     :readonly="readonly" :disable="disable" mask="##.###.###/####-##">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
@@ -25,8 +25,9 @@ export default {
   },
   data () {
     return {
-      erros: [],
-      erroRequired: false
+      // erros: [],
+      // erroRequired: false
+      errorMessage: null
     }
   },
   methods: {
@@ -34,21 +35,23 @@ export default {
       this.$emit('input', itemValue)
     },
     // verifica se o campo possui erros e imprime os erros específicos do mesmo
-    trataErro () {
+    /* trataErro () {
       this.hasError()
       this.erros.forEach(e => this.alertaErro(e))
-    },
+    }, */
     // verifica se o campo possui erros
     hasError () {
       // this.$refs.myInputCnpj.validate()
       // return this.$refs.myInputCnpj.hasError
-      this.erros = []
-      this.erroRequired = this.required && !this.value
-      if (!this.testaCNPJ()) this.erros.push(`Informe um ${this.label} válido`)
+      // this.erros = []
+      this.errorMessage = null
+      if (this.required && !this.value) this.errorMessage = 'Campo obrigatório!'
+      if (!this.testaCNPJ()) this.errorMessage = `${this.label} inválido!`
     },
     // limpa a validação do campo
     resetValidation () {
-      this.$refs.myInputCnpj.resetValidation()
+      // this.$refs.myInputCnpj.resetValidation()
+      this.errorMessage = null
     },
     // verifica se o CNPJ informado é válido
     testaCNPJ (strCnpj) {
@@ -56,11 +59,8 @@ export default {
       if (cnpj === '') return false
       if (cnpj.length !== 14) return false
       // Elimina CNPJs invalidos conhecidos
-      var regexInvalixCnpj = /^0{14}|1{14}|2{14}|3{14}|4{14}|5{14}|6{14}|7{14}|8{14}|9{14}$/g
-      if (regexInvalixCnpj.test(strCnpj)) {
-        this.isValid = false
-        return false
-      }
+      const regexInvalixCnpj = /^0{14}|1{14}|2{14}|3{14}|4{14}|5{14}|6{14}|7{14}|8{14}|9{14}$/g
+      if (regexInvalixCnpj.test(strCnpj)) return false
       // Valida DVs
       let tamanho = cnpj.length - 2
       let numeros = cnpj.substring(0, tamanho)
@@ -72,10 +72,7 @@ export default {
         if (pos < 2) pos = 9
       }
       let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11
-      if (resultado !== digitos.charAt(0)) {
-        this.isValid = false
-        return false
-      }
+      if (resultado !== digitos.charAt(0)) return false
       tamanho = tamanho + 1
       numeros = cnpj.substring(0, tamanho)
       soma = 0
@@ -85,23 +82,17 @@ export default {
         if (pos < 2) pos = 9
       }
       resultado = soma % 11 < 2 ? 0 : 11 - soma % 11
-      if (resultado !== digitos.charAt(1)) {
-        this.isValid = false
-        return false
-      }
-      this.isValid = true
+      if (resultado !== digitos.charAt(1)) return false
       return true
     }
   },
   computed: {
     isValid: function () {
-      return !this.erroRequired && this.erros.length === 0
+      // return !this.erroRequired && this.erros.length === 0
+      return !this.errorMessage
     }
   }
 }
 </script>
 <style scoped>
-  .q-field--with-bottom {
-    padding-bottom: 0px;
-  }
 </style>

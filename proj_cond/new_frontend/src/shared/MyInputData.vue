@@ -2,7 +2,7 @@
   <!-- :rules="[val => !val || dataValida(val) , val => !required || !!val]" -->
   <q-input :value="dataFormatada" @input="updateValue" :label="label" class="q-pa-xs q-mb-sm"
     filled :bg-color="bgColor" mask="##/##/####" :color="color" :autofocus="autofocus" ref="myInputData"
-    :readonly="readonly" :disable="disable" :error="!isValid" @blur="trataErro()">
+    :readonly="readonly" :disable="disable" :error="!isValid" @blur="hasError()" :error-message="errorMessage">
     <template v-slot:append>
       <q-icon name="event" class="cursor-pointer">
         <q-popup-proxy ref="myInputDataProx">
@@ -33,8 +33,9 @@ export default {
   },
   data () {
     return {
-      erros: [],
-      erroRequired: false
+      // erros: [],
+      // erroRequired: false
+      errorMessage: null
     }
   },
   methods: {
@@ -43,17 +44,17 @@ export default {
       this.$emit('input', new Date(itemValue))
     },
     // verifica se o campo possui erros e imprime os erros específicos do mesmo
-    trataErro () {
+    /* trataErro () {
       this.hasError()
       this.erros.forEach(e => this.alertaErro(e))
-    },
+    }, */
     // verifica se o campo possui erros
     hasError () {
-      this.erros = []
-      this.erroRequired = this.required && !this.value
-      if (!this.dataValida()) this.erros.push(`Informe uma data válida`)
-      if (!this.minDateValido()) this.erros.push(`A data informada não pode ser menor que ${date.formatDate(this.minDate, 'DD/MM/YYYY')}`)
-      if (!this.maxDateValido()) this.erros.push(`A data informada não pode ser maior que ${date.formatDate(this.maxDate, 'DD/MM/YYYY')}`)
+      this.errorMessage = null
+      if (this.required && !this.value) this.errorMessage = 'Campo obrigatório!'
+      if (!this.dataValida()) this.errorMessage = `Data válida!`
+      if (!this.minDateValido()) this.errorMessage = `Data menor que ${date.formatDate(this.minDate, 'DD/MM/YYYY')}`
+      if (!this.maxDateValido()) this.errorMessage = `Data maior que ${date.formatDate(this.maxDate, 'DD/MM/YYYY')}`
       // this.$refs.myInputData.validate()
       // return this.$refs.myInputData.hasError
     },
@@ -75,9 +76,10 @@ export default {
     },
     // limpa a validação do campo
     resetValidation () {
-      this.erroRequired = false
-      this.erros = []
+      // this.erroRequired = false
+      // this.erros = []
       // this.$refs.myInputData.resetValidation()
+      this.errorMessage = null
     }
   },
   computed: {
@@ -91,13 +93,11 @@ export default {
     },
     // verifica se a data é valida
     isValid: function () {
-      return !this.erroRequired && this.erros.length === 0
+      // return !this.erroRequired && this.erros.length === 0
+      return !this.errorMessage
     }
   }
 }
 </script>
 <style scoped>
-  .q-field--with-bottom {
-    padding-bottom: 0px;
-  }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm" v-bind:class="counter ? 'q-mb-lg' : ''"
     filled :bg-color="bgColor" :color="color" :autofocus="autofocus" type="email"
-    @blur="trataErro()" ref="myInputEmail"
-    :readonly="readonly" :disable="disable" :error="!isValid"
+    @blur="hasError()" ref="myInputEmail"
+    :readonly="readonly" :disable="disable" :error="!isValid" :error-message="errorMessage"
     :counter="counter" :maxlength="maxLength">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
@@ -28,8 +28,9 @@ export default {
   },
   data () {
     return {
-      erros: [],
-      erroRequired: false
+      // erros: [],
+      // erroRequired: false
+      errorMessage: null
     }
   },
   methods: {
@@ -37,20 +38,23 @@ export default {
       this.$emit('input', itemValue)
     },
     // verifica se o campo possui erros e imprime os erros específicos do mesmo
-    trataErro () {
+    /* trataErro () {
       this.hasError()
       this.erros.forEach(e => this.alertaErro(e))
-    },
+    }, */
     hasError () {
       // this.$refs.myInputEmail.validate()
       // return this.$refs.myInputEmail.hasError
-      this.erros = []
-      this.erroRequired = this.required && !this.value
-      if (!this.testaEmail()) this.erros.push(`Informe um ${this.label} válido`)
-      if (this.verificaErroMaxLength()) this.erros.push(`Informe menos de ${this.maxLength} caracteres no campo ${this.label}`)
+      // this.erros = []
+      // this.erroRequired = this.required && !this.value
+      this.errorMessage = null
+      if (this.required && !this.value) this.errorMessage = 'Campo obrigatório!'
+      else if (!this.testaEmail()) this.errorMessage = `${this.label} inválido!`
+      else if (this.verificaErroMaxLength()) this.errorMessage = `Máximo de ${this.maxLength} caracteres`
     },
     resetValidation () {
-      this.$refs.myInputEmail.resetValidation()
+      // this.$refs.myInputEmail.resetValidation()
+      this.errorMessage = null
     },
     testaEmail () {
       if (!this.value) return true
@@ -63,13 +67,11 @@ export default {
   },
   computed: {
     isValid: function () {
-      return !this.erroRequired && this.erros.length === 0
+      // return !this.erroRequired && this.erros.length === 0
+      return !this.errorMessage
     }
   }
 }
 </script>
 <style scoped>
-  .q-field--with-bottom {
-    padding-bottom: 0px;
-  }
 </style>

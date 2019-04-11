@@ -138,7 +138,7 @@
     <!-- modais -->
     <adicionar-morador ref="moradorModal"/>
     <adicionar-colaborador ref="colaboradorModal"/>
-    <!-- <adicionar-veiculo ref="veiculoModal"/> -->
+    <adicionar-veiculo ref="veiculoModal"/>
     <!-- botoes -->
     <div class="barra-botoes">
       <q-btn label="Alterar Senha" color="secondary" size="17px"/>
@@ -151,11 +151,11 @@
 import BotoesCrud from '../../../shared/MyBotoesCrud'
 import AdicionarMorador from './AdicionarMorador.vue'
 import AdicionarColaborador from './AdicionarColaborador.vue'
-// import AdicionarVeiculo from './AdicionarVeiculo.vue'
+import AdicionarVeiculo from './AdicionarVeiculo.vue'
 
 export default {
   name: 'Editar_Unidade',
-  components: { BotoesCrud, AdicionarColaborador, AdicionarMorador }, // , AdicionarVeiculo
+  components: { BotoesCrud, AdicionarColaborador, AdicionarMorador, AdicionarVeiculo },
   data () {
     return {
       unidade: {},

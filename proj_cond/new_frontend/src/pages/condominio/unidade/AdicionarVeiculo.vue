@@ -1,57 +1,49 @@
 <template>
-  <q-modal no-backdrop-dismiss no-esc-dismiss ref="modalRef"
-    :content-css="{minWidth: isMobile?'100vw':'650px', maxWidth: isMobile?'100vw':'60vw'}" :maximized="isMobile">
-    <div class="doc-container justify-center gutter-y-sm" style="padding: 20px;">
-        <div class="row justify-center q-display-1">
-          Cadastro de Veículo
-        </div>
-        <q-field class="col-12" icon="mdi-motorbike">
-          <q-select v-model="veiculo.tipo" float-label="Tipo" :options="tiposVeiculo" :disable="modo==='DETALHE'"
-            @blur="$v.veiculo.tipo.$touch" :error="$v.veiculo.tipo.$error"
-          />
-        </q-field>
-        <q-field class="col-12" icon="mdi-watermark">
-          <q-input v-model="veiculo.marca" float-label="Marca" :disable="modo==='DETALHE'"
-            @blur="$v.veiculo.marca.$touch" :error="$v.veiculo.marca.$error"/>
-        </q-field>
-        <q-field class="col-12" icon="mdi-car">
-          <q-input v-model="veiculo.modelo" float-label="Modelo" :disable="modo==='DETALHE'"
-            @blur="$v.veiculo.modelo.$touch" :error="$v.veiculo.modelo.$error"/>
-        </q-field>
-        <q-field class="col-12" icon="mdi-palette">
-          <q-select v-model="veiculo.cor" float-label="Cor" :options="cores" :disable="modo==='DETALHE'"
-            @blur="$v.veiculo.cor.$touch" :error="$v.veiculo.cor.$error"
-          />
-        </q-field>
-        <q-field class="col-12" icon="mdi-card-text">
-          <q-input v-model="veiculo.placa" upper-case v-mask="['SSS #X##', 'SSS ####']" :disable="modo==='DETALHE'"
-            float-label="Placa ( AAA 9999 / AAA 9Z99 )"
-            @blur="$v.veiculo.placa.$touch" :error="$v.veiculo.placa.$error"/>
-        </q-field>
+  <q-dialog persistent ref="modalRef" :maximized="isMobile">
+    <q-card style="minWidth: 650px" class="bg-grey-4">
+      <q-bar dark class="bg-primary text-white" style="height: 40px">
+        <q-icon name="mdi-worker" size="30px"/>
+        <div class="col text-center text-weight-bold">Cadastro de Veículo</div>
+        <q-space />
+        <q-btn dense flat icon="close" v-close-popup size="14px">
+          <q-tooltip>Fechar / Cancelar</q-tooltip>
+        </q-btn>
+      </q-bar>
+      <my-form ref="form" class="doc-container justify-center gutter-y-sm row" style="padding: 20px;">
+        <my-select ref="tipo" v-model="veiculo.tipo" :options="tiposVeiculo"
+          label="Tipo" required emit-value :disable="modo==='DETALHE'"
+          class="col-12" icon="mdi-arrow-decision"/>
+        <my-input-text ref="marca" icon="mdi-watermark" v-model.trim="veiculo.marca" :disable="modo==='DETALHE'"
+          counter max-length="50" label="Marca" autofocus required class="col-12"/>
+        <my-input-text ref="modelo" icon="mdi-car" v-model.trim="veiculo.modelo" :disable="modo==='DETALHE'"
+          counter max-length="50" label="Modelo" autofocus required class="col-12"/>
+        <my-select ref="cor" v-model="veiculo.cor" :options="cores" icon="mdi-palette"
+          label="Cor" required emit-value :disable="modo==='DETALHE'"
+          class="col-12 col-md-6"/>
+        <my-input-placa ref="placa" v-model="veiculo.placa"
+          required :disable="modo==='DETALHE'"
+          class="col-12 col-md-6"/>
         <div class="barra-botoes">
-          <q-btn class="col-xs-12" color="faded" @click="cancelar()" label="Cancelar" v-if="modo!=='DETALHE'"/>
-          <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" v-if="modo!=='DETALHE'"/>
-          <q-btn class="col-xs-12" color="negative" @click="excluir()" label="Excluir"  v-if="modo==='ALTERACAO'"/>
-          <q-btn class="col-xs-12" color="primary" @click="cancelar()" label="Fechar" v-if="modo==='DETALHE'"/>
+          <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Cancelar" size="17px" v-if="modo!=='DETALHE'"/>
+          <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" size="17px" v-if="modo!=='DETALHE'"/>
+          <q-btn class="col-xs-12" color="negative" @click="excluir()" label="Excluir" size="17px" v-if="modo==='ALTERACAO'"/>
+          <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Fechar" size="17px" v-if="modo==='DETALHE'"/>
         </div>
-    </div>
-  </q-modal>
+      </my-form>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
-import { QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox } from 'quasar'
-import { required, helpers } from 'vuelidate/lib/validators'
+import MySelect from '../../../shared/MySelect'
+import MyInputText from '../../../shared/MyInputText'
+import MyInputPlaca from '../../../shared/MyInputPlaca'
+import MyForm from '../../../shared/MyForm'
 import { CORES, TIPO_VEICULO } from '../../../const'
 import { getVeiculoNew } from '../mixin.js'
-import { mask } from 'vue-the-mask'
-
-const placa = helpers.regex('alpha', /^[A-Z]{3} [0-9][A-Z,0-9][0-9]{2}$/)
 
 export default {
-  components: {
-    QBtn, QField, QInput, QModal, QSelect, QDatetime, QCheckbox
-  },
-  directives: {mask},
+  components: { MySelect, MyInputText, MyInputPlaca, MyForm },
   data () {
     return {
       veiculo: getVeiculoNew(),
@@ -62,18 +54,8 @@ export default {
       modo: 'INCLUSAO'
     }
   },
-  validations: {
-    veiculo: {
-      tipo: { required },
-      marca: { required },
-      modelo: {required},
-      cor: {required},
-      placa: {required, placa}
-    }
-  },
   methods: {
     async prepararInclusao () {
-      this.$v.veiculo.$reset()
       this.veiculo = getVeiculoNew()
       this.modo = 'INCLUSAO'
       await this.$refs.modalRef.show()
@@ -84,7 +66,6 @@ export default {
     },
     async prepararAlteracao (objAlt) {
       try {
-        this.$v.veiculo.$reset()
         this.veiculo = JSON.parse(JSON.stringify(objAlt))
         this.modo = !this.veiculo.dataExclusao && this.possuiPerfis(['ADMIN', 'SINDICO', 'MORADOR']) ? 'ALTERACAO' : 'DETALHE'
         await this.$refs.modalRef.show()
@@ -100,13 +81,12 @@ export default {
       this.$refs.modalRef.hide()
     },
     confirmar () {
-      this.$v.veiculo.$touch()
-      if (this.$v.veiculo.$error) {
-        this.$q.notify('Preencha as informações do obrigatórias e clique em confirmar.')
-      } else {
-        this.promiseResolve(this.veiculo)
-        this.$refs.modalRef.hide()
-      }
+      this.$refs.form.tratarErros().then((ok) => {
+        if (ok) {
+          this.promiseResolve(this.colaborador)
+          this.$refs.modalRef.hide()
+        }
+      })
     },
     excluir () {
       if (this.veiculo.id) {

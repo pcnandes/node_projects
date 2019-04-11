@@ -57,7 +57,4 @@ export default {
 }
 </script>
 <style scoped>
-  .q-field--with-bottom {
-    padding-bottom: 0px;
-  }
 </style>
