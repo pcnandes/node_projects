@@ -12,24 +12,24 @@
       <my-form ref="form" class="doc-container justify-center gutter-y-sm row" style="padding: 20px;">
         <my-select ref="tipo" v-model="morador.tipo" :disable="modo==='DETALHE'"
           :options="tiposMorador" label="Tipo" required emit-value
-          class="col-xs-12" icon="mdi-arrow-decision" />
+          icon="mdi-arrow-decision" />
         <my-input-text ref="nome" v-model.trim="morador.nome" :disable="modo==='DETALHE'"
-            counter max-length="50" label="Nome" autofocus required class="col-12"/>
+            counter max-length="50" label="Nome" autofocus required/>
         <my-input-email ref="email" v-model.trim="morador.email" :disable="modo==='DETALHE'"
-            counter max-length="50" label="Email" class="col-12"/>
+            counter max-length="50" label="Email"/>
         <my-input-data ref="nascimento" v-model.trim="morador.nascimento"
-          class="col-xs-12 col-md-6" label="Nascimento" :disable="modo==='DETALHE'"
+          class="col-md-6" label="Nascimento" :disable="modo==='DETALHE'"
           min-date="1900-12-31" :max-date="Date.now()"/>
         <my-input-telefone ref="telefone" v-model.trim="morador.telefone" icon="mdi-phone"
-          class="col-xs-12 col-md-6" label="Telefone" :disable="modo==='DETALHE'"/>
+          class="col-md-6" label="Telefone" :disable="modo==='DETALHE'"/>
         <my-input-telefone ref="celular1" v-model.trim="morador.celular1"
-          class="col-xs-12 col-md-6" label="Celular 1" :disable="modo==='DETALHE'"/>
+          class="col-md-6" label="Celular 1" :disable="modo==='DETALHE'"/>
         <my-input-telefone ref="celular2" v-model.trim="morador.celular2"
-          class="col-xs-12 col-md-6" label="Celular 2" :disable="modo==='DETALHE'"/>
+          class="col-md-6" label="Celular 2" :disable="modo==='DETALHE'"/>
         <q-checkbox v-model="morador.responsavel" label="Este morador é responsável pela unidade."
-          :disable="modo==='DETALHE'" class="col-12"/>
+          :disable="modo==='DETALHE'"/>
         <q-checkbox v-model="morador.enviarNotificacaoEmail" label="Enviar notificações por email para esse usuário."
-          :disable="modo==='DETALHE'" v-if="morador.email" class="col-12"/>
+          :disable="modo==='DETALHE'" v-if="morador.email"/>
         <div class="barra-botoes">
           <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Cancelar" size="17px" v-if="modo!=='DETALHE'"/>
           <q-btn class="col-xs-12" color="negative" @click="excluir()" label="Excluir"  size="17px" v-if="modo==='ALTERACAO'"/>

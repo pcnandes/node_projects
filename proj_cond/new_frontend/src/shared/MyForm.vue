@@ -20,9 +20,11 @@ export default {
       // this.$refs.myForm.validate()
         let components = []
         this.getAllChildren(this.$refs.myForm.$children, components)
-        let erro = false
+        // let erro = false
         if (components) {
-          if (components.some(e => e.erroRequired === true)) {
+          this.alertaErro('Preencha corretamente as informações obrigatórias.')
+          resolve(false)
+          /* if (components.some(e => e.erroRequired === true)) {
             this.alertaErro('Preencha as informações do obrigatórias.')
             erro = true
           }
@@ -31,9 +33,9 @@ export default {
               this.alertaErro(msg)
               erro = true
             }
-          }))
-        }
-        erro ? resolve(false) : resolve(true)
+          })) */
+        } else resolve(true)
+        // erro ? resolve(false) : resolve(true)
       })
     },
     getAllChildren (itens, retorno) {
@@ -42,7 +44,8 @@ export default {
           if (typeof child.hasError === 'function') {
             child.hasError()
           }
-          if (child.erroRequired || (child.erros && child.erros.length > 0)) {
+          // if (child.erroRequired || (child.erros && child.erros.length > 0)) {
+          if (child.errorMessage) {
             retorno.push(child)
             if (child.$children.length > 0) this.getAllChildren(child.$children, retorno)
           }

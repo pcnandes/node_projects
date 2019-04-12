@@ -1,11 +1,12 @@
 <template>
-  <q-select :value="value" @input="updateValue" ref="mySelect" v-bind:class="!noSpaces ? 'q-pa-xs q-mb-sm' : ''"
+  <q-select :value="value" @input="updateValue" ref="mySelect"
+    class="col-12 q-pa-xs q-mb-md" bottom-slots v-bind:class="!noSpaces ? 'q-pa-xs q-mb-sm' : ''"
     :options="options" :label="label" :autofocus="autofocus"
     filled :bg-color="bgColor" :color="color" transition-show="scale" transition-hide="scale"
     :option-label="optionLabel" :option-value="optionValue"
     :emit-value="emitValue" :map-ptions="mapOptions"
     :readonly="readonly" :disable="disable"
-    :error="!isValid" @blur="trataErro()">
+    @blur="hasError()" :error="!isValid" :error-message="errorMessage">
     <template v-if="icon" v-slot:prepend>
         <q-icon :name="icon" />
     </template>
@@ -37,8 +38,9 @@ export default {
   },
   data () {
     return {
-      erros: [],
-      erroRequired: false
+      // erros: [],
+      // erroRequired: false
+      errorMessage: null
     }
   },
   methods: {
@@ -46,18 +48,19 @@ export default {
       this.$emit('input', itemSelect)
     },
     // verifica se o campo possui erros e imprime os erros específicos do mesmo
-    trataErro () {
+    /* trataErro () {
       this.hasError()
       this.erros.forEach(e => this.alertaErro(e))
-    },
+    }, */
     hasError () {
-      // this.$refs.mySelect.validate()
-      // return this.$refs.mySelect.hasError
-      this.erros = []
-      this.erroRequired = this.required && !this.value
+      // this.erros = []
+      // this.erroRequired = this.required && !this.value
     },
     resetValidation () {
-      this.$refs.mySelect.resetValidation()
+      // this.$refs.mySelect.resetValidation()
+      this.errorMessage = null
+      if (this.required && !this.value) this.errorMessage = 'Campo obrigatório!'
+      this.errorMessage = null
     }
   },
   // mounted () {
@@ -65,7 +68,8 @@ export default {
   // },
   computed: {
     isValid: function () {
-      return !this.erroRequired && this.erros.length === 0
+      // return !this.erroRequired && this.erros.length === 0
+      return !this.errorMessage
     }
   }
 }

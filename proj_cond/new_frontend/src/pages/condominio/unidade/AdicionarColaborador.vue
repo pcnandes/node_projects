@@ -12,23 +12,23 @@
       <my-form ref="form" class="doc-container justify-center gutter-y-sm row" style="padding: 20px;">
         <my-input-text ref="nome" v-model.trim="colaborador.nome"
             counter max-length="50" label="Nome" autofocus required
-            class="col-12" icon="mdi-account"/>
+            icon="mdi-account" :disable="modo==='DETALHE'"/>
         <my-select ref="tipo_documento" v-model="colaborador.tipoDoc" @input="colaborador.numeroDoc = ''"
           :options="tiposDoc" label="Tipo de documento" required emit-value
-          class="col-xs-12 col-md-6" icon="mdi-arrow-decision"/>
+          class="col-md-6" icon="mdi-arrow-decision" :disable="modo==='DETALHE'"/>
         <my-input-cpf ref="cpf" v-if="colaborador.tipoDoc==='CPF'" v-model.trim="colaborador.numeroDoc"
-          required class="col-xs-12 col-md-6"/>
+          required class="col-md-6" :disable="modo==='DETALHE'"/>
         <my-input-cnpj ref="cnpj" v-if="colaborador.tipoDoc==='CNPJ'" v-model.trim="colaborador.numeroDoc"
-          required class="col-xs-12 col-md-6"/>
+          required class="col-md-6" :disable="modo==='DETALHE'"/>
         <my-input-rg ref="rg" v-if="colaborador.tipoDoc==='RG'" v-model.trim="colaborador.numeroDoc"
-          required class="col-xs-12 col-md-6"/>
+          required class="col-md-6" :disable="modo==='DETALHE'"/>
         <my-input-data ref="dataInicio" v-model.trim="colaborador.dataInicio"
-          required class="col-xs-12 col-md-6" label="Inicio Atividade"/>
+          required class="col-md-6" label="Inicio Atividade" :disable="modo==='DETALHE'"/>
         <my-input-data ref="dataFim" v-model.trim="colaborador.dataFim"
-          class="col-xs-12 col-md-6" label="Fim Atividade"/>
+          class="col-md-6" label="Fim Atividade" :disable="modo==='DETALHE'"/>
         <my-input-text-area ref="observacao" v-model.trim="colaborador.observacao"
-            counter max-length="500" label="Observações"
-            class="col-12" icon="mdi-clipboard-text"/>
+          counter max-length="500" label="Observações"
+          icon="mdi-clipboard-text" :disable="modo==='DETALHE'"/>
         <div class="barra-botoes">
           <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Cancelar" size="17px" v-if="modo!=='DETALHE'"/>
           <q-btn class="col-xs-12" color="negative" @click="excluir()" label="Excluir" size="17px" v-if="modo==='ALTERACAO' && !colaborador.id"/>

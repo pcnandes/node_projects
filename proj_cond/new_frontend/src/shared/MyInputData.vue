@@ -1,6 +1,6 @@
 <template>
   <!-- :rules="[val => !val || dataValida(val) , val => !required || !!val]" -->
-  <q-input :value="dataFormatada" @input="updateValue" :label="label" class="q-pa-xs q-mb-sm"
+  <q-input :value="dataFormatada" @input="updateValue" :label="label" class="col-12 q-pa-xs q-mb-md" bottom-slots
     filled :bg-color="bgColor" mask="##/##/####" :color="color" :autofocus="autofocus" ref="myInputData"
     :readonly="readonly" :disable="disable" :error="!isValid" @blur="hasError()" :error-message="errorMessage">
     <template v-slot:append>
@@ -52,7 +52,7 @@ export default {
     hasError () {
       this.errorMessage = null
       if (this.required && !this.value) this.errorMessage = 'Campo obrigatório!'
-      if (!this.dataValida()) this.errorMessage = `Data válida!`
+      if (!this.dataValida()) this.errorMessage = `Data inválida!`
       if (!this.minDateValido()) this.errorMessage = `Data menor que ${date.formatDate(this.minDate, 'DD/MM/YYYY')}`
       if (!this.maxDateValido()) this.errorMessage = `Data maior que ${date.formatDate(this.maxDate, 'DD/MM/YYYY')}`
       // this.$refs.myInputData.validate()
@@ -60,6 +60,10 @@ export default {
     },
     // valida a data informada
     dataValida () {
+      console.log('teste', this.$refs.myInputData)
+      if (Object.prototype.toString.call(this.value) === '[object Date]') {
+        if (isNaN(this.value.getTime())) this.value = null
+      }
       return !this.value || date.isValid(this.value)
     },
     // se o campo min-date for informado verifica se a data é maior que ele
@@ -78,7 +82,7 @@ export default {
     resetValidation () {
       // this.erroRequired = false
       // this.erros = []
-      // this.$refs.myInputData.resetValidation()
+      this.$refs.myInputData.resetValidation()
       this.errorMessage = null
     }
   },

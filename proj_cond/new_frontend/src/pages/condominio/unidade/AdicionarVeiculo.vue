@@ -12,17 +12,17 @@
       <my-form ref="form" class="doc-container justify-center gutter-y-sm row" style="padding: 20px;">
         <my-select ref="tipo" v-model="veiculo.tipo" :options="tiposVeiculo"
           label="Tipo" required emit-value :disable="modo==='DETALHE'"
-          class="col-12" icon="mdi-arrow-decision"/>
+          icon="mdi-arrow-decision"/>
         <my-input-text ref="marca" icon="mdi-watermark" v-model.trim="veiculo.marca" :disable="modo==='DETALHE'"
-          counter max-length="50" label="Marca" autofocus required class="col-12"/>
+          counter max-length="50" label="Marca" autofocus required/>
         <my-input-text ref="modelo" icon="mdi-car" v-model.trim="veiculo.modelo" :disable="modo==='DETALHE'"
-          counter max-length="50" label="Modelo" autofocus required class="col-12"/>
+          counter max-length="50" label="Modelo" required/>
         <my-select ref="cor" v-model="veiculo.cor" :options="cores" icon="mdi-palette"
           label="Cor" required emit-value :disable="modo==='DETALHE'"
-          class="col-12 col-md-6"/>
+          class="col-md-6"/>
         <my-input-placa ref="placa" v-model="veiculo.placa"
           required :disable="modo==='DETALHE'"
-          class="col-12 col-md-6"/>
+          class="col-md-6"/>
         <div class="barra-botoes">
           <q-btn class="col-xs-12" color="grey-14" @click="cancelar()" label="Cancelar" size="17px" v-if="modo!=='DETALHE'"/>
           <q-btn class="col-xs-12" color="primary" @click="confirmar()" label="Confirmar" size="17px" v-if="modo!=='DETALHE'"/>

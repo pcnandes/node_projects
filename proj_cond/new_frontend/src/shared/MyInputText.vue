@@ -1,7 +1,7 @@
 <template>
-  <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm" v-bind:class="counter ? 'q-mb-lg' : ''"
+  <q-input :value="value" :label="label" @input="updateValue" class="col-12 q-pa-xs q-mb-md" bottom-slots
     filled  :bg-color="bgColor" :color="color" :autofocus="autofocus"
-    ref="myInputText" :error="!isValid" @blur="trataErro()"
+    ref="myInputText" @blur="hasError()" :error="!isValid" :error-message="errorMessage"
     :readonly="readonly" :disable="disable"
     :counter="counter" :maxlength="maxLength">
     <template v-if="icon" v-slot:prepend>
@@ -28,8 +28,9 @@ export default {
   },
   data () {
     return {
-      erros: [],
-      erroRequired: false
+      // erros: [],
+      // erroRequired: false
+      errorMessage: null
     }
   },
   methods: {
@@ -37,19 +38,20 @@ export default {
       this.$emit('input', itemValue)
     },
     resetValidation () {
-      this.$refs.myInputText.resetValidation()
+      // this.$refs.myInputText.resetValidation()
+      this.errorMessage = null
     },
     // verifica se o campo possui erros e imprime os erros específicos do mesmo
-    trataErro () {
+    /* trataErro () {
       this.hasError()
       this.erros.forEach(e => this.alertaErro(e))
-    },
+    }, */
     hasError () {
-      // this.$refs.myInputText.validate()
-      // return this.$refs.myInputText.hasError
-      this.erros = []
-      this.erroRequired = this.required && !this.value
-      if (this.verificaErroMaxLength()) this.erros.push(`Informe menos de ${this.maxLength} caracteres no campo ${this.label}`)
+      // this.erros = []
+      // this.erroRequired = this.required && !this.value
+      this.errorMessage = null
+      if (this.required && !this.value) this.errorMessage = 'Campo obrigatório!'
+      if (this.verificaErroMaxLength()) this.errorMessage = `Máximo de ${this.maxLength} caracteres`
     },
     verificaErroMaxLength () {
       return this.maxLength && this.value && this.value.length > this.maxLength
@@ -57,7 +59,8 @@ export default {
   },
   computed: {
     isValid: function () {
-      return !this.erroRequired && this.erros.length === 0
+      // return !this.erroRequired && this.erros.length === 0
+      return !this.errorMessage
     }
   }
 }

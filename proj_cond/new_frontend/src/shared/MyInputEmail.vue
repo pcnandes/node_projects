@@ -1,5 +1,5 @@
 <template>
-  <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-sm" v-bind:class="counter ? 'q-mb-lg' : ''"
+  <q-input :value="value" :label="label" @input="updateValue" class="col-12 q-pa-xs q-mb-md" bottom-slots
     filled :bg-color="bgColor" :color="color" :autofocus="autofocus" type="email"
     @blur="hasError()" ref="myInputEmail"
     :readonly="readonly" :disable="disable" :error="!isValid" :error-message="errorMessage"
