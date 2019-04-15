@@ -9,7 +9,7 @@
         <li>assembleia e pré assembleia online</li>
       </ul>
     </div>
-    <q-form ref="formLogin" @submit="onSubmit()" class="login_bloco column">
+    <my-form ref="formLogin" @submit="onSubmit()" class="login_bloco">
       <!-- <q-select ref="condominio" v-model="form.condominio" :options="condominios"
         option-label="nome" option-value="id" label="Condomínio" @input="selecionarBloco()"
         outlined dense bg-color="grey-2" color="indigo-2" transition-show="scale" transition-hide="scale"
@@ -51,15 +51,17 @@
           <q-icon name="mdi-textbox-password" />
         </template>
       </q-input> -->
-      <my-select ref="condominio" v-show="condominios && condominios.length > 0" icon="mdi-domain" v-model="form.condominio" :options="condominios"
-        option-label="nome" option-value="id" label="Condomínio" required map-options @input="selecionaBloco"/>
-      <my-select ref="bloco" icon="mdi-office-building" v-show="form.condominio" v-model="form.bloco"
-        :options="blocos" option-label="nome" option-value="id" label="Bloco" required map-options/>
-      <my-input-text ref="usuario" icon="mdi-account" v-model.trim="form.login" label="Usuário" autofocus required />
-      <my-input-password class="q-mb-lg" ref="senha" icon="mdi-textbox-password" v-model="form.senha" required />
-      <q-btn color="primary" size="17px" type="submit">Login</q-btn>
-      <q-checkbox v-model="form.lembreDeMim" color="blue-grey-14" label="Lembre-se de mim" />
-    </q-form>
+        <my-select ref="condominio" v-show="condominios && condominios.length > 0" icon="mdi-domain" v-model="form.condominio" :options="condominios"
+          option-label="nome" option-value="id" label="Condomínio" required map-options @input="selecionaBloco"/>
+        <my-select ref="bloco" icon="mdi-office-building" v-show="form.condominio" v-model="form.bloco"
+          :options="blocos" option-label="nome" option-value="id" label="Bloco" required map-options/>
+        <my-input-text ref="usuario" icon="mdi-account" v-model.trim="form.login" label="Usuário" autofocus required />
+        <my-input-password class="q-mb-lg" ref="senha" icon="mdi-textbox-password" v-model="form.senha" required />
+        <div class="q-pa-xs">
+          <q-btn color="primary full-width" size="17px" type="submit">Login</q-btn>
+        </div>
+        <q-checkbox v-model="form.lembreDeMim" color="blue-grey-14" label="Lembre-se de mim" />
+    </my-form>
   </q-page>
 </template>
 <style>
@@ -68,12 +70,13 @@
 <script>
 
 import MySelect from '../shared/MySelect'
+import MyForm from '../shared/MyForm'
 import MyInputText from '../shared/MyInputText'
 import MyInputPassword from '../shared/MyInputPassword'
 
 export default {
   name: 'Login',
-  components: { 'my-input-text': MyInputText, 'my-input-password': MyInputPassword, 'my-select': MySelect },
+  components: { MyInputText, MyInputPassword, MySelect, MyForm },
   data () {
     return {
       isPwd: true,
