@@ -22,7 +22,8 @@
             <q-item clickable v-ripple v-for="m in getMoradores" :key="m.id"
               @click="prepararAlterarMorador(m)" class="bg-grey-4">
               <q-item-section avatar color="secondary">
-                <q-avatar color="positive" text-color="white">
+                <q-avatar :color="getCorMorador(m)"
+                  text-color="white">
                   {{m.tipo.substring(0,1)}}
                   <q-tooltip>{{m.tipo}}</q-tooltip>
                 </q-avatar>
@@ -229,6 +230,16 @@ export default {
         return false
       } else if (colaborador.dataFim || this.maiorData(new Date(), colaborador.dataFim)) return false
       else return true
+    },
+    getCorMorador (morador) {
+      let cor = ''
+      switch (morador.tipo) {
+        case 'MORADOR': cor = 'blue'; break
+        case 'LOCADOR': cor = 'blue-10'; break
+        case 'LOCATARIO': cor = 'green'; break
+        default: cor = 'blue'; break
+      }
+      return cor
     }
   },
   mounted () {

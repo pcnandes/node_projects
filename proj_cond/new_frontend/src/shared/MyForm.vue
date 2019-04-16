@@ -21,7 +21,7 @@ export default {
         let components = []
         this.getAllChildren(this.$refs.myForm.$children, components)
         // let erro = false
-        if (components) {
+        if (components && components.length > 0) {
           this.alertaErro('Preencha corretamente as informações obrigatórias.')
           resolve(false)
           /* if (components.some(e => e.erroRequired === true)) {

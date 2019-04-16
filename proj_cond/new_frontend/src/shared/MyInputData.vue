@@ -1,12 +1,12 @@
 <template>
   <!-- :rules="[val => !val || dataValida(val) , val => !required || !!val]" -->
-  <q-input :value="dataFormatada" @input="updateValue" :label="label" class="col-12 q-pa-xs q-mb-md" bottom-slots
+  <q-input :value="dataFormatada" @input="updateValueInput" :label="label" class="col-12 q-pa-xs q-mb-md" bottom-slots
     filled :bg-color="bgColor" mask="##/##/####" :color="color" :autofocus="autofocus" ref="myInputData"
     :readonly="readonly" :disable="disable" :error="!isValid" @blur="hasError()" :error-message="errorMessage">
     <template v-slot:append>
       <q-icon name="event" class="cursor-pointer">
         <q-popup-proxy ref="myInputDataProx">
-          <q-date :value="dataFormatadaComData" @input="updateValue" minimal/>
+          <q-date :value="dataFormatadaComData" @input="updateValueCompData" minimal/>
         </q-popup-proxy>
       </q-icon>
     </template>
@@ -39,9 +39,15 @@ export default {
     }
   },
   methods: {
-    updateValue (itemValue) {
+    updateValueCompData (itemValue) {
       this.$refs.myInputDataProx.hide()
       this.$emit('input', new Date(itemValue))
+    },
+    updateValueInput (itemValue) {
+      // if (this.dataValida(itemValue))
+      if (itemValue) this.$emit('input', new Date(itemValue))
+      else this.$emit('input', null)
+      // else this.$emit('input', null)
     },
     // verifica se o campo possui erros e imprime os erros específicos do mesmo
     /* trataErro () {
@@ -62,7 +68,7 @@ export default {
     dataValida () {
       console.log('teste', this.$refs.myInputData)
       if (Object.prototype.toString.call(this.value) === '[object Date]') {
-        if (isNaN(this.value.getTime())) this.value = null
+        if (isNaN(this.value.getTime())) return false
       }
       return !this.value || date.isValid(this.value)
     },

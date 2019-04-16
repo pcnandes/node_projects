@@ -158,15 +158,16 @@ export default {
   }
   .barra-botoes {
       display: flex;
+      flex: 1 100%;
       flex-wrap: wrap;
       justify-content: center;
       align-content: space-between;
       margin-top: 20px;
     }
-    .barra-botoes > button {
-      margin-right: 20px;
-      min-width: 150px;
-    }
+  .barra-botoes > button {
+    margin-right: 20px;
+    min-width: 150px;
+  }
 /*
   .barra-navegacao {
     background-color: rgb(221, 221, 221);

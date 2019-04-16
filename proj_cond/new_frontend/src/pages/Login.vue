@@ -9,7 +9,7 @@
         <li>assembleia e pré assembleia online</li>
       </ul>
     </div>
-    <my-form ref="formLogin" @submit="onSubmit()" class="login_bloco">
+    <q-form ref="formLogin" @submit="onSubmit()" class="login_bloco">
       <!-- <q-select ref="condominio" v-model="form.condominio" :options="condominios"
         option-label="nome" option-value="id" label="Condomínio" @input="selecionarBloco()"
         outlined dense bg-color="grey-2" color="indigo-2" transition-show="scale" transition-hide="scale"
@@ -61,7 +61,7 @@
           <q-btn color="primary full-width" size="17px" type="submit">Login</q-btn>
         </div>
         <q-checkbox v-model="form.lembreDeMim" color="blue-grey-14" label="Lembre-se de mim" />
-    </my-form>
+    </q-form>
   </q-page>
 </template>
 <style>
@@ -70,13 +70,12 @@
 <script>
 
 import MySelect from '../shared/MySelect'
-import MyForm from '../shared/MyForm'
 import MyInputText from '../shared/MyInputText'
 import MyInputPassword from '../shared/MyInputPassword'
 
 export default {
   name: 'Login',
-  components: { MyInputText, MyInputPassword, MySelect, MyForm },
+  components: { MyInputText, MyInputPassword, MySelect },
   data () {
     return {
       isPwd: true,

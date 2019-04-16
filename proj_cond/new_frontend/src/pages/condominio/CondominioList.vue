@@ -1,12 +1,12 @@
 <template>
   <q-page class="justify-center pagina">
     <div class="row q-mb-xl q-mt-sm" v-if="condominios.length>0">
-      <div class="col-8 q-mr-xs">
+      <div class="col-8">
         <my-select icon="mdi-domain" ref="condominio" v-model="condominio" :options="condominios"
           option-label="nome" option-value="id" label="Condomínio" required map-options no-spaces>
         </my-select>
       </div>
-      <q-btn icon="mdi-check" color="positive" size="19px" @click="detalhar()">
+      <q-btn icon="mdi-check" class="q-mb-md q-mt-xs" color="positive" size="19px" @click="detalhar()">
         <q-tooltip>
           Selecionar condomínio
         </q-tooltip>
