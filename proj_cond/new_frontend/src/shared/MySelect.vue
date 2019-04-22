@@ -53,8 +53,8 @@ export default {
       this.erros.forEach(e => this.alertaErro(e))
     }, */
     hasError () {
-      // this.erros = []
-      // this.erroRequired = this.required && !this.value
+      this.errorMessage = null
+      if (this.required && !this.value) this.errorMessage = 'Campo obrigatório!'
     },
     resetValidation () {
       // this.$refs.mySelect.resetValidation()

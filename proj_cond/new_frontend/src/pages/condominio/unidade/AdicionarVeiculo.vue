@@ -83,7 +83,7 @@ export default {
     confirmar () {
       this.$refs.form.tratarErros().then((ok) => {
         if (ok) {
-          this.promiseResolve(this.colaborador)
+          this.promiseResolve(this.veiculo)
           this.$refs.modalRef.hide()
         }
       })

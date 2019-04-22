@@ -12,14 +12,14 @@
           <q-item-section>
             Moradores
           </q-item-section>
-          <q-item-section side v-if="possuiPerfis(['ADMIN', 'SINDICO']) && unidade.moradores && unidade.moradores.length>0">
+          <!-- <q-item-section side v-if="possuiPerfis(['ADMIN', 'SINDICO']) && unidade.moradores && unidade.moradores.length>0">
             <q-checkbox v-model="exibeMoradoresInativos" label="Exibe excluídos" />
             <q-tooltip>Exibe moradores anteriores da unidade</q-tooltip>
-          </q-item-section>
+          </q-item-section> -->
         </template>
         <q-card class="bg-grey-3 q-pa-sm">
           <q-list separator highlight v-if="unidade.moradores && unidade.moradores.length>0">
-            <q-item clickable v-ripple v-for="m in getMoradores" :key="m.id"
+            <q-item clickable v-ripple v-for="m in unidade.moradores" :key="m.id"
               @click="prepararAlterarMorador(m)" class="bg-grey-4">
               <q-item-section avatar color="secondary">
                 <q-avatar :color="getCorMorador(m)"
@@ -72,7 +72,7 @@
         </template>
         <q-card class="bg-grey-3 q-pa-sm">
           <q-list class="col-12 q-px-lg" separator v-if="unidade.colaboradores && unidade.colaboradores.length>0">
-            <q-item clickable v-ripple v-for="c in getColaboradores" :key="c.id"
+            <q-item clickable v-ripple v-for="c in unidade.colaboradores" :key="c.id"
               @click="prepararAlterarColaborador(c)" class="bg-grey-4">
               <q-item-section avatar color="secondary">
                 <q-avatar :color="colaboradorAtivo(c) ? 'positive' : 'grey-6'" text-color="white">
@@ -109,14 +109,40 @@
           <q-item-section>
             Veículos
           </q-item-section>
-          <q-item-section side v-if="possuiPerfis(['ADMIN', 'SINDICO']) && unidade.veiculos && unidade.veiculos.length>0">
+          <!-- <q-item-section side v-if="possuiPerfis(['ADMIN', 'SINDICO']) && unidade.veiculos && unidade.veiculos.length>0">
             <q-checkbox v-model="exibeVeiculosInativos" label="Exibe Excluídos" />
             <q-tooltip>Exibe veículos de morades anteriores</q-tooltip>
-          </q-item-section>
+          </q-item-section> -->
         </template>
         <q-card class="bg-grey-3 q-pa-sm">
           <q-list inset-separator no-border highlight v-if="unidade.veiculos && unidade.veiculos.length>0">
-            <q-item v-for="v in getVeiculos" :key="v.id"
+            <q-item clickable v-ripple v-for="v in unidade.veiculos" :key="v.id"
+              @click="prepararAlterarVeiculo(v)" class="bg-grey-4">
+              <q-item-section avatar v-if="v.dataExclusao">
+                <q-avatar color="grey-6" text-color="white">
+                  E<q-tooltip>Veículo Excluído</q-tooltip>
+                </q-avatar>
+              </q-item-section>
+              <q-item-section avatar v-else>
+                <q-avatar color="secondary" text-color="white">
+                  {{v.tipo.substring(0,1)}}
+                  <q-tooltip>{{v.tipo}}</q-tooltip>
+                </q-avatar>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{`${v.marca} - ${v.modelo}`}}</q-item-label>
+                <q-item-label caption lines="2">
+                  {{`${v.dataCriacao ? 'Cadastro: ' + formataData(v.dataCriacao) : ''} ${v.dataExclusao ? 'Exclusao: ' + formataData(v.dataExclusao) : ''} Placa: ${v.placa} Cor: ${v.cor}`}}
+                </q-item-label>
+              </q-item-section>
+              <q-item-section side v-if="v.dataExclusao">
+                <q-icon name="mdi-cancel" color="grey-7">
+                  <q-tooltip>Veículo excluído</q-tooltip>
+                </q-icon>
+              </q-item-section>
+            </q-item>
+
+            <!-- <q-item v-for="v in unidade.veiculos" :key="v.id"
               @click.native="prepararAlterarVeiculo(v)" class="bg-grey-4">
               <q-item-side :letter="v.tipo.substring(0,1)" color="secondary">
                 <q-tooltip>{{v.tipo}}</q-tooltip>
@@ -127,7 +153,7 @@
               <q-item-side right  v-if="v.dataExclusao" icon="mdi-cancel" color="fadded">
                 <q-tooltip>Veículo excluído</q-tooltip>
               </q-item-side>
-            </q-item>
+            </q-item> -->
           </q-list>
           <div class="row justify-center q-mt-sm">
             <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar veículo"
@@ -160,10 +186,10 @@ export default {
   data () {
     return {
       unidade: {},
-      unidadeId: this.$route.params.unidadeId,
-      exibeMoradoresInativos: false,
+      unidadeId: this.$route.params.unidadeId
+      /* exibeMoradoresInativos: false,
       exibeColaboradoresInativos: false,
-      exibeVeiculosInativos: false
+      exibeVeiculosInativos: false */
     }
   },
   methods: {
@@ -228,7 +254,7 @@ export default {
     colaboradorAtivo (colaborador) {
       if (!colaborador.dataInicio || this.maiorData(colaborador.dataInicio, new Date())) {
         return false
-      } else if (colaborador.dataFim || this.maiorData(new Date(), colaborador.dataFim)) return false
+      } else if (!!colaborador.dataFim && this.maiorData(new Date(), colaborador.dataFim)) return false
       else return true
     },
     getCorMorador (morador) {
@@ -250,8 +276,8 @@ export default {
       return this.unidade.bloco && !this.isMobile
         ? `${this.unidade.bloco.condominio.nome} | ${this.unidade.bloco.nome} | ${this.unidade.nome}`
         : this.unidade.nome
-    },
-    getMoradores: function () {
+    }
+    /* getMoradores: function () {
       if (this.unidade.moradores && this.unidade.moradores.length > 0) {
         return this.exibeMoradoresInativos ? this.unidade.moradores : this.unidade.moradores.filter(i => !i.dataExclusao)
       } else return null
@@ -266,7 +292,7 @@ export default {
         console.log('entrouaaa', this.exibeColaboradoresInativos)
         return this.exibeColaboradoresInativos ? this.unidade.colaboradores : this.unidade.colaboradores.filter(i => !i.dataFim || !this.maiorQueDataAtual(i.dataFim))
       } else return null
-    }
+    } */
   }
 }
 </script>

@@ -94,7 +94,7 @@ export default {
     confirmar () {
       this.$refs.form.tratarErros().then((ok) => {
         if (ok) {
-          if (this.colaborador.dataFim && this.maiorData(this.colaborador.dataFim, this.colaborador.dataInicio)) {
+          if (this.colaborador.dataFim && this.maiorData(this.colaborador.dataInicio, this.colaborador.dataFim)) {
             this.alertaErro('A data de fim da atividade não pode ser menor que a data de início.')
           } else {
             this.promiseResolve(this.colaborador)

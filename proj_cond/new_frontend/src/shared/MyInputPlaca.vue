@@ -2,7 +2,7 @@
   <q-input :value="value" :label="label" @input="updateValue" class="col-12 q-pa-xs q-mb-md" bottom-slots
     filled :bg-color="bgColor" :color="color" :autofocus="autofocus"
     ref="myInputCpf" @blur="hasError()" :error="!isValid" :error-message="errorMessage"
-    :readonly="readonly" :disable="disable" mask="SSS #X##">
+    :readonly="readonly" :disable="disable" mask="AAA #X##">
     <template v-if="icon" v-slot:prepend>
       <q-icon :name="icon" />
     </template>
