@@ -95,11 +95,11 @@ export default {
       this.$refs.form.tratarErros().then((ok) => {
         if (ok) {
           if (this.morador.enviarNotificacaoEmail && !this.morador.email) {
-            this.alertaErro('Informe um email vádido para que o empregado possa receber notificações por email!')
-          } else {
-            this.promiseResolve(this.morador)
-            this.$refs.modalRef.hide()
+            this.morador.enviarNotificacaoEmail = false
+            // this.alertaErro('Informe um email vádido para que o empregado possa receber notificações por email!')
           }
+          this.promiseResolve(this.morador)
+          this.$refs.modalRef.hide()
         }
       })
     },
