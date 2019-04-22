@@ -12,7 +12,7 @@
       <my-input-text v-model.trim="condominio.situacao"
         label="Situação" class="col-md-2 col-xs-12 q-pl-sm q-mb-lg" :bg-color="classSituacao[1]" readonly/>
     </div>
-
+    <!-- BLOCOS -->
     <q-list v-if="condominioId && condominio.blocos && condominio.blocos.length>0"
         class="col-12 q-my-lg" bordered separator>
       <q-expansion-item
@@ -53,6 +53,42 @@
         title="Gera o(s) Bloco(s), as unidades e as respectivas contas de usuários"
         @click="confirmaFinalizacao()"/>
     </div>
+
+    <!--ESPAÇOS-->
+    <q-list inset-separator no-border highlight>
+      <q-expansion-item class="col-12 q-mb-xs" header-class="bg-grey-5 text-black">
+        <template v-slot:header>
+          <q-item-section avatar>
+            <q-avatar icon="mdi-sticker-emoji" color="green" text-color="white" />
+          </q-item-section>
+          <q-item-section>
+            Espaços
+          </q-item-section>
+        </template>
+        <q-card class="bg-grey-3 q-pa-sm">
+          <q-list separator highlight v-if="condominioId && condominio.espacos && condominio.espacos.length>0">
+            <q-item clickable v-ripple v-for="e in condominio.espacos" :key="e.id"
+              @click="prepararAlterarEspaco(e)" class="bg-grey-4">
+              <q-item-section avatar>
+                <q-avatar color="green" text-color="white">
+                  {{e.tipo}}
+                  <q-tooltip>{{e.tipo}}</q-tooltip>
+                </q-avatar>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>{{e.nome}}</q-item-label>
+                <q-item-label caption lines="2">
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <div class="row justify-center q-mt-sm">
+            <q-btn class="col-xs-12 col-md-auto q-ma-sm" icon="mdi-plus" label="Adicionar Espaço"
+              @click="prepararAdicionarEspaço()" color="secondary" size="17px"/>
+          </div>
+        </q-card>
+      </q-expansion-item>
+    </q-list>
     <adicionar-bloco ref="blocoModal"/>
     <my-confirmacao ref="confirmaFinalizarCondominio" @confirmar="finalizarCondominioGerarUsuarios()"
       texto="Verique se todos os blocos e unidades estão corretos. Não será possível realizar alterações futuramente!"/>
