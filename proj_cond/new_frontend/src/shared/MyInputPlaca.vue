@@ -1,5 +1,5 @@
 <template>
-  <q-input :value="value" :label="label" @input="updateValue" class="col-12 q-pa-xs q-mb-md" bottom-slots
+  <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-md" bottom-slots
     filled :bg-color="bgColor" :color="color" :autofocus="autofocus"
     ref="myInputCpf" @blur="hasError()" :error="!isValid" :error-message="errorMessage"
     :readonly="readonly" :disable="disable" mask="AAA #X##">
@@ -45,6 +45,7 @@ export default {
       this.errorMessage = null
       if (this.required && !this.value) this.errorMessage = 'Campo obrigatório!'
       if (!this.placaValida()) this.errorMessage = `${this.label} inválida`
+      return !!this.errorMessage
     },
     resetValidation () {
       // this.erroRequired = false

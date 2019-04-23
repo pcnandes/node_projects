@@ -1,5 +1,5 @@
 <template>
-  <q-input :value="value" :label="label" @input="updateValue" class="col-12 q-pa-xs q-mb-md" bottom-slots
+  <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-md" bottom-slots
     filled :bg-color="bgColor" :color="color" :autofocus="autofocus" type="email"
     @blur="hasError()" ref="myInputEmail"
     :readonly="readonly" :disable="disable" :error="!isValid" :error-message="errorMessage"
@@ -51,6 +51,7 @@ export default {
       if (this.required && !this.value) this.errorMessage = 'Campo obrigatório!'
       else if (!this.testaEmail()) this.errorMessage = `${this.label} inválido!`
       else if (this.verificaErroMaxLength()) this.errorMessage = `Máximo de ${this.maxLength} caracteres`
+      return !!this.errorMessage
     },
     resetValidation () {
       // this.$refs.myInputEmail.resetValidation()

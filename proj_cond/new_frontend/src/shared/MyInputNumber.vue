@@ -1,5 +1,5 @@
 <template>
-  <q-input :value="value" :label="label" @input="updateValue" class="col-12 q-pa-xs q-mb-md" bottom-slots
+  <q-input :value="value" :label="label" @input="updateValue" class="q-pa-xs q-mb-md" bottom-slots
     filled  :bg-color="bgColor" :color="color" :autofocus="autofocus"
     ref="myInputNumber" @blur="hasError()" :error="!isValid" :error-message="errorMessage"
     :readonly="readonly" :disable="disable" :mask="mascara">
@@ -52,6 +52,7 @@ export default {
       if (this.verificaErroMaxLength()) this.errorMessage = `Máximo de ${this.maxLength} caracteres`
       if (this.verificaErroMaxValue()) this.errorMessage = `Número maior que ${this.maxValue}`
       if (this.verificaErroMinValue()) this.errorMessage = `Número menor que ${this.maxValue}`
+      return !!this.errorMessage
     },
     resetValidation () {
       // this.$refs.myInputNumber.resetValidation()

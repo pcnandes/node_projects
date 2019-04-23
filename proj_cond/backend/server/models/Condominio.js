@@ -25,7 +25,7 @@ module.exports = (sequelize, type) => {
   }, { tableName: 'condominio', timestamps: false })
 
   Condominio.associate = function ({ Bloco, Funcionario, FuncionarioCondominio }) {
-    Condominio.hasMany(Bloco, { as: 'blocos' })
+    Condominio.hasMany(Bloco, { as: 'blocos', allowNull: false, onDelete: 'CASCADE', hooks: true })
     Condominio.belongsToMany(Funcionario, { through: FuncionarioCondominio })
   }
 

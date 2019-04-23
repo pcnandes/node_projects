@@ -1,6 +1,6 @@
 <template>
   <q-input :value="value" :label="label" @input="updateValue" type="textarea"
-    class="col-12 q-pa-xs q-mb-md" bottom-slots
+    class="q-pa-xs q-mb-md" bottom-slots
     filled  :bg-color="bgColor" :color="color" :autofocus="autofocus"
     ref="myInputTextArea" @blur="hasError()" :error="!isValid" :error-message="errorMessage"
     :readonly="readonly" :disable="disable"
@@ -53,6 +53,7 @@ export default {
       this.errorMessage = null
       if (this.required && !this.value) this.errorMessage = 'Campo obrigatório!'
       if (this.verificaErroMaxLength()) this.errorMessage = `Máximo de ${this.maxLength} caracteres`
+      return !!this.errorMessage
     },
     verificaErroMaxLength () {
       return this.maxLength && this.value && this.value.length > this.maxLength

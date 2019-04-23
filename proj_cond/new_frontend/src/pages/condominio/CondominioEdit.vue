@@ -10,7 +10,7 @@
         label="Nome do Condomínio" autofocus required v-bind:class="[!alteravel ? 'col-xs-12' : 'col-md-10 col-xs-12']"
         max-length="50" counter/>
       <my-input-text v-model.trim="condominio.situacao"
-        label="Situação" class="col-md-2 col-xs-12 q-pl-sm q-mb-lg" :bg-color="classSituacao[1]" readonly/>
+        label="Situação" class="col-md-2 col-xs-12" :bg-color="classSituacao[1]" readonly/>
     </div>
     <!-- BLOCOS -->
     <q-list v-if="condominioId && condominio.blocos && condominio.blocos.length>0"
@@ -55,7 +55,7 @@
     </div>
 
     <!--ESPAÇOS-->
-    <q-list inset-separator no-border highlight>
+    <q-list inset-separator no-border highlight v-if="condominioPronto && (condominio.situacao==='ATIVO' || condominio.situacao==='INATIVO')">
       <q-expansion-item class="col-12 q-mb-xs" header-class="bg-grey-5 text-black">
         <template v-slot:header>
           <q-item-section avatar>

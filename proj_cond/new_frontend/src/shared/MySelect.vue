@@ -1,6 +1,6 @@
 <template>
   <q-select :value="value" @input="updateValue" ref="mySelect"
-    class="col-12 q-pa-xs q-mb-md" bottom-slots v-bind:class="!noSpaces ? 'q-pa-xs q-mb-sm' : ''"
+    class="q-pa-xs q-mb-md" bottom-slots v-bind:class="!noSpaces ? 'q-pa-xs q-mb-sm' : ''"
     :options="options" :label="label" :autofocus="autofocus"
     filled :bg-color="bgColor" :color="color" transition-show="scale" transition-hide="scale"
     :option-label="optionLabel" :option-value="optionValue"
@@ -55,6 +55,7 @@ export default {
     hasError () {
       this.errorMessage = null
       if (this.required && !this.value) this.errorMessage = 'Campo obrigatório!'
+      return !!this.errorMessage
     },
     resetValidation () {
       // this.$refs.mySelect.resetValidation()

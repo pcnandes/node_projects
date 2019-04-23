@@ -1,6 +1,6 @@
 <template>
   <q-input :value="value" :label="label" :type="isPwd ? 'password' : 'text'" @input="updateValue"
-    filled bg-color="grey-5" color="blue-grey-14" :autofocus="autofocus" class="col-12 q-pa-xs q-mb-md" bottom-slots
+    filled bg-color="grey-5" color="blue-grey-14" :autofocus="autofocus" class="q-pa-xs q-mb-md" bottom-slots
     ref="myInputPass" :error="!isValid" :error-message="errorMessage"
     :readonly="readonly" :disable="disable">
     <template v-slot:append>
@@ -44,6 +44,7 @@ export default {
       // return this.comErro
       this.errorMessage = null
       if (this.required && !this.value) this.errorMessage = 'Campo obrigatório!'
+      return !!this.errorMessage
     },
     resetValidation () {
       // this.$refs.myInputPass.resetValidation()

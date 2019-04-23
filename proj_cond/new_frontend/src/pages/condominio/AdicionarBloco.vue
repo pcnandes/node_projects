@@ -1,8 +1,6 @@
 <template>
-  <!--<q-modal no-backdrop-dismiss no-esc-dismiss ref="modalRef"
-    :content-css="{minWidth: '50vw', maxWidth: '80vw'}"> -->
   <q-dialog persistent ref="modalRef" :maximized="isMobile">
-    <q-card style="min-width: 900px" class="bg-grey-4">
+    <q-card style="minWidth: 850px" class="bg-grey-4">
       <q-bar dark class="bg-primary text-white" style="height: 40px">
         <q-icon name="mdi-office-building" size="30px"/>
         <div class="col text-center text-weight-bold">Cadastro Bloco</div>
@@ -15,22 +13,22 @@
           <q-tooltip>Fechar / Cancelar</q-tooltip>
         </q-btn>
       </q-bar>
-      <div style="margin: 20px;">
-        <div class="row q-mb-md" >
-          <my-input-text ref="nome" v-model.trim="bloco.nome"
-            counter max-length="50" label="Nome" autofocus required
-            class="col-12" />
-          <my-input-number ref="numeroPrimeiraUnidade" v-model="numeroPrimeiraUnidade" v-if="modo==='INCLUSAO'"
-            label="Primeira Unidade" class="col-6" :max-length="3"/>
-          <my-input-number ref="andares" v-model="andares" v-if="modo==='INCLUSAO'"
-            label="Qtd. andares" class="col-6" :max-length="2" required/>
-          <my-input-number ref="unidadesPorAndar" v-model="unidadesPorAndar" v-if="modo==='INCLUSAO'"
-            label="Unidades por andar" class="col-6" :max-length="3" required/>
-          <div class="col-12 row justify-end" v-if="modo==='INCLUSAO'">
-            <q-btn class="col-xs-12 col-md-auto" size="17px" color="secondary"
-              @click="gerarBloco()" label="Gerar bloco" />
-          </div>
+      <my-form ref="form" class="doc-container justify-center gutter-y-sm row" style="padding: 20px;">
+        <my-input-text ref="nome" v-model.trim="bloco.nome"
+          counter max-length="50" label="Nome" autofocus required
+          class="col-12" />
+        <my-input-number ref="numeroPrimeiraUnidade" v-model="numeroPrimeiraUnidade" v-if="modo==='INCLUSAO'"
+          label="n. Primeira Unidade" class="col-4" :max-length="3"/>
+        <my-input-number ref="andares" v-model="andares" v-if="modo==='INCLUSAO'"
+          label="Qtd. andares" class="col-4" :max-length="2" required/>
+        <my-input-number ref="unidadesPorAndar" v-model="unidadesPorAndar" v-if="modo==='INCLUSAO'"
+          label="Unidades por andar" class="col-4" :max-length="3" required/>
+
+        <div class="col-12 row justify-end" v-if="modo==='INCLUSAO'">
+          <q-btn class="col-md-auto q-my-md" size="17px" color="secondary"
+            @click="gerarBloco()" label="Gerar bloco" />
         </div>
+
         <div class="row col-12 justify-center">
           <div style="display: table;">
             <div class="divUnidade"
@@ -47,7 +45,7 @@
           <q-btn color="grey-14" @click="cancelar()" label="Cancelar" size="17px" />
           <q-btn color="primary" @click="confirmar()" label="Confirmar" size="17px" />
         </div>
-      </div>
+      </my-form>
     </q-card>
   </q-dialog>
 </template>
@@ -56,9 +54,10 @@
 import { getBlocoNew } from './mixin.js'
 import MyInputText from '../../shared/MyInputText'
 import MyInputNumber from '../../shared/MyInputNumber'
+import MyForm from '../../shared/MyForm'
 
 export default {
-  components: { MyInputText, MyInputNumber },
+  components: { MyInputText, MyInputNumber, MyForm },
   data () {
     return {
       bloco: getBlocoNew(),
@@ -99,29 +98,24 @@ export default {
       this.$refs.modalRef.hide()
     },
     confirmar () {
-      let erro = this.verificaErrosCampos([
-        this.$refs.nome.hasError(),
-        this.$refs.andares.hasError(),
-        this.$refs.unidadesPorAndar.hasError()
-      ])
-      if (erro || this.bloco.unidades.length === 0) {
-        this.alertaErro('Preencha as informações do bloco e clique em Gerar Bloco.')
-      } else {
-        if (this.modo === 'ALTERACAO') {
-          this.promiseResolve(this.bloco)
-        } else if (this.modo === 'INCLUSAO') {
-          this.promiseResolve(this.bloco)
+      this.$refs.form.tratarErros().then((ok) => {
+        if (ok) {
+          if (this.bloco.unidades.length === 0) {
+            this.alertaErro('Preencha as informações do bloco e clique em Gerar Bloco.')
+          } else {
+            if (this.modo === 'ALTERACAO') {
+              this.promiseResolve(this.bloco)
+            } else if (this.modo === 'INCLUSAO') {
+              this.promiseResolve(this.bloco)
+            }
+            this.$refs.modalRef.hide()
+          }
         }
-        this.$refs.modalRef.hide()
-      }
+      })
     },
     gerarBloco () {
-      let erro = this.verificaErrosCampos([
-        this.$refs.andares.hasError(),
-        this.$refs.unidadesPorAndar.hasError()
-      ])
-      if (erro) {
-        this.alertaErro('Informe a Qtd. andares e Unidades por andar.')
+      if (this.$refs.andares.hasError() || this.$refs.unidadesPorAndar.hasError()) {
+        this.alertaErro('Informe a Qtd. andares e Unidades por andar para poder gerar o bloco.')
       } else {
         const primeira = this.numeroPrimeiraUnidade ? this.numeroPrimeiraUnidade : 101
         this.bloco.unidades = new Array(this.andares * this.unidadesPorAndar)

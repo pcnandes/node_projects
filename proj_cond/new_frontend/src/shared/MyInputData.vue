@@ -1,6 +1,6 @@
 <template>
   <!-- :rules="[val => !val || dataValida(val) , val => !required || !!val]" -->
-  <q-input :value="dataFormatada" @input="updateValueInput" :label="label" class="col-12 q-pa-xs q-mb-md" bottom-slots
+  <q-input :value="dataFormatada" @input="updateValueInput" :label="label" class="q-pa-xs q-mb-md" bottom-slots
     filled :bg-color="bgColor" mask="##/##/####" :color="color" :autofocus="autofocus" ref="myInputData"
     :readonly="readonly" :disable="disable" :error="!isValid" @blur="hasError()" :error-message="errorMessage">
     <template v-slot:append>
@@ -63,6 +63,7 @@ export default {
       if (!this.maxDateValido()) this.errorMessage = `Data maior que ${date.formatDate(this.maxDate, 'DD/MM/YYYY')}`
       // this.$refs.myInputData.validate()
       // return this.$refs.myInputData.hasError
+      return !!this.errorMessage
     },
     // valida a data informada
     dataValida () {
