@@ -101,3 +101,6 @@ Regra para cadastrar usuario
 -Quasar 1.0
 TODO
 - \router\index verificar se controle de perfil esta funcionando corretamente
+- erro ao cadastrar dois blocos
+- nao exclui bloco
+- ajustar mensagens do login

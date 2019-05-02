@@ -6,6 +6,7 @@
     "start": "node ./app",
     "unit-test": "cross-env NODE_ENV=test mocha --opts ./test/unit/config/mocha.opts ./test/unit/*.test.js",
     "unit-test-unidade": "cross-env NODE_ENV=test mocha --opts ./test/unit/config/mocha.opts ./test/unit/unidade.test.js",
+    "unit-test-condominio": "cross-env NODE_ENV=test mocha --opts ./test/unit/config/mocha.opts ./test/unit/condominio.test.js",
     "integ-test": "cross-env NODE_ENV=test mocha --opts ./test/integration/config/mocha.opts ./test/integration/*.test.js"
   },
   "dependencies": {
@@ -22,7 +23,7 @@
     "morgan": "~1.9.1",
     "mysql2": "^1.6.5",
     "nodemon": "^1.18.11",
-    "sequelize": "^5.7.4",
+    "sequelize": "^4.43.2",
     "to": "^0.2.9",
     "update": "^0.7.4"
   },
