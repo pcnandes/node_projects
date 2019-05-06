@@ -6,9 +6,8 @@ const axiosInstance = axios.create({
   timeout: 15000
 })
 
-export default async ({ Vue }) => {
+export default async ({ Vue, router }) => {
   Vue.prototype.$axios = axiosInstance
-
   // Add a request interceptor
   Vue.prototype.$axios.interceptors.request.use(function (config) {
     // Do something before request is sent
@@ -33,13 +32,14 @@ export default async ({ Vue }) => {
     // Gateway Timeout -> servidor offline
     if (error.response.status && error.response.status === 504) {
       disparaMensagemErro(Vue.prototype, `Erro(${error.response.status}) - Servidor offline`)
-      if (Vue.prototype.$router) Vue.prototype.$router.push('/')
-    } else if (error.response.status && error.response.status === 401) {
+      router.push('/')
+    } else if (error.response.status && error.response.status === 401 &&
+        router.currentRoute.path !== '/') {
       disparaMensagemErro(Vue.prototype, `Erro(${error.response.status}) - Login expirado, faça login novamente`)
-      if (Vue.prototype.$router) Vue.prototype.$router.push('/')
+      router.push('/')
     } else if (error.response.status && error.response.status === 403) {
       disparaMensagemErro(Vue.prototype, `Erro(${error.response.status}) - ${error.response.data.message}`)
-      if (Vue.prototype.$router) Vue.prototype.$router.go(-1)
+      router.go(-1)
     } else if (error.response.status) {
       disparaMensagemErro(Vue.prototype, `Erro(${error.response.status}) - ${error.response.data.message}`)
     }

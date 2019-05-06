@@ -27,6 +27,7 @@ exports.novo = async function (req, res) {
 exports.salvar = async function (req, res) {
   try {
     const retorno = await persist.alterar(req.body)
+    console.log('aquiii', retorno)
     // return res.res.sendStatus(200).send(retorno)
     return onSuccess(res, retorno)
   } catch (err) {
@@ -84,7 +85,6 @@ exports.excluir = async function (req, res) {
 exports.gerarContasUsuario = async function (req, res) {
   try {
     let condominio = req.body
-    console.log('condominiooooo', condominio)
     if (condominio) {
       const retorno = await persist.gerarContasUsuario(condominio)
       return onSuccess(res, retorno)

@@ -14,9 +14,9 @@
     </div>
     <!-- BLOCOS -->
     <q-list v-if="condominioId && condominio.blocos && condominio.blocos.length>0"
-        class="col-12 q-my-lg" bordered separator>
+        class="col-12 q-my-lg">
       <q-expansion-item
-        v-for="(bl, i) in condominio.blocos" :key="i" header-class="bg-grey-5 text-black"
+        v-for="(bl, i) in condominio.blocos" :key="i" class="q-mb-xs" header-class="bg-grey-5 text-black"
         expand-icon-class="text-black">
         <template v-slot:header>
           <q-item-section avatar>

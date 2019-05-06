@@ -65,7 +65,7 @@ exports.alterar = async function (condominio, transaction) {
 // TODO refatorar esse bloco
 exports.alterar = async function (condominio, transaction) {
   // carrego o condominio do banco
-  let condominioBd = await Condominio.findByPk(condominio.id, { include: ['blocos'] })
+  let condominioBd = await this.carregar(condominio.id)
   // verifico se existe o registro no banco
   if (!condominioBd.id) {
     throw new Error()

@@ -136,6 +136,6 @@ exports.alterar = async function (usuario) {
   })
 }
 
-function gerarSenhaHash(senha) {
+function gerarSenhaHash (senha) {
   return bcrypt.hashSync(senha, saltRounds)
 }

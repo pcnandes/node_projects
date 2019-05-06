@@ -220,7 +220,7 @@ export default {
         })
     },
     cancelar () {
-      this.$router.push('/condominio')
+      this.$router.go(-1)
     },
     async prepararAlterarMorador (morador) {
       let index = this.unidade.moradores.indexOf(morador)
