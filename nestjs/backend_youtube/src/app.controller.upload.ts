@@ -4,6 +4,10 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { diskStorage } from  'multer';
 import { extname } from  'path';
 
+// upload ex https://www.techiediaries.com/nestjs-upload-serve-static-file/
+// cors ex https://github.com/expressjs/cors#configuration-options
+// https://docs.nestjs.com/techniques/security
+
 @Controller('upload')
 export class AppControllerUpload {
   constructor(private readonly appService: AppService) {}
