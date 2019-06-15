@@ -24,6 +24,7 @@
       v-model="leftDrawerOpen"
       bordered
       content-class="bg-grey-2"
+      :mini="mini"
     >
       <q-list>
         <q-item-label header>Essential Links</q-item-label>
@@ -72,7 +73,41 @@
             <q-item-label caption>@quasarframework</q-item-label>
           </q-item-section>
         </q-item>
+        <q-expansion-item
+          expand-separator
+          icon="signal_wifi_off"
+          label="bla bla bla"
+        >
+          <q-card>
+            <q-card-section >
+              itemmm
+            </q-card-section>
+          </q-card>
+          <q-item clickable to="teste">
+            <q-item-section>
+              <q-item-label>Twitter</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-expansion-item>
+
+        <q-item clickable title="dubmenuuuu">
+          <q-item-section>Preferences</q-item-section>
+          <q-item-section avatar>
+            <q-icon name="school" />
+          </q-item-section>
+          <q-menu anchor="top right" self="top left">
+            <q-list dense>
+              <q-item to="bunda">
+                <q-item-section>Submenu Label</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+
+        </q-item>
       </q-list>
+      <div class="absolute-bottom bg-grey-10" @click="mini = !mini">
+        aqui
+      </div>
     </q-drawer>
 
     <q-page-container>
@@ -88,7 +123,8 @@ export default {
   name: 'MyLayout',
   data () {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop
+      leftDrawerOpen: this.$q.platform.is.desktop,
+      mini: true
     }
   },
   methods: {
