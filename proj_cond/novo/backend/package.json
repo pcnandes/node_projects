@@ -8,7 +8,7 @@
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
-    "start:dev": "tsc-watch -p tsconfig.build.json --onSuccess \"node dist/main.js\"",
+    "dev": "tsc-watch -p tsconfig.build.json --onSuccess \"node dist/main.js\"",
     "start:debug": "tsc-watch -p tsconfig.build.json --onSuccess \"node --inspect-brk dist/main.js\"",
     "start:prod": "node dist/main.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
@@ -24,7 +24,10 @@
     "@nestjs/platform-express": "^6.5.3",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^2.6.3",
-    "rxjs": "^6.5.2"
+    "rxjs": "^6.5.2",
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4"
   },
   "devDependencies": {
     "@nestjs/testing": "6.5.3",

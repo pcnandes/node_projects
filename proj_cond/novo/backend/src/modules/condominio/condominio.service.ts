@@ -1,4 +1,4 @@
-import { Condominio } from './condominio';
+import { Condominio } from './condominio.entity';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

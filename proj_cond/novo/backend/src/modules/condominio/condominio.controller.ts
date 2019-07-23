@@ -1,5 +1,5 @@
 import { CondominioService } from './condominio.service';
-import { Condominio } from './condominio';
+import { Condominio } from './condominio.entity';
 import { Controller, Get, Param, Post, Body, Query, Delete, Put } from '@nestjs/common';
 import { Request } from 'express';
 
