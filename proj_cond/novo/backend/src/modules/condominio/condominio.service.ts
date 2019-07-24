@@ -1,15 +1,20 @@
 import { Condominio } from './condominio.entity';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CondominioService {
-  private readonly condominios: Condominio[] = [];
+  constructor(
+  @Inject('CONDOMINIO_REPOSITORY')
+    private readonly condominioRepository: Repository<Condominio>,
+  ) {}
 
   create(condominio: Condominio) {
-    this.condominios.push(condominio);
+    this.condominioRepository.create(condominio)
   }
 
-  findAll(): Condominio[] {
-    return this.condominios;
+  async findAll(): Promise<Condominio[]> {
+    return await this.condominioRepository.find();
   }
+  
 }
