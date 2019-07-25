@@ -18,6 +18,8 @@ export class Condominio {
   })
   public situacao?: string
 
-  @OneToMany(type => Bloco, bloco => bloco.condominio)
+  @OneToMany(type => Bloco, bloco => bloco.condominio, {
+    cascade: true
+  })
   public blocos?: Bloco []
 }

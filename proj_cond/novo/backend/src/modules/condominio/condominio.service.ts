@@ -9,9 +9,9 @@ export class CondominioService {
     private readonly condominioRepository: Repository<Condominio>,
   ) {}
 
-  create(condominio: Condominio) {
+  async create(condominio: Condominio): Promise<Condominio>  {
     console.log('aquiii persist', condominio)
-    this.condominioRepository.create(condominio)
+    return await this.condominioRepository.save(condominio)
   }
 
   async findAll(): Promise<Condominio[]> {
