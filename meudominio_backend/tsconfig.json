@@ -1,0 +1,35 @@
+{
+  "version": "3.4.5",
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "outDir": "build",
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "alwaysStrict": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "types": [
+      "node"
+    ],
+    "plugins": [
+      { "name": "typescript-tslint-plugin" }
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/*.ts",
+    "tests/*.ts",
+    "tests/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "compileOnSave": true,
+  "buildOnSave": true
+}
