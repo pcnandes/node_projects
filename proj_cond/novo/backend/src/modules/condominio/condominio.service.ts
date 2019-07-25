@@ -10,6 +10,7 @@ export class CondominioService {
   ) {}
 
   create(condominio: Condominio) {
+    console.log('aquiii persist', condominio)
     this.condominioRepository.create(condominio)
   }
 

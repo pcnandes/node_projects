@@ -1,11 +1,6 @@
 import { Bloco } from "../bloco/bloco.entity";
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-
-export enum Situacao {
-  RASCUNHO = 'Rascunho',
-  ATIVO = 'Ativo',
-  INATIVO = 'Inativo'
-}
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { CondominioSituacao } from "./condominio.enum";
 
 @Entity()
 export class Condominio {
@@ -18,9 +13,11 @@ export class Condominio {
 
   @Column({
     type: "enum",
-    enum: Situacao,
-    default: Situacao.RASCUNHO
-})
-  public situacao: string
-  // public blocos: Bloco []
+    enum: CondominioSituacao,
+    default: CondominioSituacao.RASCUNHO
+  })
+  public situacao?: string
+
+  @OneToMany(type => Bloco, bloco => bloco.condominio)
+  public blocos?: Bloco []
 }

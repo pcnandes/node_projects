@@ -1,3 +1,4 @@
+import { CondominioSituacao } from './condominio.enum';
 import { CondominioService } from './condominio.service';
 import { Condominio } from './condominio.entity';
 import { Controller, Get, Param, Post, Body, Query, Delete, Put } from '@nestjs/common';
@@ -7,28 +8,30 @@ import { Request } from 'express';
 export class CondominioController {
   constructor(private readonly condominioService: CondominioService) {}
 
-  @Post()
-  create(@Body() condominio: Condominio) {
-    return this.condominioService.create(condominio)
-  }
-
   @Get()
-  async findAll(): Promise<Condominio[]> {
+  async listar(): Promise<Condominio[]> {
     return this.condominioService.findAll();
   }
 
+  @Post()
+  novo(@Body() condominio: Condominio) {
+    condominio.situacao = CondominioSituacao.RASCUNHO
+    console.log('aquiii', condominio)
+    return this.condominioService.create(condominio)
+  }
+  
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  carregar(@Param('id') id: string) {
     return `This action returns a #${id} condominio`;
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() condominio: Condominio) {
+  salvar(@Param('id') id: string, @Body() condominio: Condominio) {
     return `This action updates a #${id} condominio`;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  excluir(@Param('id') id: string) {
     return `This action removes a #${id} condominio`;
   }
 
