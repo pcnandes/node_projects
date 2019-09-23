@@ -1,4 +1,4 @@
-package br.com.condominio.domain;
+package br.com.condominio.condominio.domain;
 
 import java.util.Date;
 

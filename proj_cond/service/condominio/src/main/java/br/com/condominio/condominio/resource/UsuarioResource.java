@@ -1,4 +1,4 @@
-package br.com.condominio.resource;
+package br.com.condominio.condominio.resource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.condominio.domain.Usuario;
+import br.com.condominio.condominio.domain.Usuario;
 
 @RestController
 public class UsuarioResource {
