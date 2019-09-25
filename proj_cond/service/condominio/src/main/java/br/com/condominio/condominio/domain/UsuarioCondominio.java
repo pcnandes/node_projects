@@ -5,11 +5,13 @@ import java.util.Date;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Getter @Builder
+@Getter @Builder @NoArgsConstructor @AllArgsConstructor
 public class UsuarioCondominio {
 
 	@EmbeddedId

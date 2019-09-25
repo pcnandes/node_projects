@@ -9,4 +9,5 @@ import br.com.condominio.condominio.domain.Usuario;
 @Transactional
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
+	
 }
