@@ -13,8 +13,7 @@ public class Usuario {
 
 	@Id
 	private Long id;
-	@ManyToOne
-	private Usuario usuario;
+	private String apelido;
 	private String senha;
 	private String email;
 	private String perfis;
