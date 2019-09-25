@@ -1,17 +1,26 @@
 package br.com.condominio.condominio.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 import lombok.Builder;
 import lombok.Getter;
 
+@Entity
 @Getter @Builder
 public class Usuario {
 
+	@Id
 	private Long id;
+	@ManyToOne
+	private Usuario usuario;
+	private String senha;
 	private String email;
-	private String perfis; // tabela de dominio
+	private String perfis;
 	private String cpf;
 	private String nome;
 	private String telefone;
-	private String celular1; // Lista de telefones?
+	private String celular1;
 	private String celular2;
 }

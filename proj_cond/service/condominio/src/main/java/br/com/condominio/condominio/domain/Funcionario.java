@@ -1,11 +1,26 @@
 package br.com.condominio.condominio.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 import lombok.Builder;
 import lombok.Getter;
 
+@Entity
 @Getter @Builder
 public class Funcionario {
 
+	@Id
 	private Long id;
-	// verificar repeticao de dados novamente, como usuario e morador
+	@ManyToOne
+	private Usuario usuario;
+	private String senha;
+	private String perfis;
+	private String cpf;
+	private String nome;
+	private String email;
+	private String telefone;
+	private String celular1;
+	private String celular2;
 }
