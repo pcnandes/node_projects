@@ -1,4 +1,4 @@
-package br.com.condominio.condominio.resource;
+package br.com.condominio.condominio.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +20,7 @@ import br.com.condominio.condominio.domain.Usuario;
 import br.com.condominio.condominio.repository.UsuarioRepository;
 
 @RestController
-public class UsuarioResource {
+public class UsuarioController {
 
 	@Autowired
 	private UsuarioRepository usuarioRepository;
