@@ -9,7 +9,7 @@
 		<version>2.1.8.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>br.com.condominio</groupId>
+	<groupId>br.br.com.condominio</groupId>
 	<artifactId>condominio</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>condominio</name>
