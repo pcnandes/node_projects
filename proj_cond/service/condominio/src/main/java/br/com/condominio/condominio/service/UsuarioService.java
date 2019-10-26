@@ -1,19 +1,25 @@
 package br.com.condominio.condominio.service;
 
-import java.util.Optional;
+import java.util.List;
 
-import br.com.condominio.condominio.domain.Usuario;
+import br.com.condominio.condominio.dto.UsuarioDTO;
+import br.com.condominio.condominio.model.Usuario;
 
 public interface UsuarioService {
 
-	/**
-	 * Busca e retorna um usuário dado um email.
-	 * 
-	 * @param email
-	 * @return Optional<Usuario>
-	 */
-	Optional<Usuario> buscarPorEmail(String email);
+
+	public UsuarioDTO salvar(UsuarioDTO usuarioDTO);
 	
-	public void validarUsuarioBuscadoAlteracao(Optional<Usuario> usuarioBuscado);
+	public UsuarioDTO alterar(Long id, UsuarioDTO usuarioDTO);
+	
+	public void deletar(Long id);
+	
+	public List<UsuarioDTO> listar();
+	
+	public UsuarioDTO buscarPorEmail(String email);
+	
+	public Usuario buscarUsuarioPorEmail(String email);
+	
+	public UsuarioDTO buscar(Long id);
 
 }

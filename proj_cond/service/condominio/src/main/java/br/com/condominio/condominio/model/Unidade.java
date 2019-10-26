@@ -1,4 +1,4 @@
-package br.com.condominio.condominio.domain;
+package br.com.condominio.condominio.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

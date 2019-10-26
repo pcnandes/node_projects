@@ -1,4 +1,4 @@
-package br.com.condominio.condominio.domain;
+package br.com.condominio.condominio.model;
 
 import java.io.Serializable;
 import java.util.Date;

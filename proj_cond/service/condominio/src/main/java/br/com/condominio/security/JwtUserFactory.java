@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import br.com.condominio.condominio.domain.PerfilEnum;
-import br.com.condominio.condominio.domain.Usuario;
+import br.com.condominio.condominio.model.PerfilEnum;
+import br.com.condominio.condominio.model.Usuario;
 
 public class JwtUserFactory {
 

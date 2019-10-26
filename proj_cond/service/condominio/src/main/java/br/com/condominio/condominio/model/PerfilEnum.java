@@ -1,4 +1,4 @@
-package br.com.condominio.condominio.domain;
+package br.com.condominio.condominio.model;
 
 public enum PerfilEnum {
 	ROLE_ADMIN,
